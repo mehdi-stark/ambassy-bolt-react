@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* Prevent horizontal scrolling */
+html, body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.bg-gradient-primary {
+  background: var(--gradient-primary);
+}
+
+.hover-gradient-primary:hover {
+  background: linear-gradient(135deg, #5558e6 0%, #7c4feb 100%);
+}
+
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
