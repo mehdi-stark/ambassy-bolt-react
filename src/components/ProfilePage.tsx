@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigation } from './Navigation';
+import axios from 'axios';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 export const ProfilePage = () => {
+  useEffect(() => {
+    // Initialise le SDK TikTok
+  
+  }, []);
+
+
+  const handleTikTokLogin = () => {
+    // Ouvre la fenêtre de connexion TikTok
+    // import.meta.env.API_SERVER + '/api/authenticate/tiktok'
+    const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
+    console.log('print URL :', url);
+    axios.post(url)
+    .then((response) => {
+      const { url } = response.data;
+      window.open(url, '_blank');
+    })
+    .catch((error) => {
+      console.error('Failed to initiate TikTok integration', error);
+    });
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Navigation />
@@ -49,6 +73,12 @@ export const ProfilePage = () => {
             <li>Invitation 2</li>
           </ul>
         </section>
+
+        <div>
+        <button onClick={handleTikTokLogin}>Se connecter avec TikTok</button>
+
+{/* <a href={import.meta.env.API_SERVER + '/api/authenticate/tiktok'}>Se connecter avec TikTok</a> */}
+    </div>
       </div>
     </div>
   );
