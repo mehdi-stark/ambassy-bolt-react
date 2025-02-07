@@ -1,15 +1,49 @@
 import React, { useEffect } from 'react';
 import { Navigation } from './Navigation';
 import axios from 'axios';
+import { Instagram, Twitch } from 'lucide-react';
 // import dotenv from 'dotenv';
 // dotenv.config();
 
 export const ProfilePage = () => {
-  useEffect(() => {
-    // Initialise le SDK TikTok
-  
+  useEffect(() => {  
   }, []);
 
+  const handleShopifyLogin = () => {
+
+    const CLIENT_ID = import.meta.env.VITE_SHOPIFY_CLIENT_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_SHOPIFY_REDIRECT_URI;
+    const SCOPES = "read_products,read_orders"; // Ajoute d'autres permissions si nécessaire
+    const shopUrl = "ambassy-test.myshopify.com";
+    // const shopUrl = shop.endsWith(".myshopify.com") ? shop : `${shop}.myshopify.com`;
+    console.log('CLIENT_ID :', CLIENT_ID);
+    console.log('REDIRECT_URI :', REDIRECT_URI);
+
+    window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
+    
+    // const url = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
+    // await axios.post(url)
+    // .then((response) => {
+    //   console.log('response :', response);
+    //   const { url } = response.data;
+    //   window.open(url, '_blank');
+    // })
+    // .catch((error) => {
+    //   console.error('Failed to initiate Shopify Auhthorize integration', error);
+    //   return;
+    // });
+
+    // url = import.meta.env.VITE_API_SERVER + '/api/social/connect/shopify';
+    // console.log('print URL :', url);
+    // axios.post(url)
+    // .then((response) => {
+    //   const { url } = response.data;
+    //   window.open(url, '_blank');
+    // })
+    // .catch((error) => {
+    //   console.error('Failed to initiate Shopify Connect integration', error);
+    // });
+  };
 
   const handleTikTokLogin = () => {
     // Ouvre la fenêtre de connexion TikTok
@@ -74,11 +108,62 @@ export const ProfilePage = () => {
           </ul>
         </section>
 
-        <div>
-        <button onClick={handleTikTokLogin}>Se connecter avec TikTok</button>
+                {/* Boutiques
+                <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+            <h3 className="text-xl font-bold">Mes Boutiques</h3>
+            <button 
+              className="text-indigo-600 hover:text-indigo-800 font-medium"
+              onClick={handleShopifyLogin}
+            >
+              Ajouter
+            </button>
+          </div>
+          <div className="p-6 space-y-4">
+              <div className="flex items-center p-4 bg-gray-50 rounded-xl">
+              <div className="flex flex-col items-center text-sm space-y-3">
+                      <div className='flex flex-row items-center'>
+                        <Instagram className="w-4 h-4 mr-1" />
+                        <button onClick={handleTikTokLogin}>Se connecter a Instagram</button>
+                      </div>
+                      <div className='flex flex-row items-center'>
+                        <Twitch className="w-4 h-4 mr-1" />
+                        <button onClick={handleTikTokLogin}>Se connecter a Tiktok</button>       
+                      </div>
+                      <div className='flex flex-row items-center'>
+                        <img src='../assets/logo-shopify.png' className="w-4 h-4 mr-1" />
+                        <button onClick={handleShopifyLogin}>Se connecter a Shopify</button>       
+                      </div>
+                    </div>
+              </div>
+          </div>
+        </div> */}
 
-{/* <a href={import.meta.env.API_SERVER + '/api/authenticate/tiktok'}>Se connecter avec TikTok</a> */}
-    </div>
+        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div className="relative h-48 sm:h-56">
+              <h3 className="flex items-center justify-center text-center text-gradient text-2xl font-bold">
+                Mes réseaux sociaux
+              </h3>
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                <div className="flex items-center justify-center gap-3">
+                    <div className="flex flex-col items-center text-sm space-y-3">
+                      <div className='flex flex-row items-center'>
+                        <Instagram className="w-4 h-4 mr-1" />
+                        <button onClick={handleTikTokLogin}>Se connecter a Instagram</button>
+                      </div>
+                      <div className='flex flex-row items-center'>
+                        <Twitch className="w-4 h-4 mr-1" />
+                        <button onClick={handleTikTokLogin}>Se connecter a Tiktok</button>       
+                      </div>
+                      <div className='flex flex-row items-center'>
+                        <img src='../assets/logo-shopify.png' className="w-4 h-4 mr-1" />
+                        <button onClick={handleShopifyLogin}>Se connecter a Shopify</button>       
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </section>
       </div>
     </div>
   );

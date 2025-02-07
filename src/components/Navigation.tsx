@@ -5,7 +5,7 @@ import { Search, LayoutDashboard, Users, LogOut, Menu, X, UserCheck } from 'luci
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

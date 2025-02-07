@@ -1,63 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Instagram, Youtube, Twitter, Star, TrendingUp } from 'lucide-react';
+import axios from 'axios';
 import type { Influencer } from '../types';
-
-const mockInfluencers: Influencer[] = [
-  {
-    id: '1',
-    name: 'Sophie Martin',
-    email: 'sophie@example.com',
-    role: 'influencer',
-    followers: 150000,
-    platforms: [
-      { name: 'Instagram', followers: 100000, handle: '@sophiem' },
-      { name: 'TikTok', followers: 50000, handle: '@sophiem' }
-    ],
-    categories: ['Mode', 'Lifestyle'],
-    description: 'Créatrice de contenu mode et lifestyle',
-    engagementRate: 3.5,
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
-    rating: 4.8,
-    reviewCount: 124,
-    completedCampaigns: 45
-  },
-  {
-    id: '2',
-    name: 'Lucas Dubois',
-    email: 'lucas@example.com',
-    role: 'influencer',
-    followers: 280000,
-    platforms: [
-      { name: 'YouTube', followers: 200000, handle: '@lucasdubois' },
-      { name: 'Instagram', followers: 80000, handle: '@lucasd' }
-    ],
-    categories: ['Tech', 'Gaming'],
-    description: 'Passionné de tech et gaming, je partage mes découvertes et tests',
-    engagementRate: 4.2,
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
-    rating: 4.9,
-    reviewCount: 208,
-    completedCampaigns: 67
-  },
-  {
-    id: '3',
-    name: 'Emma Laurent',
-    email: 'emma@example.com',
-    role: 'influencer',
-    followers: 420000,
-    platforms: [
-      { name: 'Instagram', followers: 320000, handle: '@emmalaurent' },
-      { name: 'TikTok', followers: 100000, handle: '@emmalaurent' }
-    ],
-    categories: ['Beauté', 'Bien-être'],
-    description: 'Expert en beauté naturelle et bien-être holistique',
-    engagementRate: 5.1,
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80',
-    rating: 4.7,
-    reviewCount: 156,
-    completedCampaigns: 89
-  }
-];
 
 export function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,8 +13,21 @@ export function SearchPage() {
   const [commission, setCommission] = useState('');
   const [message, setMessage] = useState('');
   const [connectedInfluencers, setConnectedInfluencers] = useState<string[]>([]);
+  const [influencers, setInfluencers] = useState<Influencer[]>([]);
 
   useEffect(() => {
+    const fetchInfluencers = async () => {
+      try {
+        const response = await axios.get(import.meta.env.VITE_API_SERVER + '/api/users?role=ambassador');
+        console.log('response :', response);
+        setInfluencers(response.data);
+      } catch (error) {
+        console.error('Failed to fetch influencers:', error);
+      }
+    };
+
+    fetchInfluencers();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setSelectedInfluencer(null);
@@ -89,7 +46,7 @@ export function SearchPage() {
     }
   };
 
-  const sortedInfluencers = [...mockInfluencers].sort((a, b) => {
+  const sortedInfluencers = [...influencers].sort((a, b) => {
     switch (sortBy) {
       case 'rating':
         return b.rating - a.rating;
