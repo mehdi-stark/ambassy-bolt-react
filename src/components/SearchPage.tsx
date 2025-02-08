@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Instagram, Youtube, Twitter, Star, TrendingUp } from 'lucide-react';
 import axios from 'axios';
-import type { Influencer } from '../types';
+import type { Ambassador, Influencer } from '../types';
 
 export function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'rating' | 'followers' | 'engagement'>('rating');
   const [selectedInfluencer, setSelectedInfluencer] = useState<Influencer | null>(null);
+  const [selectedAmbassador, setSelectedAmbassador] = useState<Ambassador | null>(null);
   const [shops, setShops] = useState<string[]>(['Shop 1', 'Shop 2', 'Shop 3']);
   const [selectedShop, setSelectedShop] = useState('');
   const [commission, setCommission] = useState('');
   const [message, setMessage] = useState('');
   const [connectedInfluencers, setConnectedInfluencers] = useState<string[]>([]);
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
+  const [ambassadors, setAmbassadors] = useState<Ambassador[]>([]);
 
   useEffect(() => {
     const fetchInfluencers = async () => {
       try {
         const response = await axios.get(import.meta.env.VITE_API_SERVER + '/api/users?role=ambassador');
+        const filteredAmbassadors = response.data.filter((user: Ambassador) => user.socialMediaLinks && user.socialMediaLinks.length > 0);
         console.log('response :', response);
-        setInfluencers(response.data);
+        console.log('filteredAmbassadors :', filteredAmbassadors);
+        setAmbassadors(filteredAmbassadors);
+        console.log('print ambassadors :', ambassadors);
       } catch (error) {
         console.error('Failed to fetch influencers:', error);
       }
@@ -59,8 +64,25 @@ export function SearchPage() {
     }
   });
 
+  const sortedAmbassadors = [...ambassadors].sort((a, b) => {
+    switch (sortBy) {
+      case 'rating':
+        return b.rating - a.rating;
+      case 'followers':
+        return b.socialMediaLinks[0].metrics.followers - a.socialMediaLinks[0].metrics.followers ;
+      case 'engagement':
+        return b.socialMediaLinks[0].metrics.engagement  - a.socialMediaLinks[0].metrics.engagement ;
+      default:
+        return 0;
+    }
+  });
+
   const handleConnectClick = (influencer: Influencer) => {
     setSelectedInfluencer(influencer);
+  };
+
+  const handleConnectClickAmbassador = (influencer: Ambassador) => {
+    setSelectedAmbassador(influencer);
   };
 
   const handleValidateClick = () => {
@@ -118,6 +140,7 @@ export function SearchPage() {
         </div>
       </div>
 
+      {/*  formulaire pour les pro d'invation d'ambassadeur   */}
       {selectedInfluencer && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99] popup-overlay"
@@ -165,9 +188,11 @@ export function SearchPage() {
         </div>
       )}
 
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {sortedInfluencers.map((influencer) => (
-          <div key={influencer.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+        {/* {sortedInfluencers.map((influencer) => ( */}
+        {sortedAmbassadors.map((influencer) => (
+          <div key={influencer._id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
             <div className="relative h-48 sm:h-56">
               <img
                 src={influencer.avatar}
@@ -178,12 +203,12 @@ export function SearchPage() {
               <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                 <h3 className="text-white text-lg sm:text-xl font-bold mb-1">{influencer.name}</h3>
                 <div className="flex flex-wrap items-center gap-3 text-white/90">
-                  {influencer.platforms.map((platform) => (
-                    <div key={platform.name} className="flex items-center text-sm">
-                      {platform.name === 'Instagram' && <Instagram className="w-4 h-4 mr-1" />}
-                      {platform.name === 'YouTube' && <Youtube className="w-4 h-4 mr-1" />}
-                      {platform.name === 'Twitter' && <Twitter className="w-4 h-4 mr-1" />}
-                      {platform.followers.toLocaleString()}
+                  {influencer.socialMediaLinks.map((platform) => (
+                    <div key={platform._id} className="flex items-center text-sm">
+                      {platform.platform.valueOf() === 'instagram' && <Instagram className="w-4 h-4 mr-1" />}
+                      {platform.platform.valueOf() === 'youtube' && <Youtube className="w-4 h-4 mr-1" />}
+                      {platform.platform.valueOf() === 'tiktok' && <Twitter className="w-4 h-4 mr-1" />}
+                      {platform.metrics.followers.toLocaleString()}
                     </div>
                   ))}
                 </div>
@@ -204,7 +229,7 @@ export function SearchPage() {
                 </div>
                 <div className="flex items-center text-sm whitespace-nowrap">
                   <TrendingUp className="w-4 h-4 mr-1 text-emerald-500" />
-                  <span className="text-emerald-500 font-medium">{influencer.engagementRate}%</span>
+                  <span className="text-emerald-500 font-medium">{influencer.socialMediaLinks[0].metrics.engagement}%</span>
                 </div>
               </div>
               
@@ -226,7 +251,7 @@ export function SearchPage() {
               <div className="flex justify-center space-x-4">
                 <button
                   className={`w-1/2 px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors ${connectedInfluencers.includes(influencer.id) ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  onClick={() => handleConnectClick(influencer)}
+                  onClick={() => handleConnectClickAmbassador(influencer)}
                   disabled={connectedInfluencers.includes(influencer.id)}
                 >
                   Connecter

@@ -24,7 +24,7 @@ export function Navigation() {
       {/* Mobile header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-100 z-50">
         <div className="flex items-center justify-between h-full px-4">
-          <h1 className="text-2xl font-bold text-gradient">InfluConnect</h1>
+          <h1 className="text-2xl font-bold text-gradient">Ambassy</h1>
           <button
             onClick={toggleSidebar}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -47,7 +47,7 @@ export function Navigation() {
       >
         {/* Logo - desktop only */}
         <div className="hidden lg:flex h-16 items-center px-4 border-b border-gray-100">
-          <h1 className="text-xl font-bold text-gradient">InfluConnect</h1>
+          <h1 className="text-xl font-bold text-gradient">Ambassy</h1>
         </div>
 
         {/* Navigation items */}

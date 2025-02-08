@@ -48,16 +48,30 @@ export const ProfilePage = () => {
   const handleTikTokLogin = () => {
     // Ouvre la fenêtre de connexion TikTok
     // import.meta.env.API_SERVER + '/api/authenticate/tiktok'
-    const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
+    const csrfState = Math.random().toString(36).substring(2);
+    // res.cookie('csrfState', csrfState, {maxAge: 60000});
+
+    let url = 'https://www.tiktok.com/v2/auth/authorize/';
+
+    // the following params need to be in `application/x-www-form-urlencoded` format.
+    url += `?client_key=${import.meta.env.VITE_TIKTOK_CLIENT_KEY}`;
+    url += '&scope=user.info.basic';
+    url += '&response_type=code';
+    url += `&redirect_uri=${import.meta.env.VITE_SERVER_ENDPOINT_REDIRECT}`;
+    url += '&state=' + csrfState;
+
+    // const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
     console.log('print URL :', url);
-    axios.post(url)
-    .then((response) => {
-      const { url } = response.data;
-      window.open(url, '_blank');
-    })
-    .catch((error) => {
-      console.error('Failed to initiate TikTok integration', error);
-    });
+    window.location.href = url
+
+    // axios.post(url)
+    // .then((response) => {
+    //   const { url } = response.data;
+    //   window.open(url, '_blank');
+    // })
+    // .catch((error) => {
+    //   console.error('Failed to initiate TikTok integration', error);
+    // });
   };
 
   return (
