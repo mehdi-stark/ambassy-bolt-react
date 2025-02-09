@@ -1,7 +1,11 @@
 import { SignIn } from "@clerk/clerk-react";
 
 export function LoginPage() {
-  return <SignIn redirectUrl="/dashboard" />;
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center py-12 sm:px-6 lg:px-8">
+      <SignIn redirectUrl="/dashboard" />
+    </div>
+  );
 }
 
 // return (
