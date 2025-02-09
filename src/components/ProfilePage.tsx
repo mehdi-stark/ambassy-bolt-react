@@ -1,14 +1,9 @@
-import React, { useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Navigation } from "./Navigation";
-import axios from "axios";
 import { Instagram, Twitch } from "lucide-react";
-// import dotenv from 'dotenv';
-// dotenv.config();
+import shopifyLogo from "../assets/logo-shopify.png";
 
 export const ProfilePage = () => {
-  useEffect(() => {}, []);
-
   const user = useUser();
 
   const handleShopifyLogin = () => {
@@ -19,31 +14,12 @@ export const ProfilePage = () => {
     // const shopUrl = shop.endsWith(".myshopify.com") ? shop : `${shop}.myshopify.com`;
     console.log("CLIENT_ID :", CLIENT_ID);
     console.log("REDIRECT_URI :", REDIRECT_URI);
+    // const encodedRedirectUri = encodeURIComponent(
+    //   `${REDIRECT_URI}?userId=${user.user?.id}`
+    // );
+    // console.log("encodedRedirectUri :", encodedRedirectUri);
 
-    window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
-
-    // const url = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}`;
-    // await axios.post(url)
-    // .then((response) => {
-    //   console.log('response :', response);
-    //   const { url } = response.data;
-    //   window.open(url, '_blank');
-    // })
-    // .catch((error) => {
-    //   console.error('Failed to initiate Shopify Auhthorize integration', error);
-    //   return;
-    // });
-
-    // url = import.meta.env.VITE_API_SERVER + '/api/social/connect/shopify';
-    // console.log('print URL :', url);
-    // axios.post(url)
-    // .then((response) => {
-    //   const { url } = response.data;
-    //   window.open(url, '_blank');
-    // })
-    // .catch((error) => {
-    //   console.error('Failed to initiate Shopify Connect integration', error);
-    // });
+    window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${user.user?.id}`;
   };
 
   const handleTikTokLogin = () => {
@@ -64,15 +40,6 @@ export const ProfilePage = () => {
     // const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
     console.log("print URL :", url);
     window.location.href = url;
-
-    // axios.post(url)
-    // .then((response) => {
-    //   const { url } = response.data;
-    //   window.open(url, '_blank');
-    // })
-    // .catch((error) => {
-    //   console.error('Failed to initiate TikTok integration', error);
-    // });
   };
 
   return (
@@ -98,7 +65,7 @@ export const ProfilePage = () => {
             </label>
             <input
               type="text"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
               disabled
               value={user.user?.emailAddresses[0].emailAddress}
             />
@@ -109,7 +76,8 @@ export const ProfilePage = () => {
             </label>
             <input
               type="password"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+              placeholder="••••••••"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
             />
           </div>
         </section>
@@ -189,10 +157,7 @@ export const ProfilePage = () => {
                     </button>
                   </div>
                   <div className="flex flex-row items-center">
-                    <img
-                      src="../assets/logo-shopify.png"
-                      className="w-4 h-4 mr-1"
-                    />
+                    <img src={shopifyLogo} className="w-4 h-4 mr-1" />
                     <button onClick={handleShopifyLogin}>
                       Se connecter a Shopify
                     </button>
