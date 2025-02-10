@@ -10,17 +10,21 @@ import { AmbassadorsPage } from "./components/AmbassadorsPage";
 import { ProfilePage } from "./components/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ClerkProvider } from "@clerk/clerk-react";
+import { UserRegistration } from "./components/UserRegistration";
+import { AuthLoadingPage } from "./components/AuthLoadingPage";
 
 function App() {
   return (
     <ClerkProvider
       publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY}
-      afterSignOutUrl="/"
+      afterSignOutUrl="/login"
     >
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth-loading" element={<AuthLoadingPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/user-register" element={<UserRegistration />} />
           <Route
             path="/register/merchant"
             element={<MerchantRegistrationPage />}

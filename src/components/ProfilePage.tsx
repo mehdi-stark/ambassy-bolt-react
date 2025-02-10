@@ -11,6 +11,7 @@ export const ProfilePage = () => {
     const REDIRECT_URI = import.meta.env.VITE_SHOPIFY_REDIRECT_URI;
     const SCOPES = "read_products,read_orders"; // Ajoute d'autres permissions si nécessaire
     const shopUrl = "ambassy-test.myshopify.com";
+    const userId = sessionStorage.getItem("userId");
     // const shopUrl = shop.endsWith(".myshopify.com") ? shop : `${shop}.myshopify.com`;
     console.log("CLIENT_ID :", CLIENT_ID);
     console.log("REDIRECT_URI :", REDIRECT_URI);
@@ -19,7 +20,7 @@ export const ProfilePage = () => {
     // );
     // console.log("encodedRedirectUri :", encodedRedirectUri);
 
-    window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${user.user?.id}`;
+    window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${userId}`;
   };
 
   const handleTikTokLogin = () => {
