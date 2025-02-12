@@ -41,6 +41,26 @@ export function AuthLoadingPage() {
         );
         sessionStorage.setItem("userId", data[0].id || data[0]._id);
 
+        // stocker les invitations en attente dans le sessionStorage depuis l'API /api/collaboration-requests
+        const collaborationRequests = await fetch(
+          import.meta.env.VITE_API_SERVER +
+            "/api/collaboration-requests?userId=" +
+            data[0].id,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+
+        if (!collaborationRequests.ok)
+          throw new Error("Erreur lors de la récupération des invitations");
+
+        const requests = await collaborationRequests.json();
+        sessionStorage.setItem(
+          "collaborationRequests",
+          JSON.stringify(requests)
+        );
+
         navigate("/dashboard"); // Redirection finale
       } catch (error) {
         console.error("Erreur :", error);

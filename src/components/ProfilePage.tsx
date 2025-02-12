@@ -23,20 +23,56 @@ export const ProfilePage = () => {
     window.location.href = `https://${shopUrl}/admin/oauth/authorize?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${userId}`;
   };
 
+  const handleMeta = () => {
+    const CLIENT_ID = import.meta.env.VITE_META_APP_ID;
+    const REDIRECT_URI = import.meta.env.VITE_META_REDIRECT_URI;
+    const SCOPES = "instagram_basic,instagram_content_publish,pages_show_list"; // Ajoute d'autres permissions si nécessaire
+    const userId = sessionStorage.getItem("userId");
+    console.log("CLIENT_ID :", CLIENT_ID);
+    console.log("REDIRECT_URI :", REDIRECT_URI);
+    // const encodedRedirectUri = encodeURIComponent(
+    //   `${REDIRECT_URI}?userId=${user.user?.id}`
+    // );
+    // console.log("encodedRedirectUri :", encodedRedirectUri);
+
+    // window.location.href = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${userId}&response_type=code`;
+    window.location.href = `https://www.facebook.com/v18.0/dialog/oauth?client_id=${CLIENT_ID}&scope=${SCOPES}&redirect_uri=${REDIRECT_URI}&state=${userId}&response_type=code`;
+  };
+
   const handleTikTokLogin = () => {
     // Ouvre la fenêtre de connexion TikTok
     // import.meta.env.API_SERVER + '/api/authenticate/tiktok'
+    const CLIENT_ID = import.meta.env.VITE_TIKTOK_CLIENT_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_TIKTOK_REDIRECT_URI;
+    const SCOPES = "user.info.basic"; // Ajoute d'autres permissions si nécessaire
+    // const userId = sessionStorage.getItem("userId");
+    // const shopUrl = shop.endsWith(".myshopify.com") ? shop : `${shop}.myshopify.com`;
+    console.log("CLIENT_ID :", CLIENT_ID);
+    console.log("REDIRECT_URI :", REDIRECT_URI);
     const csrfState = Math.random().toString(36).substring(2);
     // res.cookie('csrfState', csrfState, {maxAge: 60000});
 
-    let url = "https://www.tiktok.com/v2/auth/authorize/";
+    // let url = "https://www.tiktok.com/v2/auth/authorize/";
 
-    // the following params need to be in `application/x-www-form-urlencoded` format.
-    url += `?client_key=${import.meta.env.VITE_TIKTOK_CLIENT_KEY}`;
-    url += "&scope=user.info.basic";
-    url += "&response_type=code";
-    url += `&redirect_uri=${import.meta.env.VITE_SERVER_ENDPOINT_REDIRECT}`;
-    url += "&state=" + csrfState;
+    // // the following params need to be in `application/x-www-form-urlencoded` format.
+    // url += `?client_key=${CLIENT_ID}`;
+    // url += `&scope=${SCOPES}`;
+    // url += "&response_type=code";
+    // url += `&redirect_uri=${REDIRECT_URI}`;
+    // url += "&state=" + csrfState;
+
+    let url =
+      "https://www.tiktok.com/v2/auth/authorize/" +
+      "client_key=" +
+      encodeURIComponent(CLIENT_ID) +
+      "&scope=" +
+      encodeURIComponent("user.info.basic") +
+      "&response_type=" +
+      encodeURIComponent("code") +
+      "&redirect_uri=" +
+      encodeURIComponent(REDIRECT_URI) +
+      "&state=" +
+      encodeURIComponent(csrfState);
 
     // const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
     console.log("print URL :", url);
@@ -147,7 +183,7 @@ export const ProfilePage = () => {
                 <div className="flex flex-col items-center text-sm space-y-3">
                   <div className="flex flex-row items-center">
                     <Instagram className="w-4 h-4 mr-1" />
-                    <button onClick={handleTikTokLogin}>
+                    <button onClick={handleMeta}>
                       Se connecter a Instagram
                     </button>
                   </div>
