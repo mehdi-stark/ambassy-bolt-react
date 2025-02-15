@@ -45,22 +45,6 @@ const CampaignsPage = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     fetchCampaigns();
-  //   }, []);
-
-  //   function fetchCampaigns() {
-  //     // fetch campaigns from the server
-  //     setCampaigns([
-  //       { name: "Campagne 1", status: "accepted" },
-  //       { name: "Campagne 2", status: "pending" },
-  //       { name: "Campagne 3", status: "rejected" },
-  //     ]);
-  //     setTotalCampaigns(3);
-  //     setActiveCampaigns(1);
-  //     setArchivedCampaigns(2);
-  //   }
-
   return (
     <div className="h-full">
       <div className="mx-auto flex flex-col">
@@ -68,9 +52,8 @@ const CampaignsPage = () => {
           className="p-5 campaign-info flex flex-row justify-center space-x-4 bg-white w-full h-[150px] 
         shadow-sm items-center rounded-xl border border-gray-100"
         >
-          {/* <h2>Informations sur les Campagnes</h2> */}
           <p className="text-center text-gray-600 font-light text-sm text-custom-grey">
-            Total de campagnes: <br />{" "}
+            Total de campagnes: <br />
             <span id="total-campaigns" className="font-bold text-lg">
               {totalCampaigns}
             </span>
@@ -82,64 +65,64 @@ const CampaignsPage = () => {
             </span>
           </p>
           <p className="text-center text-gray-600 font-light text-sm text-custom-grey">
-            Campagnes archivees: <br />
+            Campagnes archivées: <br />
             <span id="archived-campaigns" className="font-bold text-lg">
               {archivedCampaigns}
             </span>
           </p>
         </section>
 
-        <section className="filters flex mt-[80px] flex flex-col p-5 justify-center">
+        <section className="filters flex md:mt-[80px] mt-8 flex-col p-5 justify-center">
           <div className="flex flex-col mb-6 items-center">
-            {/* <h2 className="text-2xl font-bold mb-4 text-grey">Campagnes</h2> */}
             <h1 className="text-3xl font-bold mb-2">
               <span className="text-gradient">Mes Campagnes</span>
             </h1>
-            {/* filters */}
-            <div className="flex mb-6 pb-2 mr-[50px]">
-              <button
-                onClick={() => setActiveTab("all")}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
-                  activeTab === "all"
-                    ? "bg-indigo-50 text-indigo-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                Toutes
-              </button>
-              <button
-                onClick={() => setActiveTab("accepted")}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
-                  activeTab === "accepted"
-                    ? "bg-emerald-50 text-emerald-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                Actives
-              </button>
-              <button
-                onClick={() => setActiveTab("pending")}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
-                  activeTab === "pending"
-                    ? "bg-amber-50 text-amber-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                Archivees
-              </button>
-              <button
-                onClick={() => setActiveTab("rejected")}
-                className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
-                  activeTab === "rejected"
-                    ? "bg-rose-50 text-rose-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                Refusés
-              </button>
+            <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+              <div className="flex flex-wrap items-center justify-center space-x-2">
+                <button
+                  onClick={() => setActiveTab("all")}
+                  className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
+                    activeTab === "all"
+                      ? "bg-indigo-50 text-indigo-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Toutes
+                </button>
+                <button
+                  onClick={() => setActiveTab("accepted")}
+                  className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
+                    activeTab === "accepted"
+                      ? "bg-emerald-50 text-emerald-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Actives
+                </button>
+                <button
+                  onClick={() => setActiveTab("pending")}
+                  className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
+                    activeTab === "pending"
+                      ? "bg-amber-50 text-amber-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Archivées
+                </button>
+                <button
+                  onClick={() => setActiveTab("rejected")}
+                  className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap ${
+                    activeTab === "rejected"
+                      ? "bg-rose-50 text-rose-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  Refusées
+                </button>
+              </div>
               <button
                 onClick={() => setShowPopup(true)}
-                className="px-4 py-2 rounded-lg font-medium whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-700 ml-[120px]"
+                className="px-4 py-2 rounded-lg font-medium whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-700"
               >
                 Créer campagne
               </button>
@@ -150,7 +133,7 @@ const CampaignsPage = () => {
         {campaigns.length === 0 && (
           <div className="flex flex-col justify-center items-center h-full space-y-4">
             <FileSearch2 color="blue" className="w-1/2" height={70} />
-            <p className="text-gray-600  text-xl">Aucune campagne disponible</p>
+            <p className="text-gray-600 text-xl">Aucune campagne disponible</p>
           </div>
         )}
 
@@ -165,9 +148,8 @@ const CampaignsPage = () => {
         </section>
 
         {showPopup && (
-          // <div className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-gray-100">
           <div
-            className="fixed inset-0 bg-black bg-opacity-80 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
+            className="fixed inset-0 bg-white bg-opacity-80 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
             onClick={handleOutsideClick}
           >
             <div className="w-full h-full md:w-1/2 p-4">

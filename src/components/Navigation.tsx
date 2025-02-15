@@ -127,7 +127,20 @@ export function Navigation() {
 
           <div className="space-y-1 p-2">
             <button
-              onClick={() => handleNavigation("/profile")}
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/profile");
+              }}
+              className="px-4 py-2 bg-gradient-primary hover-gradient-primary text-white rounded-xl font-medium transition-colors w-full"
+            >
+              Upgrade
+            </button>
+
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/profile");
+              }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
                 isActive("/profile")
                   ? "bg-indigo-50 text-indigo-600"
