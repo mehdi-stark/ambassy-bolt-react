@@ -4,6 +4,8 @@ import {
   Search,
   LayoutDashboard,
   Users,
+  FileSearch2,
+  ReceiptText,
   LogOut,
   Menu,
   X,
@@ -63,7 +65,10 @@ export function Navigation() {
         <div className="flex flex-col h-[calc(100%-4rem)] justify-between p-2">
           <div className="space-y-1" style={{ marginTop: "64px" }}>
             <button
-              onClick={() => handleNavigation("/search")}
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/search");
+              }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
                 isActive("/search")
                   ? "bg-indigo-50 text-indigo-600"
@@ -75,7 +80,25 @@ export function Navigation() {
             </button>
 
             <button
-              onClick={() => handleNavigation("/ambassadors")}
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/campaigns");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/campaigns")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <ReceiptText className="w-5 h-5 mr-3" />
+              Mes Campagnes
+            </button>
+
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/ambassadors");
+              }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
                 isActive("/ambassadors")
                   ? "bg-indigo-50 text-indigo-600"
@@ -83,11 +106,14 @@ export function Navigation() {
               }`}
             >
               <UserCheck className="w-5 h-5 mr-3" />
-              Ambassadeurs
+              Mes Ambassadeurs
             </button>
 
             <button
-              onClick={() => handleNavigation("/dashboard")}
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/dashboard");
+              }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
                 isActive("/dashboard")
                   ? "bg-indigo-50 text-indigo-600"

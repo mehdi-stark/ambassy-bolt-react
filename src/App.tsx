@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { UserRegistration } from "./components/UserRegistration";
 import { AuthLoadingPage } from "./components/AuthLoadingPage";
+import CampaignsPage from "./components/CampaignsPage";
 
 function App() {
   return (
@@ -57,6 +58,14 @@ function App() {
                       element={
                         <ProtectedRoute>
                           <Dashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/campaigns"
+                      element={
+                        <ProtectedRoute>
+                          <CampaignsPage />
                         </ProtectedRoute>
                       }
                     />

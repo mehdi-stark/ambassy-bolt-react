@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export function AuthLoadingPage() {
   const { user, isSignedIn } = useUser();
@@ -15,53 +16,69 @@ export function AuthLoadingPage() {
 
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          import.meta.env.VITE_API_SERVER + "/api/users?clerkId=" + user.id,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        await axios
+          .get(
+            import.meta.env.VITE_API_SERVER + "/api/users?clerkId=" + user.id,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          )
+          .then(async (data) => {
+            // debugger;
+            // Stocker userId + clerkId en sessionStorage
+            const userResponse = data.data[0];
+            console.log("data user", userResponse);
+            sessionStorage.setItem(
+              "user",
+              JSON.stringify({
+                userId: userResponse.id || userResponse._id,
+                avatar: userResponse.avatar,
+                clerkId: user.id,
+                email: user.primaryEmailAddress?.emailAddress,
+                name: user.fullName,
+              })
+            );
+            sessionStorage.setItem(
+              "userComplete",
+              JSON.stringify(userResponse)
+            );
+            sessionStorage.setItem(
+              "userId",
+              userResponse.id || userResponse._id
+            );
 
-        if (!response.ok)
-          throw new Error("Erreur lors de la récupération de l'utilisateur");
+            // stocker les invitations en attente dans le sessionStorage depuis l'API /api/collaboration-requests
+            await axios
+              .get(
+                import.meta.env.VITE_API_SERVER +
+                  "/api/collaboration-requests/" +
+                  userResponse._id,
+                {
+                  headers: { "Content-Type": "application/json" },
+                }
+              )
+              .then((data) => {
+                console.log("data collaborationRequests", data);
 
-        const data = await response.json();
-        console.log("data user", data);
-        // Stocker userId + clerkId en sessionStorage
-        sessionStorage.setItem(
-          "user",
-          JSON.stringify({
-            userId: data[0].id || data[0]._id,
-            clerkId: user.id,
-            email: user.primaryEmailAddress?.emailAddress,
-            name: user.fullName,
-            avatar: user.imageUrl,
+                sessionStorage.setItem(
+                  "collaborationRequests",
+                  JSON.stringify(data?.data)
+                );
+
+                navigate("/dashboard"); // Redirection finale
+                // return data;
+              })
+              .catch((err) => {
+                console.log("err collaborationRequests", err);
+                throw new Error(
+                  "Erreur lors de la récupération des invitations"
+                );
+              });
           })
-        );
-        sessionStorage.setItem("userId", data[0].id || data[0]._id);
-
-        // stocker les invitations en attente dans le sessionStorage depuis l'API /api/collaboration-requests
-        const collaborationRequests = await fetch(
-          import.meta.env.VITE_API_SERVER +
-            "/api/collaboration-requests?userId=" +
-            data[0].id,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        if (!collaborationRequests.ok)
-          throw new Error("Erreur lors de la récupération des invitations");
-
-        const requests = await collaborationRequests.json();
-        sessionStorage.setItem(
-          "collaborationRequests",
-          JSON.stringify(requests)
-        );
-
-        navigate("/dashboard"); // Redirection finale
+          .catch((err) => {
+            console.log("err", err);
+            throw new Error("Erreur lors de la récupération de l'utilisateur");
+          });
       } catch (error) {
         console.error("Erreur :", error);
         signOut(); // Déconnecte l'utilisateur en cas d'erreur
