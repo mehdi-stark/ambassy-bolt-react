@@ -1,7 +1,7 @@
 import { FileSearch2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Testimonial from "./Testimonial";
-import NewCampaignForm from "./NewCampaignForm";
+import Testimonial from "../Testimonial";
+import NewCampaign from "./NewCampaignForm";
 
 const CampaignsPage = () => {
   const [totalCampaigns, setTotalCampaigns] = useState(0);
@@ -48,6 +48,7 @@ const CampaignsPage = () => {
   return (
     <div className="h-full">
       <div className="mx-auto flex flex-col">
+        {/* Title nb of campaigns */}
         <section
           className="p-5 campaign-info flex flex-row justify-center space-x-4 bg-white w-full h-[150px] 
         shadow-sm items-center rounded-xl border border-gray-100"
@@ -72,6 +73,7 @@ const CampaignsPage = () => {
           </p>
         </section>
 
+        {/* Filters */}
         <section className="filters flex md:mt-[80px] mt-8 flex-col p-5 justify-center">
           <div className="flex flex-col mb-6 items-center">
             <h1 className="text-3xl font-bold mb-2">
@@ -130,13 +132,13 @@ const CampaignsPage = () => {
           </div>
         </section>
 
+        {/* Campaigns list */}
         {campaigns.length === 0 && (
           <div className="flex flex-col justify-center items-center h-full space-y-4">
             <FileSearch2 color="blue" className="w-1/2" height={70} />
             <p className="text-gray-600 text-xl">Aucune campagne disponible</p>
           </div>
         )}
-
         <section className="campaign-list flex mt-8 w-full mx-auto items-center justify-center">
           <ul id="campaigns">
             {campaigns.map((campaign, index) => (
@@ -147,17 +149,20 @@ const CampaignsPage = () => {
           </ul>
         </section>
 
+        {/* Form new campaign */}
         {showPopup && (
           <div
-            className="fixed inset-0 bg-white bg-opacity-80 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
+            className="fixed inset-0 bg-grey-100 bg-opacity-90 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
             onClick={handleOutsideClick}
           >
-            <div className="w-full h-full md:w-1/2 p-4">
+            <NewCampaign />
+
+            {/* <div className="w-full h-full md:w-1/2 p-4">
               <NewCampaignForm />
             </div>
             <div className="w-full h-full md:w-1/2 p-4">
               <Testimonial />
-            </div>
+            </div> */}
           </div>
         )}
       </div>

@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Store, Link as LinkIcon } from 'lucide-react';
-import { AuthLayout } from './AuthLayout';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Store, Link as LinkIcon } from "lucide-react";
+import { AuthLayout } from "./auth/AuthLayout";
 
 export function MerchantRegistrationPage() {
   const navigate = useNavigate();
-  const [shopifyDomain, setShopifyDomain] = useState('');
+  const [shopifyDomain, setShopifyDomain] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement Shopify integration
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   return (
@@ -40,7 +40,10 @@ export function MerchantRegistrationPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="shopify-domain" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="shopify-domain"
+              className="block text-sm font-medium text-gray-700"
+            >
               Domaine de votre boutique Shopify
             </label>
             <div className="mt-1 relative">

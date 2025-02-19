@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { Ambassador } from "../types";
 import axios from "axios";
-import Form from "./NewCampaignForm";
+import Form from "./NewCampaignAmbassador";
 import Testimonial from "./Testimonial";
 
 export function AmbassadorsPage() {

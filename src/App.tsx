@@ -3,16 +3,16 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { SearchPage } from "./components/SearchPage";
 import { Dashboard } from "./components/Dashboard";
-import { LoginPage } from "./components/LoginPage";
-import { RegisterPage } from "./components/RegisterPage";
+import { LoginPage } from "./components/auth/LoginPage";
+import { RegisterPage } from "./components/auth/RegisterPage";
 import { MerchantRegistrationPage } from "./components/MerchantRegistrationPage";
 import { AmbassadorsPage } from "./components/AmbassadorsPage";
 import { ProfilePage } from "./components/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { ClerkProvider } from "@clerk/clerk-react";
-import { UserRegistration } from "./components/UserRegistration";
-import { AuthLoadingPage } from "./components/AuthLoadingPage";
-import CampaignsPage from "./components/CampaignsPage";
+import { UserRegistration } from "./components/auth/UserRegistration";
+import { AuthLoadingPage } from "./components/auth/AuthLoadingPage";
+import CampaignsPage from "./components/campaigns/CampaignsPage";
 
 function App() {
   return (

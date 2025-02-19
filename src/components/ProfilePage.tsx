@@ -2,6 +2,9 @@ import { useUser } from "@clerk/clerk-react";
 import { Navigation } from "./Navigation";
 import { Instagram, Twitch } from "lucide-react";
 import shopifyLogo from "../assets/logo-shopify.png";
+import axios from "axios";
+
+const shopUrl = "e5jqg8-y2.myshopify.com";
 
 export const ProfilePage = () => {
   const user = useUser();
@@ -10,7 +13,7 @@ export const ProfilePage = () => {
     const CLIENT_ID = import.meta.env.VITE_SHOPIFY_CLIENT_KEY;
     const REDIRECT_URI = import.meta.env.VITE_SHOPIFY_REDIRECT_URI;
     const SCOPES = "read_products,read_orders"; // Ajoute d'autres permissions si nécessaire
-    const shopUrl = "ambassy-test.myshopify.com";
+    // const shopUrl = "ambassy-test.myshopify.com";
     const userId = sessionStorage.getItem("userId");
     // const shopUrl = shop.endsWith(".myshopify.com") ? shop : `${shop}.myshopify.com`;
     console.log("CLIENT_ID :", CLIENT_ID);
@@ -77,6 +80,38 @@ export const ProfilePage = () => {
     // const url = import.meta.env.VITE_API_SERVER + '/api/social/authenticate/tiktok';
     console.log("print URL :", url);
     window.location.href = url;
+  };
+
+  const fetchShopifyData = () => {
+    axios
+      .get(import.meta.env.VITE_API_SERVER + "/api/ecommerce/get-stats", {
+        auth: {
+          username: "db1f62f484dc61ff91a25df8eef571f9",
+          password: "755d1b747f79c9485a30ad184754ef2f",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // const url = `https://${shopUrl}/admin/api/2025-01/orders.json?status=any`;
+
+    // axios
+    //   .get(url, {
+    //     auth: {
+    //       username: "db1f62f484dc61ff91a25df8eef571f9",
+    //       password: "755d1b747f79c9485a30ad184754ef2f",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   return (
@@ -197,6 +232,12 @@ export const ProfilePage = () => {
                     <img src={shopifyLogo} className="w-4 h-4 mr-1" />
                     <button onClick={handleShopifyLogin}>
                       Se connecter a Shopify
+                    </button>
+                  </div>
+                  <div className="flex flex-row items-center">
+                    <img src={shopifyLogo} className="w-4 h-4 mr-1" />
+                    <button onClick={fetchShopifyData}>
+                      Recup data Shopify
                     </button>
                   </div>
                 </div>

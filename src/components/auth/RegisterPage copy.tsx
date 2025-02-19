@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Building } from 'lucide-react';
-import { AuthLayout } from './AuthLayout';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, User, Building } from "lucide-react";
+import { AuthLayout } from "./AuthLayout";
 
 export function RegisterPage() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<'client' | 'influencer'>('client');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [role, setRole] = useState<"client" | "influencer">("client");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (role === 'client') {
-      navigate('/register/merchant');
+    if (role === "client") {
+      navigate("/register/merchant");
     } else {
       // TODO: Implement influencer registration
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
   };
 
   return (
-    <AuthLayout
-      title="Créer un compte"
-      subtitle="Rejoignez notre communauté"
-    >
+    <AuthLayout title="Créer un compte" subtitle="Rejoignez notre communauté">
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -34,11 +31,11 @@ export function RegisterPage() {
             <button
               type="button"
               className={`p-4 text-center rounded-lg border ${
-                role === 'client'
-                  ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
-                  : 'border-gray-200 hover:border-gray-300'
+                role === "client"
+                  ? "border-indigo-600 bg-indigo-50 text-indigo-600"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
-              onClick={() => setRole('client')}
+              onClick={() => setRole("client")}
             >
               <Building className="h-6 w-6 mx-auto mb-2" />
               <span className="text-sm font-medium">Une marque</span>
@@ -46,11 +43,11 @@ export function RegisterPage() {
             <button
               type="button"
               className={`p-4 text-center rounded-lg border ${
-                role === 'influencer'
-                  ? 'border-indigo-600 bg-indigo-50 text-indigo-600'
-                  : 'border-gray-200 hover:border-gray-300'
+                role === "influencer"
+                  ? "border-indigo-600 bg-indigo-50 text-indigo-600"
+                  : "border-gray-200 hover:border-gray-300"
               }`}
-              onClick={() => setRole('influencer')}
+              onClick={() => setRole("influencer")}
             >
               <User className="h-6 w-6 mx-auto mb-2" />
               <span className="text-sm font-medium">Un influenceur</span>
@@ -59,8 +56,11 @@ export function RegisterPage() {
         </div>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            {role === 'client' ? 'Nom de l\'entreprise' : 'Nom complet'}
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
+            {role === "client" ? "Nom de l'entreprise" : "Nom complet"}
           </label>
           <div className="mt-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -79,7 +79,10 @@ export function RegisterPage() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Adresse email
           </label>
           <div className="mt-1 relative">
@@ -101,7 +104,10 @@ export function RegisterPage() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Mot de passe
           </label>
           <div className="mt-1 relative">
@@ -132,8 +138,12 @@ export function RegisterPage() {
         </div>
 
         <div className="text-center">
-          <Link to="/login" className="text-sm text-gray-600 hover:text-gray-900">
-            Déjà un compte? <span className="text-indigo-600 font-medium">Se connecter</span>
+          <Link
+            to="/login"
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            Déjà un compte?{" "}
+            <span className="text-indigo-600 font-medium">Se connecter</span>
           </Link>
         </div>
       </form>
