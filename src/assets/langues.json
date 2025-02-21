@@ -1,0 +1,15 @@
+[
+  { "name": "Arabe", "code": "ar" },
+  { "name": "Chinois (simplifié)", "code": "zh-CN" },
+  { "name": "Chinois (traditionnel)", "code": "zh-TW" },
+  { "name": "Néerlandais", "code": "nl" },
+  { "name": "Anglais", "code": "en" },
+  { "name": "Finnois", "code": "fi" },
+  { "name": "Français", "code": "fr" },
+  { "name": "Allemand", "code": "de" },
+  { "name": "Italien", "code": "it" },
+  { "name": "Japonais", "code": "ja" },
+  { "name": "Portugais", "code": "pt" },
+  { "name": "Russe", "code": "ru" },
+  { "name": "Espagnol", "code": "es" }
+]

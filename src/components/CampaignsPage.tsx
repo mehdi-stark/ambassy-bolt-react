@@ -1,7 +1,6 @@
 import { FileSearch2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import Testimonial from "../Testimonial";
-import NewCampaign from "./NewCampaignForm";
+import NewCampaign from "./global_campaigns/NewCampaignForm";
 
 const CampaignsPage = () => {
   const [totalCampaigns, setTotalCampaigns] = useState(0);

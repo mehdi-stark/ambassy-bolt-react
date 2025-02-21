@@ -8,8 +8,9 @@ import {
 } from "lucide-react";
 import type { Ambassador } from "../types";
 import axios from "axios";
-import Form from "./NewCampaignAmbassador";
-import Testimonial from "./Testimonial";
+import Form from "./ambassador_campaign/NewCampaignAmbassador";
+import Testimonial from "./ambassador_campaign/Testimonial";
+import ServiceForm from "./ambassador_campaign/NewAmbassadorCampaignForm";
 
 export function AmbassadorsPage() {
   const [activeTab, setActiveTab] = useState<string | "all">("all");
@@ -270,16 +271,17 @@ export function AmbassadorsPage() {
       </div>
 
       {selectedAmbassador && (
+        // <div
+        //   className="fixed inset-0 bg-slate-200 bg-blur flex items-center justify-center z-[99] popup-overlay
+        //   p-4 rounded-xl"
+        //   onClick={handleOutsideClick}
+        // >
         <div
-          className="fixed inset-0 bg-black bg-opacity-80 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
+          className="fixed inset-0 bg-slate-200 bg-blur flex items-center justify-center z-[99] popup-overlay
+        rounded-xl"
           onClick={handleOutsideClick}
         >
-          <div className="w-full h-full md:w-1/2 p-4">
-            <Form />
-          </div>
-          <div className="w-full h-full md:w-1/2 p-4">
-            <Testimonial />
-          </div>
+          <ServiceForm ambassador={selectedAmbassador}></ServiceForm>
         </div>
       )}
     </div>

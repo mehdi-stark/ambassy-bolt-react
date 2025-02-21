@@ -12,7 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { ClerkProvider } from "@clerk/clerk-react";
 import { UserRegistration } from "./components/auth/UserRegistration";
 import { AuthLoadingPage } from "./components/auth/AuthLoadingPage";
-import CampaignsPage from "./components/campaigns/CampaignsPage";
+import CampaignsPage from "./components/CampaignsPage";
 
 function App() {
   return (

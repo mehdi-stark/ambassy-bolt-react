@@ -11,6 +11,8 @@ import Instagram from "../../assets/logo-instagram.jpg";
 import { MultiSelect } from "primereact/multiselect";
 
 import PlatformItem from "./PlatformItem";
+import countries from "../../assets/countries.json";
+import languages from "../../assets/langues.json";
 
 const platforms = [
   { name: "Instagram", logo: Instagram },
@@ -34,6 +36,8 @@ const NewCampaign = () => {
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const navigate = useNavigate();
   const [selectedCities, setSelectedCities] = useState(null);
+  const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -108,16 +112,38 @@ const NewCampaign = () => {
           <h2>Décrire votre audience cible</h2>
           <Form>
             <Form.Group controlId="country">
-              <Form.Label>Pays</Form.Label>
+              <Form.Label>Choisissez le(s) pays cible(s)</Form.Label>
 
               <div className="card flex justify-content-center">
                 <MultiSelect
-                  value={selectedCities}
-                  onChange={(e) => setSelectedCities(e.value)}
-                  options={cities}
+                  value={selectedCountries}
+                  onChange={(e) => setSelectedCountries(e.value)}
+                  filter
+                  options={countries}
                   optionLabel="name"
                   display="chip"
-                  placeholder="Select Cities"
+                  placeholder="Selectionnez"
+                  maxSelectedLabels={3}
+                  className="w-full md:w-20rem bg-grey-100"
+                />
+              </div>
+            </Form.Group>
+            {/* Add other filtering fields here */}
+          </Form>
+
+          <Form>
+            <Form.Group controlId="country">
+              <Form.Label>Choisissez la langue cible</Form.Label>
+
+              <div className="card flex justify-content-center">
+                <MultiSelect
+                  value={selectedLanguages}
+                  onChange={(e) => setSelectedLanguages(e.value)}
+                  filter
+                  options={languages}
+                  optionLabel="name"
+                  display="chip"
+                  placeholder="Selectionnez"
                   maxSelectedLabels={3}
                   className="w-full md:w-20rem bg-grey-100"
                 />
