@@ -1,14 +1,59 @@
 import { FileSearch2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import NewCampaign from "./global_campaigns/NewCampaignForm";
+import axios from "axios";
+import CampaignItem from "./CampaignItem";
 
 const CampaignsPage = () => {
   const [totalCampaigns, setTotalCampaigns] = useState(0);
   const [activeCampaigns, setActiveCampaigns] = useState(0);
   const [archivedCampaigns, setArchivedCampaigns] = useState(0);
-  const [campaigns, setCampaigns] = useState([]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [activeTab, setActiveTab] = useState<string | "all">("all");
+  const user = sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user") as string)
+    : null;
+  console.log("User:", user);
+
+  const fetchCampaigns = async () => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_API_SERVER +
+          `/api/campaigns/ambassador/${user?.userId}`
+      ); // Remplace par ton endpoint
+      const data = response.data;
+      console.log("API response data:", data); // 🟡 Vérifie le format ici
+
+      // Stocke dans le sessionStorage
+      sessionStorage.setItem("campaigns", JSON.stringify(data));
+      updateCampaignsState(data);
+    } catch (error) {
+      console.error("Erreur lors de la récupération des campagnes :", error);
+    }
+  };
+
+  const updateCampaignsState = (data: any[]) => {
+    console.log("Update campaign data:", data); // 🟡 Vérifie le format ici
+    setCampaigns(data);
+    setTotalCampaigns(data.length);
+    setActiveCampaigns(data.filter((c) => c.status === "active").length);
+    setArchivedCampaigns(data.filter((c) => c.status === "archived").length);
+  };
+
+  useEffect(() => {
+    // Vérifie si les campagnes sont dans le sessionStorage
+    sessionStorage.removeItem("campaigns");
+    console.log("Sessionstorage on campaigns:", sessionStorage);
+    const storedCampaigns = sessionStorage.getItem("campaigns");
+    if (storedCampaigns) {
+      console.log("Stored campaigns:", storedCampaigns);
+      updateCampaignsState(JSON.parse(storedCampaigns));
+    } else {
+      console.log("No stored campaigns, fetching from API");
+      fetchCampaigns(); // Sinon, envoie une requête API
+    }
+  }, []);
 
   const handleCreateCampaign = (event: React.FormEvent) => {
     event.preventDefault();
@@ -49,7 +94,7 @@ const CampaignsPage = () => {
       <div className="mx-auto flex flex-col">
         {/* Title nb of campaigns */}
         <section
-          className="p-5 campaign-info flex flex-row justify-center space-x-4 bg-white w-full h-[150px] 
+          className="p-5 campaign-info flex flex-row justify-center space-x-4 bg-white w-full h-[130px] 
         shadow-sm items-center rounded-xl border border-gray-100"
         >
           <p className="text-center text-gray-600 font-light text-sm text-custom-grey">
@@ -73,7 +118,7 @@ const CampaignsPage = () => {
         </section>
 
         {/* Filters */}
-        <section className="filters flex md:mt-[80px] mt-8 flex-col p-5 justify-center">
+        <section className="filters flex md:mt-[40px] mt-8 flex-col p-5 justify-center">
           <div className="flex flex-col mb-6 items-center">
             <h1 className="text-3xl font-bold mb-2">
               <span className="text-gradient">Mes Campagnes</span>
@@ -138,14 +183,16 @@ const CampaignsPage = () => {
             <p className="text-gray-600 text-xl">Aucune campagne disponible</p>
           </div>
         )}
-        <section className="campaign-list flex mt-8 w-full mx-auto items-center justify-center">
-          <ul id="campaigns">
+
+        <section className="campaign-list flex w-full bg-white p-12 rounded-xl border border-gray-100">
+          <CampaignItem campaigns={campaigns} />
+          {/* <ul id="campaigns">
             {campaigns.map((campaign, index) => (
               <li key={index}>
-                {campaign.name} - {campaign.status}
+                {campaign.commissionPercentage} - {campaign.status}
               </li>
             ))}
-          </ul>
+          </ul> */}
         </section>
 
         {/* Form new campaign */}
