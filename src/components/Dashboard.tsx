@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BarChart, Users, TrendingUp, DollarSign, Store } from "lucide-react";
 import type { Campaign } from "../types";
 
@@ -34,12 +34,23 @@ const mockStores = [
 ];
 
 export function Dashboard() {
-  console.log("Dashboard");
+  const [userData, setUserData] = useState<any>(null);
+  const [businessStores, setBusinessStores] = useState<any[]>([]);
+
+  useEffect(() => {
+    console.log("Dashboard");
+    const user = sessionStorage.getItem("userComplete");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUserData(parsedUser);
+      setBusinessStores(parsedUser.businessStores || []);
+    }
+  }, []);
   // console.log(
   //   "print sessionStorage :",
   //   JSON.parse(sessionStorage.getItem("user") || "{}")
   // );
-  console.log("print sessionStorage :", sessionStorage);
+
   const handleAddStoreClick = async () => {
     try {
       const response = await fetch("/api/shopify/integration", {
@@ -60,6 +71,7 @@ export function Dashboard() {
     }
   };
 
+  console.log("businessStores", businessStores);
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -193,7 +205,7 @@ export function Dashboard() {
             </button>
           </div>
           <div className="p-6 space-y-4">
-            {mockStores.map((store) => (
+            {businessStores.map((store) => (
               <div
                 key={store.id}
                 className="flex items-center p-4 bg-gray-50 rounded-xl"
@@ -202,15 +214,17 @@ export function Dashboard() {
                   <Store className="w-6 h-6 text-indigo-600" />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h4 className="font-medium text-gray-900">{store.name}</h4>
-                  <p className="text-sm text-gray-500">{store.domain}</p>
+                  <h4 className="font-medium text-gray-900">
+                    {store.storeName}
+                  </h4>
+                  <p className="text-sm text-gray-500">{store.storeUrl}</p>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-medium text-gray-900">
-                    {store.products} produits
+                    {store.stats.totalProducts} produits
                   </div>
                   <div className="text-sm text-gray-500">
-                    {store.monthlyOrders} commandes/mois
+                    {store.stats.monthlyOrders} commandes/mois
                   </div>
                 </div>
               </div>

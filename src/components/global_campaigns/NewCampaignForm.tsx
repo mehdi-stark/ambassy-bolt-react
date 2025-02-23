@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Button, ProgressBar, Dropdown, Form } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, ProgressBar, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-// import Instagram from "../../assets/Instagram.svg";
 import TikTok from "../../assets/TikTok.svg";
 import Youtube from "../../assets/Youtube.svg";
 import Facebook from "../../assets/Facebook.svg";
@@ -9,6 +8,7 @@ import Twitter from "../../assets/Twitter.svg";
 import Snap from "../../assets/logo-snapchat.png";
 import Instagram from "../../assets/logo-instagram.jpg";
 import { MultiSelect } from "primereact/multiselect";
+import { Dropdown } from "primereact/dropdown";
 
 import PlatformItem from "./PlatformItem";
 import countries from "../../assets/countries.json";
@@ -23,14 +23,6 @@ const platforms = [
   { name: "Snapchat", logo: Snap },
 ];
 
-const cities = [
-  { name: "New York", code: "NY" },
-  { name: "Rome", code: "RM" },
-  { name: "London", code: "LDN" },
-  { name: "Istanbul", code: "IST" },
-  { name: "Paris", code: "PRS" },
-];
-
 const NewCampaign = () => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
@@ -38,6 +30,18 @@ const NewCampaign = () => {
   const [selectedCities, setSelectedCities] = useState(null);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [userData, setUserData] = useState<any>(null);
+  const [businessStores, setBusinessStores] = useState<any[]>([]);
+  const [selectedShop, setSelectedShop] = useState("");
+
+  useEffect(() => {
+    const user = sessionStorage.getItem("userComplete");
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      setUserData(parsedUser);
+      setBusinessStores(parsedUser.businessStores || []);
+    }
+  }, []);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -170,7 +174,42 @@ const NewCampaign = () => {
           <Form>
             <Form.Group controlId="shop">
               <Form.Label>Shop</Form.Label>
-              <Dropdown>{/* Add shop options here */}</Dropdown>
+              <Dropdown
+                value={selectedShop.storeName}
+                onChange={(e) => setSelectedShop(e.value.storeName)}
+                options={businessStores}
+                optionLabel="name"
+                placeholder="Select a City"
+                className="w-full md:w-14rem"
+              />
+
+              {/* <select
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                value={selectedShop}
+                onChange={(e) => {
+                  console.log("print onchange e : ", e);
+                  setSelectedShop(e.target.value);
+                }}
+              >
+                <option value="">Sélectionner un shop</option>
+                {businessStores.map((shop) => (
+                  <option key={shop} value={shop}>
+                    {shop}
+                  </option>
+                ))}
+              </select> */}
+              {/* <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  Select a store
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {businessStores.map((store) => (
+                    <Dropdown.Item href="#/action-1">
+                      {store.storeName}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown> */}
             </Form.Group>
             <Form.Group controlId="commission">
               <Form.Label>Pourcentage de commission</Form.Label>
