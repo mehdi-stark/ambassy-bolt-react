@@ -21,28 +21,43 @@ export function UserRegistration() {
       };
 
       try {
-        console.log("Enregistrement de l'utilisateur:", payload);
-        const response = await fetch(
-          import.meta.env.VITE_API_SERVER + "/api/users/register",
+        const existingUserResponse = await fetch(
+          import.meta.env.VITE_API_SERVER + "/api/users?clerkId=" + user.id,
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
+            headers: { "Content-Type": "application/json" },
           }
         );
 
-        const data = await response.json();
+        const existingUserData = await existingUserResponse.json();
 
-        if (response.ok) {
-          sessionStorage.setItem("userId", data.userId);
+        if (existingUserData.length > 0) {
+          sessionStorage.setItem("userId", existingUserData[0].id);
           sessionStorage.setItem("clerkId", user.id);
           navigate("/dashboard");
-        } else {
-          signOut();
-          setError(data.message || "An unknown error occurred.");
+          return;
         }
+        // console.log("Enregistrement de l'utilisateur:", payload);
+        // const response = await fetch(
+        //   import.meta.env.VITE_API_SERVER + "/api/users/register",
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(payload),
+        //   }
+        // );
+
+        // const data = await response.json();
+
+        // if (response.ok) {
+        //   sessionStorage.setItem("userId", data.userId);
+        //   sessionStorage.setItem("clerkId", user.id);
+        //   navigate("/dashboard");
+        // } else {
+        //   signOut();
+        //   setError(data.message || "An unknown error occurred.");
+        // }
       } catch (error) {
         signOut();
         setError("Network error. Please try again.");

@@ -8,9 +8,8 @@ import {
 } from "lucide-react";
 import type { Ambassador } from "../types";
 import axios from "axios";
-import Form from "./ambassador_campaign/NewCampaignAmbassador";
-import Testimonial from "./ambassador_campaign/Testimonial";
 import ServiceForm from "./ambassador_campaign/NewAmbassadorCampaignForm";
+import { useNavigate } from "react-router-dom";
 
 export function AmbassadorsPage() {
   const [activeTab, setActiveTab] = useState<string | "all">("all");
@@ -23,6 +22,7 @@ export function AmbassadorsPage() {
   const [invitationData, setInvitationData] = useState<any>(null);
   const [ambassadors, setAmbassadors] = useState<Ambassador[]>([]);
   const [filteredAmbassadors, setFilteredAmbassadors] = useState<any>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -190,85 +190,107 @@ export function AmbassadorsPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredAmbassadors &&
-          filteredAmbassadors.map((ambassador) => (
-            <div
-              key={ambassador._id}
-              className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              <div className="relative h-40">
-                <img
-                  src={ambassador.ambassadorId.avatar || ""}
-                  alt={ambassador.ambassadorId.name}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-white text-lg font-bold mb-1">
-                    {ambassador.ambassadorId.name}
-                  </h3>
-                  <div className="flex flex-wrap items-center gap-2">
-                    {ambassador.ambassadorId.categories &&
-                      ambassador.ambassadorId.categories.map((category) => (
-                        <span
-                          key={category}
-                          className="px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded-full"
-                        >
-                          {category}
-                        </span>
-                      ))}
+      {filteredAmbassadors.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-96 space-y-4">
+          <Users className="w-12 h-12 text-gray-400" />
+          <p className="text-gray-600 text-center text-xl">
+            Aucun ambassadeur...
+          </p>{" "}
+          <br />
+          <p className="text-gray-600 text-center text-md">
+            Commencez à développer votre réseau en invitant des créateurs de
+            contenu <br /> à rejoindre votre programme.
+          </p>
+          <button
+            className="px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+            onClick={() => navigate("/search")}
+          >
+            Trouver des ambassadeurs
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredAmbassadors &&
+            filteredAmbassadors.map((ambassador) => (
+              <div
+                key={ambassador._id}
+                className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                <div className="relative h-40">
+                  <img
+                    src={ambassador.ambassadorId.avatar || ""}
+                    alt={ambassador.ambassadorId.name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 className="text-white text-lg font-bold mb-1">
+                      {ambassador.ambassadorId.name}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {ambassador.ambassadorId.categories &&
+                        ambassador.ambassadorId.categories.map((category) => (
+                          <span
+                            key={category}
+                            className="px-2 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded-full"
+                          >
+                            {category}
+                          </span>
+                        ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <div
-                    className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                      ambassador.status
-                    )}`}
-                  >
-                    {getStatusIcon(ambassador.status)}
-                    <span className="ml-2 capitalize">{ambassador.status}</span>
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <div
+                      className={`flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                        ambassador.status
+                      )}`}
+                    >
+                      {getStatusIcon(ambassador.status)}
+                      <span className="ml-2 capitalize">
+                        {ambassador.status}
+                      </span>
+                    </div>
+                    <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+                      <MessageCircle className="w-5 h-5" />
+                    </button>
                   </div>
-                  <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
-                    <MessageCircle className="w-5 h-5" />
-                  </button>
+
+                  {ambassador.ambassadorId.notes && (
+                    <p className="text-sm text-gray-600 mb-4">
+                      {ambassador.ambassadorId.notes}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <span>
+                      {ambassador.ambassadorId.platforms?.length} plateformes
+                    </span>
+                    <span>
+                      Dernier contact:{" "}
+                      {new Date(
+                        ambassador.ambassadorId?.lastContact || ""
+                      ).toLocaleDateString()}
+                    </span>
+                  </div>
+
+                  {ambassador.status === "accepted" && (
+                    <button
+                      className="mt-4 w-full px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+                      onClick={() =>
+                        handleRequestCampaignClick(ambassador.ambassadorId)
+                      }
+                    >
+                      Demande de nouvelle campagne
+                    </button>
+                  )}
                 </div>
-
-                {ambassador.ambassadorId.notes && (
-                  <p className="text-sm text-gray-600 mb-4">
-                    {ambassador.ambassadorId.notes}
-                  </p>
-                )}
-
-                <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>
-                    {ambassador.ambassadorId.platforms?.length} plateformes
-                  </span>
-                  <span>
-                    Dernier contact:{" "}
-                    {new Date(
-                      ambassador.ambassadorId?.lastContact || ""
-                    ).toLocaleDateString()}
-                  </span>
-                </div>
-
-                {ambassador.status === "accepted" && (
-                  <button
-                    className="mt-4 w-full px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
-                    onClick={() =>
-                      handleRequestCampaignClick(ambassador.ambassadorId)
-                    }
-                  >
-                    Demande de nouvelle campagne
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
-      </div>
+            ))}
+        </div>
+      )}
 
       {selectedAmbassador && (
         // <div

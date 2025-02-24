@@ -14,7 +14,6 @@ const CampaignsPage = () => {
   const user = sessionStorage.getItem("user")
     ? JSON.parse(sessionStorage.getItem("user") as string)
     : null;
-  console.log("User:", user);
 
   const fetchCampaigns = async () => {
     try {
@@ -23,7 +22,6 @@ const CampaignsPage = () => {
           `/api/campaigns/ambassador/${user?.userId}`
       ); // Remplace par ton endpoint
       const data = response.data;
-      console.log("API response data:", data); // 🟡 Vérifie le format ici
 
       // Stocke dans le sessionStorage
       sessionStorage.setItem("campaigns", JSON.stringify(data));
@@ -34,7 +32,6 @@ const CampaignsPage = () => {
   };
 
   const updateCampaignsState = (data: any[]) => {
-    console.log("Update campaign data:", data); // 🟡 Vérifie le format ici
     setCampaigns(data);
     setTotalCampaigns(data.length);
     setActiveCampaigns(data.filter((c) => c.status === "active").length);
@@ -44,7 +41,6 @@ const CampaignsPage = () => {
   useEffect(() => {
     // Vérifie si les campagnes sont dans le sessionStorage
     sessionStorage.removeItem("campaigns");
-    console.log("Sessionstorage on campaigns:", sessionStorage);
     const storedCampaigns = sessionStorage.getItem("campaigns");
     if (storedCampaigns) {
       console.log("Stored campaigns:", storedCampaigns);
@@ -76,7 +72,6 @@ const CampaignsPage = () => {
         setShowPopup(false);
       }
     };
-
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -176,24 +171,24 @@ const CampaignsPage = () => {
           </div>
         </section>
 
-        {/* Campaigns list */}
-        {campaigns.length === 0 && (
+        {/* No campaign */}
+        {campaigns.length === 0 ? (
           <div className="flex flex-col justify-center items-center h-full space-y-4">
             <FileSearch2 color="blue" className="w-1/2" height={70} />
             <p className="text-gray-600 text-xl">Aucune campagne disponible</p>
           </div>
-        )}
-
-        <section className="campaign-list flex w-full bg-white p-12 rounded-xl border border-gray-100">
-          <CampaignItem campaigns={campaigns} />
-          {/* <ul id="campaigns">
+        ) : (
+          <section className="campaign-list flex w-full bg-white p-8 rounded-xl border border-gray-100">
+            <CampaignItem campaigns={campaigns} status={activeTab} />
+            {/* <ul id="campaigns">
             {campaigns.map((campaign, index) => (
               <li key={index}>
                 {campaign.commissionPercentage} - {campaign.status}
               </li>
             ))}
           </ul> */}
-        </section>
+          </section>
+        )}
 
         {/* Form new campaign */}
         {showPopup && (
