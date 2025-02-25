@@ -23,7 +23,7 @@ const platforms = [
   { name: "Snapchat", logo: Snap },
 ];
 
-const NewCampaign = () => {
+const NewCampaign = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const navigate = useNavigate();
@@ -51,12 +51,12 @@ const NewCampaign = () => {
     setStep(step - 1);
   };
 
-  const closeForm = () => {
-    // Logic to close the form
-    console.log("Closing form...");
-    // navigate("/dashboard");
-    window.location.reload();
-  };
+  // const closeForm = () => {
+  //   // Logic to close the form
+  //   console.log("Closing form...");
+  //   // navigate("/dashboard");
+  //   window.location.reload();
+  // };
 
   const handlePlatformChange = (platform: string, checked: boolean) => {
     setSelectedPlatforms((prev) =>
@@ -73,7 +73,7 @@ const NewCampaign = () => {
           notre reseau d'ambassadeur
         </p>
         <button
-          onClick={closeForm}
+          onClick={onClose}
           className="close-button h-6 items-center justify-center flex hover-red-200"
         >
           X

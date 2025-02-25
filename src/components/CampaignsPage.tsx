@@ -196,7 +196,7 @@ const CampaignsPage = () => {
             className="fixed inset-0 bg-grey-100 bg-opacity-90 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
             onClick={handleOutsideClick}
           >
-            <NewCampaign />
+            <NewCampaign onClose={() => setShowPopup(false)} />
 
             {/* <div className="w-full h-full md:w-1/2 p-4">
               <NewCampaignForm />

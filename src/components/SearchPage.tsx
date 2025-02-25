@@ -304,7 +304,10 @@ export function SearchPage() {
                 <div className="flex items-center text-sm whitespace-nowrap">
                   <TrendingUp className="w-4 h-4 mr-1 text-emerald-500" />
                   <span className="text-emerald-500 font-medium">
-                    {influencer.socialMediaLinks[0].metrics.engagement}%
+                    {influencer.socialMediaLinks[0].metrics.engagement.toFixed(
+                      2
+                    )}
+                    %
                   </span>
                 </div>
               </div>
