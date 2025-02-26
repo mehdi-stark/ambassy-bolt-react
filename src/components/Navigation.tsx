@@ -130,7 +130,7 @@ export function Navigation() {
             <button
               onClick={() => {
                 toggleSidebar();
-                handleNavigation("/profile");
+                handleNavigation("/pricing");
               }}
               className="px-4 py-2 bg-gradient-primary hover-gradient-primary text-white rounded-xl font-medium transition-colors w-full"
             >

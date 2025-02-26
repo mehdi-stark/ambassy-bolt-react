@@ -17,12 +17,9 @@ export function AuthLoadingPage() {
     const fetchUserData = async () => {
       try {
         await axios
-          .get(
-            import.meta.env.VITE_API_SERVER + "/api/users?clerkId=" + user.id,
-            {
-              headers: { "Content-Type": "application/json" },
-            }
-          )
+          .get(import.meta.env.VITE_API_SERVER + "/users?clerkId=" + user.id, {
+            headers: { "Content-Type": "application/json" },
+          })
           .then(async (data) => {
             // debugger;
             // Stocker userId + clerkId en sessionStorage
@@ -47,11 +44,11 @@ export function AuthLoadingPage() {
               userResponse.id || userResponse._id
             );
 
-            // stocker les invitations en attente dans le sessionStorage depuis l'API /api/collaboration-requests
+            // stocker les invitations en attente dans le sessionStorage depuis l'API /collaboration-requests
             await axios
               .get(
                 import.meta.env.VITE_API_SERVER +
-                  "/api/collaboration-requests/" +
+                  "/collaboration-requests/" +
                   userResponse._id,
                 {
                   headers: { "Content-Type": "application/json" },

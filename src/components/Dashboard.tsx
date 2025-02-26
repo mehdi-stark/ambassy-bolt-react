@@ -53,7 +53,7 @@ export function Dashboard() {
 
   const handleAddStoreClick = async () => {
     try {
-      const response = await fetch("/api/shopify/integration", {
+      const response = await fetch("/shopify/integration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

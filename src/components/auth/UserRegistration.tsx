@@ -22,7 +22,7 @@ export function UserRegistration() {
 
       try {
         const existingUserResponse = await fetch(
-          import.meta.env.VITE_API_SERVER + "/api/users?clerkId=" + user.id,
+          import.meta.env.VITE_API_SERVER + "/users?clerkId=" + user.id,
           {
             headers: { "Content-Type": "application/json" },
           }
@@ -33,12 +33,12 @@ export function UserRegistration() {
         if (existingUserData.length > 0) {
           sessionStorage.setItem("userId", existingUserData[0].id);
           sessionStorage.setItem("clerkId", user.id);
-          navigate("/dashboard");
+          navigate("/registration-store");
           return;
         }
         // console.log("Enregistrement de l'utilisateur:", payload);
         // const response = await fetch(
-        //   import.meta.env.VITE_API_SERVER + "/api/users/register",
+        //   import.meta.env.VITE_API_SERVER + "/users/register",
         //   {
         //     method: "POST",
         //     headers: {

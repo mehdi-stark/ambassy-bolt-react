@@ -91,7 +91,7 @@ export function AmbassadorsPage() {
 
   const handleValidateCampaignClick = () => {
     if (selectedAmbassador) {
-      fetch("/api/request-campaign", {
+      fetch("/request-campaign", {
         method: "POST",
         body: JSON.stringify({
           ambassadorId: selectedAmbassador.id,
@@ -112,9 +112,7 @@ export function AmbassadorsPage() {
     const userId = sessionStorage.getItem("userId");
     return axios
       .get(
-        import.meta.env.VITE_API_SERVER +
-          "/api/collaboration-requests/" +
-          userId,
+        import.meta.env.VITE_API_SERVER + "/collaboration-requests/" + userId,
         {
           headers: { "Content-Type": "application/json" },
         }

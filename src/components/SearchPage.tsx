@@ -38,7 +38,7 @@ export function SearchPage() {
     const fetchInfluencers = async () => {
       try {
         const response = await axios.get(
-          import.meta.env.VITE_API_SERVER + "/api/users?role=ambassador"
+          import.meta.env.VITE_API_SERVER + "/users?role=ambassador"
         );
         const filteredAmbassadors = response.data.filter(
           (user: Ambassador) =>
@@ -106,7 +106,7 @@ export function SearchPage() {
     setLoading(true);
     setError("");
     await axios
-      .post(import.meta.env.VITE_API_SERVER + "/api/collaboration-requests", {
+      .post(import.meta.env.VITE_API_SERVER + "/collaboration-requests", {
         proId: sessionStorage.getItem("userId"),
         commission,
         message,

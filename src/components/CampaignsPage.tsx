@@ -19,7 +19,7 @@ const CampaignsPage = () => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_API_SERVER +
-          `/api/campaigns/ambassador/${user?.userId}`
+          `/campaigns/ambassador/${user?.userId}`
       ); // Remplace par ton endpoint
       const data = response.data;
 

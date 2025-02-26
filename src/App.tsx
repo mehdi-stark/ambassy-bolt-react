@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { Navigation } from "./components/Navigation";
 import { SearchPage } from "./components/SearchPage";
 import { Dashboard } from "./components/Dashboard";
@@ -13,6 +18,9 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import { UserRegistration } from "./components/auth/UserRegistration";
 import { AuthLoadingPage } from "./components/auth/AuthLoadingPage";
 import CampaignsPage from "./components/CampaignsPage";
+import StoreForm from "./components/auth/registration form/StoreForm";
+import PricingPage from "./components/PricingPage";
+import SubscriptionSuccess from "./components/subscription/SubscriptionSuccess";
 
 function App() {
   return (
@@ -21,6 +29,33 @@ function App() {
       afterSignOutUrl="/login"
     >
       <Router>
+        <AppContent />
+      </Router>
+    </ClerkProvider>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  const hideNavigationPaths = [
+    "/login",
+    "/register",
+    "/user-register",
+    "/register/merchant",
+    "/registration-form-store",
+    "/subscription-success",
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {!hideNavigationPaths.includes(location.pathname) && <Navigation />}
+      <div
+        className={
+          !hideNavigationPaths.includes(location.pathname)
+            ? "lg:pl-60 pt-16 lg:pt-0"
+            : ""
+        }
+      >
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth-loading" element={<AuthLoadingPage />} />
@@ -30,55 +65,58 @@ function App() {
             path="/register/merchant"
             element={<MerchantRegistrationPage />}
           />
+          <Route path="/registration-form-store" element={<StoreForm />} />
           <Route
             path="*"
             element={
-              <div className="min-h-screen bg-gray-50">
-                <Navigation />
-                <div className="lg:pl-60 pt-16 lg:pt-0">
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        <ProtectedRoute>
-                          <SearchPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/search"
-                      element={
-                        <ProtectedRoute>
-                          <SearchPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/campaigns"
-                      element={
-                        <ProtectedRoute>
-                          <CampaignsPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="/ambassadors" element={<AmbassadorsPage />} />
-                    <Route path="/profile" element={<ProfilePage />} />
-                  </Routes>
-                </div>
-              </div>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <SearchPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/search"
+                  element={
+                    <ProtectedRoute>
+                      <SearchPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/campaigns"
+                  element={
+                    <ProtectedRoute>
+                      <CampaignsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/ambassadors" element={<AmbassadorsPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/pricing" element={<PricingPage />} />
+
+                {/* Subscription */}
+                <Route
+                  path="/subscription-success"
+                  element={<SubscriptionSuccess />}
+                />
+              </Routes>
             }
           />
         </Routes>
-      </Router>
-    </ClerkProvider>
+      </div>
+    </div>
   );
 }
 
