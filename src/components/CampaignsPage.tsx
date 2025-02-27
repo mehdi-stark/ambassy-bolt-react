@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import NewCampaign from "./global_campaigns/NewCampaignForm";
 import axios from "axios";
 import CampaignItem from "./CampaignItem";
+// import { campaigns } from "@/store/useStore";
 
 const CampaignsPage = () => {
   const [totalCampaigns, setTotalCampaigns] = useState(0);
@@ -14,6 +15,8 @@ const CampaignsPage = () => {
   const user = sessionStorage.getItem("user")
     ? JSON.parse(sessionStorage.getItem("user") as string)
     : null;
+
+  console.log("campaigns", campaigns);
 
   const fetchCampaigns = async () => {
     try {
@@ -32,7 +35,7 @@ const CampaignsPage = () => {
   };
 
   const updateCampaignsState = (data: any[]) => {
-    setCampaigns(data);
+    // setCampaigns(data);
     setTotalCampaigns(data.length);
     setActiveCampaigns(data.filter((c) => c.status === "active").length);
     setArchivedCampaigns(data.filter((c) => c.status === "archived").length);

@@ -6,6 +6,15 @@ const StoreForm = () => {
   const [showTitle, setShowTitle] = useState(true);
   const message = "Veuillez renseigner l'url de votre boutique";
 
+  // New business store
+  // let newBusinessStore = {
+  //   userId,
+  //   businessType: "ecommerce",
+  //   platform: "shopify",
+  //   storeName
+  //   storeUrl
+  // };
+
   useEffect(() => {
     if (showTitle) {
       setTimeout(() => {

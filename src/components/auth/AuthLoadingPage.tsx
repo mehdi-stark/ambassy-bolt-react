@@ -2,11 +2,16 @@ import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { useUserStore, businessStores } from "../../store/Store";
+import { set } from "date-fns";
 export function AuthLoadingPage() {
   const { user, isSignedIn } = useUser();
   const { signOut } = useClerk();
   const navigate = useNavigate();
+
+  // Récupération des setters depuis Zustand
+  const { setUser, setCollaborationRequests, clearUser } = useUserStore();
+  const { setBusinessStores } = businessStores();
 
   useEffect(() => {
     if (!isSignedIn || !user) {
@@ -21,10 +26,22 @@ export function AuthLoadingPage() {
             headers: { "Content-Type": "application/json" },
           })
           .then(async (data) => {
-            // debugger;
             // Stocker userId + clerkId en sessionStorage
             const userResponse = data.data[0];
             console.log("data user", userResponse);
+
+            // Stocker les données dans Zustand
+            setUser({
+              userId: userResponse.id || userResponse._id,
+              avatar: userResponse.avatar,
+              clerkId: user.id,
+              email: user.primaryEmailAddress?.emailAddress,
+              name: user.fullName,
+              completeUser: userResponse,
+            });
+
+            setBusinessStores(userResponse.businessStores || []);
+
             sessionStorage.setItem(
               "user",
               JSON.stringify({
@@ -62,6 +79,9 @@ export function AuthLoadingPage() {
                   JSON.stringify(data?.data)
                 );
 
+                // Stocker les invitations dans Zustand
+                setCollaborationRequests(data?.data);
+
                 navigate("/dashboard"); // Redirection finale
                 // return data;
               })
@@ -79,12 +99,14 @@ export function AuthLoadingPage() {
       } catch (error) {
         console.error("Erreur :", error);
         signOut(); // Déconnecte l'utilisateur en cas d'erreur
+        localStorage.clear(); // Supprime les données du localStorage
+        clearUser(); // Déconnecte l'utilisateur et supprime les données du store Zustand
         navigate("/login"); // Retour à la connexion en cas de problème
       }
     };
 
     fetchUserData();
-  }, [isSignedIn, user, navigate, signOut]);
+  }, [isSignedIn, user, navigate, signOut, setUser, setCollaborationRequests]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">

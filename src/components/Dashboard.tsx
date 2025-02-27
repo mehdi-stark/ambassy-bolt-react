@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BarChart, Users, TrendingUp, DollarSign, Store } from "lucide-react";
-import type { Campaign } from "../types";
+import { useUserStore, useBusinessStores } from "../store/Store";
+import { Campaign } from "../types";
 
 const mockCampaigns: Campaign[] = [
   {
@@ -14,38 +15,41 @@ const mockCampaigns: Campaign[] = [
   },
 ];
 
-const mockStores = [
-  {
-    id: "1",
-    name: "Ma Boutique Mode",
-    domain: "ma-boutique-mode.myshopify.com",
-    status: "active",
-    products: 156,
-    monthlyOrders: 234,
-  },
-  {
-    id: "2",
-    name: "Accessoires Luxe",
-    domain: "accessoires-luxe.myshopify.com",
-    status: "active",
-    products: 89,
-    monthlyOrders: 167,
-  },
-];
+// const mockStores = [
+//   {
+//     id: "1",
+//     name: "Ma Boutique Mode",
+//     domain: "ma-boutique-mode.myshopify.com",
+//     status: "active",
+//     products: 156,
+//     monthlyOrders: 234,
+//   },
+//   {
+//     id: "2",
+//     name: "Accessoires Luxe",
+//     domain: "accessoires-luxe.myshopify.com",
+//     status: "active",
+//     products: 89,
+//     monthlyOrders: 167,
+//   },
+// ];
 
 export function Dashboard() {
-  const [userData, setUserData] = useState<any>(null);
-  const [businessStores, setBusinessStores] = useState<any[]>([]);
+  // const [userData, setUserData] = useState<any>(null);
+  // const [businessStores, setBusinessStores] = useState<any[]>([]);
+  const { user } = useUserStore();
+  const { businessStores } = useBusinessStores();
+  console.log("user store", user);
 
-  useEffect(() => {
-    console.log("Dashboard");
-    const user = sessionStorage.getItem("userComplete");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      setUserData(parsedUser);
-      setBusinessStores(parsedUser.businessStores || []);
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("Dashboard");
+  //   const user = sessionStorage.getItem("userComplete");
+  //   if (user) {
+  //     const parsedUser = JSON.parse(user);
+  //     setUserData(parsedUser);
+  //     setBusinessStores(parsedUser.businessStores || []);
+  //   }
+  // }, []);
   // console.log(
   //   "print sessionStorage :",
   //   JSON.parse(sessionStorage.getItem("user") || "{}")
