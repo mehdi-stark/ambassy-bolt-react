@@ -3,6 +3,8 @@ import AmbassadorCampaignForm from "./AmbassadorCampaignForm";
 import { Ambassador } from "../../types";
 
 const ServiceForm = (ambassador) => {
+  console.log("ambassador", ambassador);
+
   return (
     <div className="flex w-full min-h-screen p-8 rounded-xl overflow-hidden">
       {/* Form Section */}

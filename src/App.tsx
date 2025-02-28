@@ -43,6 +43,7 @@ function AppContent() {
     "/user-register",
     "/register/merchant",
     "/registration-form-store",
+    "/registration-form-social",
     "/subscription-success",
   ];
 
@@ -66,6 +67,7 @@ function AppContent() {
             element={<MerchantRegistrationPage />}
           />
           <Route path="/registration-form-store" element={<StoreForm />} />
+          <Route path="/registration-form-social" element={<StoreForm />} />
           <Route
             path="*"
             element={

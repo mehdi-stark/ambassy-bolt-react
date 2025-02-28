@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useUserStore, businessStores } from "../../store/Store";
+import { useUserStore, useBusinessStores } from "../../store/Store";
 import { set } from "date-fns";
 export function AuthLoadingPage() {
   const { user, isSignedIn } = useUser();
@@ -11,7 +11,7 @@ export function AuthLoadingPage() {
 
   // Récupération des setters depuis Zustand
   const { setUser, setCollaborationRequests, clearUser } = useUserStore();
-  const { setBusinessStores } = businessStores();
+  const { setBusinessStores } = useBusinessStores();
 
   useEffect(() => {
     if (!isSignedIn || !user) {

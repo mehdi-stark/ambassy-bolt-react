@@ -9,7 +9,6 @@ import Snap from "../../assets/logo-snapchat.png";
 import Instagram from "../../assets/logo-instagram.jpg";
 import { MultiSelect } from "primereact/multiselect";
 import { Dropdown } from "primereact/dropdown";
-
 import PlatformItem from "./PlatformItem";
 import countries from "../../assets/countries.json";
 import languages from "../../assets/langues.json";
@@ -26,29 +25,15 @@ const platforms = [
 const NewCampaign = ({ onClose }) => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
-  const navigate = useNavigate();
-  const [selectedCities, setSelectedCities] = useState(null);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [userData, setUserData] = useState<any>(null);
   const [businessStores, setBusinessStores] = useState<any[]>([]);
   const [selectedShop, setSelectedShop] = useState("");
-
-  // const [newCampaign, setNewCampaign] = useState({
-  //   platform: "",
-  //   country: "",
-  //   percentageCommission: 0,
-  //   summary: "",
-  //   expectations: "",
-  // });
-
-  let newCampaign = {
-    platform: "",
-    country: "",
-    percentageCommission: 0,
-    summary: "",
-    expectations: "",
-  };
+  const [commissionPercentage, setCommissionPercentage] = useState(0);
+  const [summary, setSummary] = useState("");
+  const [expectations, setExpectations] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = sessionStorage.getItem("userComplete");
@@ -67,30 +52,48 @@ const NewCampaign = ({ onClose }) => {
     setStep(step - 1);
   };
 
-  // const closeForm = () => {
-  //   // Logic to close the form
-  //   console.log("Closing form...");
-  //   // navigate("/dashboard");
-  //   window.location.reload();
-  // };
-
   const handlePlatformChange = (platform: string, checked: boolean) => {
     setSelectedPlatforms((prev) =>
       checked ? [...prev, platform] : prev.filter((p) => p !== platform)
     );
   };
 
+  const handleSubmit = () => {
+    const newCampaign = {
+      proId: userData._id,
+      ambassadorId: userData._id, // Assuming the same user is the ambassador
+      businessId: selectedShop,
+      amount: 0, // You need to set this value
+      affiliateLink: {
+        title: summary,
+      },
+      campaignScript: expectations,
+      commissionPercentage,
+      status: "active",
+      category: "", // You need to set this value
+      requirements: "", // You need to set this value
+      platform: selectedPlatforms.length > 0 ? selectedPlatforms[0] : "",
+      targetCountries: selectedCountries,
+      targetAudience: "", // You need to set this value
+      targetLanguages: selectedLanguages,
+      createdBy: userData._id,
+    };
+
+    // Send newCampaign to your API
+    console.log("New Campaign Data:", newCampaign);
+  };
+
   return (
     <div className="new-campaign p-4 bg-white rounded-xl border border-gray-100 shadow-sm w-full max-w-4xl mx-auto">
       {/* Title */}
-      <div className="flex justify-between space-x-6 mb-4">
+      <div className="flex justify-between items-center mb-4">
         <p className="text-lg">
-          Creer votre campagne et trouver immediatemment votre audience grace a
-          notre reseau d'ambassadeur
+          Créez votre campagne et trouvez immédiatement votre audience grâce à
+          notre réseau d'ambassadeurs
         </p>
         <button
           onClick={onClose}
-          className="close-button h-6 items-center justify-center flex hover-red-200"
+          className="close-button h-6 items-center justify-center flex hover:text-red-500"
         >
           X
         </button>
@@ -145,7 +148,7 @@ const NewCampaign = ({ onClose }) => {
                   options={countries}
                   optionLabel="name"
                   display="chip"
-                  placeholder="Selectionnez"
+                  placeholder="Sélectionnez"
                   maxSelectedLabels={3}
                   className="w-full md:w-20rem bg-grey-100"
                 />
@@ -163,7 +166,7 @@ const NewCampaign = ({ onClose }) => {
                   options={languages}
                   optionLabel="name"
                   display="chip"
-                  placeholder="Selectionnez"
+                  placeholder="Sélectionnez"
                   maxSelectedLabels={3}
                   className="w-full md:w-20rem bg-grey-100"
                 />
@@ -200,15 +203,31 @@ const NewCampaign = ({ onClose }) => {
             </Form.Group>
             <Form.Group controlId="commission">
               <Form.Label>Pourcentage de commission</Form.Label>
-              <Form.Control type="number" />
+              <Form.Control
+                type="number"
+                value={commissionPercentage}
+                onChange={(e) =>
+                  setCommissionPercentage(Number(e.target.value))
+                }
+              />
             </Form.Group>
             <Form.Group controlId="summary">
               <Form.Label>Résumé de l'offre/produit</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+              />
             </Form.Group>
             <Form.Group controlId="expectations">
               <Form.Label>Ce qu'on attend de l'ambassadeur</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={expectations}
+                onChange={(e) => setExpectations(e.target.value)}
+              />
             </Form.Group>
           </Form>
           <div className="flex space-x-4">
@@ -218,10 +237,7 @@ const NewCampaign = ({ onClose }) => {
             >
               Retour
             </button>
-            <Button
-              onClick={() => console.log("Form submitted")}
-              className="bg-gradient-primary"
-            >
+            <Button onClick={handleSubmit} className="bg-gradient-primary">
               Valider
             </Button>
           </div>
