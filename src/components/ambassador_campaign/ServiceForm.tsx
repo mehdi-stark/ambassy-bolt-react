@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import AmbassadorCampaignForm from "./AmbassadorCampaignForm";
+import AmbassadorCampaignForm from "./Form";
 import { Ambassador } from "../../types";
 
-const ServiceForm = (ambassador) => {
+const ServiceForm = ({ ambassador, onReturn }) => {
   console.log("ambassador", ambassador);
 
   return (
-    <div className="flex w-full min-h-screen p-8 rounded-xl overflow-hidden">
+    <div className="flex md:flex-row flex-col w-full md:h-screen rounded-xl p-3 bg-white">
       {/* Form Section */}
       {/* <div className="md:w-1/2 p-8 bg-white overflow-auto h-full">
         <AmbassadorCampaignForm />
       </div> */}
       {/* Form Section */}
-      <div className="md:w-1/2 bg-white p-4 h-full">
-        <AmbassadorCampaignForm />
+      <div className="md:w-1/2 bg-white md:h-screen">
+        <AmbassadorCampaignForm onReturn={onReturn} />
       </div>
 
       {/* Testimonial Section */}
-      <div className="w-1/2 relative bg-neutral-100 overflow-hidden h-full rounded-r-xl">
-        <div className="relative h-full">
+      <div className="w-1/2 md:relative bg-white md:overflow-hidden md:h-screen rounded-r-xl p-2">
+        <div className="md:relative h-full">
           <img
             src={ambassador.avatar || ambassador.ambassador.avatar || ""}
             alt="Testimonial"

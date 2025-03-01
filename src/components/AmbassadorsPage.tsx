@@ -37,6 +37,10 @@ export function AmbassadorsPage() {
     };
   }, []);
 
+  function onReturn() {
+    setSelectedAmbassador(null);
+  }
+
   useEffect(() => {
     fetchUserData().then((storedData) => {
       if (storedData) {
@@ -301,7 +305,10 @@ export function AmbassadorsPage() {
         rounded-xl"
           onClick={handleOutsideClick}
         >
-          <ServiceForm ambassador={selectedAmbassador}></ServiceForm>
+          <ServiceForm
+            ambassador={selectedAmbassador}
+            onReturn={onReturn}
+          ></ServiceForm>
         </div>
       )}
     </div>

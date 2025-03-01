@@ -1,4 +1,4 @@
-const AmbassadorCampaignForm = () => {
+const AmbassadorCampaignForm = ({ onReturn }) => {
   return (
     <div className="flex flex-col max-w-2xl mx-auto h-full">
       {/* <div className="flex items-center mb-8">
@@ -40,6 +40,7 @@ const AmbassadorCampaignForm = () => {
             Donnez un résumé rapide de votre offre
           </h2>
           <textarea
+            required="true"
             placeholder="Fournissez aux influenceurs un bref aperçu de votre marque et des objectifs de la campagne..."
             className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
           />
@@ -166,7 +167,10 @@ const AmbassadorCampaignForm = () => {
         </section>
 
         <div className="flex justify-between mt-6">
-          <button className="px-6 py-2 border rounded-lg hover:bg-gray-50">
+          <button
+            onClick={onReturn}
+            className="px-6 py-2 border rounded-lg hover:bg-gray-50"
+          >
             Retour
           </button>
           <button className="px-6 py-2 bg-gradient-primary text-white rounded-lg hover:bg-orange-600">
