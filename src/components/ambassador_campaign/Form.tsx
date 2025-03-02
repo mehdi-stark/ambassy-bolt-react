@@ -1,4 +1,10 @@
 const AmbassadorCampaignForm = ({ onReturn }) => {
+  let formDetails = {
+    todoByInfluencer: "",
+    offerSummary: "",
+    storeUrl: "",
+  };
+
   return (
     <div className="flex flex-col max-w-2xl mx-auto h-full">
       {/* <div className="flex items-center mb-8">
@@ -15,7 +21,9 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
 
       <div className="space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-2">URL de votre boutique</h2>
+          <h2 className="text-xl font-semibold mb-2">
+            URL de votre boutique <span className="text-red-500">*</span>
+          </h2>
           {/* <p className="text-gray-600 mb-4">
             Ce compte représentera votre marque auprès de votre ambassadeur
           </p> */}
@@ -23,6 +31,7 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
             type="text"
             placeholder="Exemple : ma-boutique.shopify.com"
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+            onChange={(e) => (formDetails.storeUrl = e.target.value)}
           />
         </section>
 
@@ -37,12 +46,15 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
 
         <section>
           <h2 className="text-xl font-semibold mb-2">
-            Donnez un résumé rapide de votre offre
+            Donnez un résumé rapide de votre offre{" "}
+            <span className="text-red-500">*</span>
           </h2>
           <textarea
-            required="true"
+            id="offerSummary"
+            required={true}
             placeholder="Fournissez aux influenceurs un bref aperçu de votre marque et des objectifs de la campagne..."
             className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+            onChange={(e) => (formDetails.offerSummary = e.target.value)}
           />
           <div className="mt-2">
             <p className="text-gray-600 mb-2 text-sm">
@@ -103,11 +115,14 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
 
         <section>
           <h2 className="text-xl font-semibold mb-2">
-            Ce qui doit être fait par l'influenceur
+            Ce qui doit être fait par l'influenceur{" "}
+            <span className="text-red-500">*</span>
           </h2>
           <textarea
+            id="todoByInfluencer"
             placeholder="Fournissez aux influenceurs la description de votre tâche..."
             className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+            onChange={(e) => (formDetails.todoByInfluencer = e.target.value)}
           />
           <div className="mt-2">
             <p className="text-gray-600 mb-2 text-sm">
@@ -168,12 +183,30 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
 
         <div className="flex justify-between mt-6">
           <button
+            disabled={
+              !formDetails.todoByInfluencer ||
+              !formDetails.offerSummary ||
+              !formDetails.storeUrl
+                ? true
+                : false
+            }
             onClick={onReturn}
             className="px-6 py-2 border rounded-lg hover:bg-gray-50"
           >
             Retour
           </button>
-          <button className="px-6 py-2 bg-gradient-primary text-white rounded-lg hover:bg-orange-600">
+          <button
+            className="px-6 py-2 bg-gradient-primary text-white rounded-lg hover:bg-orange-600"
+            onClick={() => {
+              console.log("URL de la boutique:", formDetails.storeUrl);
+              console.log("Résumé de l'offre:", formDetails.offerSummary);
+              console.log(
+                "Tâche de l'influenceur:",
+                formDetails.todoByInfluencer
+              );
+              console.log("Détails du formulaire:", formDetails);
+            }}
+          >
             Continuer
           </button>
         </div>
