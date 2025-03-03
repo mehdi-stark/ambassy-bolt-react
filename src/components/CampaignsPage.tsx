@@ -196,7 +196,7 @@ const CampaignsPage = () => {
         {/* Form new campaign */}
         {showPopup && (
           <div
-            className="fixed inset-0 bg-grey-100 bg-opacity-90 bg-blur flex items-center justify-center z-[99] popup-overlay bg-gray-600"
+            className="fixed w-screen md:inset-0 bg-slate-100 bg-blur flex items-center justify-center z-[99] popup-overlay h-screen"
             onClick={handleOutsideClick}
           >
             <NewCampaign onClose={() => setShowPopup(false)} />

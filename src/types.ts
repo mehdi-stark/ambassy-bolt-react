@@ -1,3 +1,10 @@
+import TikTok from './assets/logo-tiktok.jpg';
+import Youtube from './assets/Youtube.svg';
+import Facebook from './assets/Facebook.svg';
+import Twitter from './assets/Twitter.svg';
+import Snap from './assets/logo-snapchat.png';
+import Instagram from './assets/logo-instagram.jpg';
+
 export interface User {
   id: string;
   name: string;
@@ -92,3 +99,13 @@ export interface Campaign {
   endDate?: Date;
   description: string;
 }
+
+
+export const platforms = [
+  { name: "Instagram", logo: Instagram },
+  { name: "TikTok", logo: TikTok },
+  { name: "YouTube", logo: Youtube },
+  { name: "Facebook", logo: Facebook },
+  { name: "Twitter", logo: Twitter },
+  { name: "Snapchat", logo: Snap },
+];

@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-
 interface PlatformItemProps {
   logo: string;
   name: string;
