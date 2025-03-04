@@ -3,11 +3,13 @@ import { Navigation } from "./Navigation";
 import { Instagram, Twitch } from "lucide-react";
 import shopifyLogo from "../assets/logo-shopify.png";
 import axios from "axios";
+import { useUserStore } from "../store/Store";
 
 const shopUrl = "e5jqg8-y2.myshopify.com";
 
 export const ProfilePage = () => {
-  const user = useUser();
+  const { user } = useUserStore();
+  const userClerk = useUser();
 
   const handleShopifyLogin = () => {
     const CLIENT_ID = import.meta.env.VITE_SHOPIFY_CLIENT_KEY;
@@ -139,7 +141,7 @@ export const ProfilePage = () => {
               type="text"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
               disabled
-              value={user.user?.emailAddresses[0].emailAddress}
+              value={userClerk.user?.emailAddresses[0].emailAddress}
             />
           </div>
           <div className="mb-4">

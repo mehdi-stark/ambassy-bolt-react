@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import { updateUserSubscription } from "../../api/user"; // Assumed API call to update subscription
+import { updateUserSubscription } from "../../api/user.js"; // Assumed API call to update subscription
 import { getUserFromSessionStorage } from "../lib/utils";
 import { useUser } from "@clerk/clerk-react";
 const SubscriptionSuccess: React.FC = () => {

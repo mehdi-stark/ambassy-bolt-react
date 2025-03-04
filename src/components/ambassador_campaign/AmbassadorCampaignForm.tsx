@@ -1,5 +1,5 @@
 import React from "react";
-import AmbassadorCampaignForm from "./Form";
+import AmbassadorCampaignForm from "./AmbassadorForm";
 import { Ambassador } from "../../types";
 
 const ServiceForm = ({ ambassador, onReturn }) => {

@@ -10,8 +10,14 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import type { Ambassador, Influencer } from "../types";
+import { useBusinessStores, useUserStore } from "../store/Store";
+import PourcentageCommission from "./ambassador_campaign/PourcentageCommission";
+import { Card } from "react-bootstrap";
 
 export function SearchPage() {
+  const { user } = useUserStore();
+  const { businessStores } = useBusinessStores();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<"rating" | "followers" | "engagement">(
@@ -21,7 +27,6 @@ export function SearchPage() {
     useState<Influencer | null>(null);
   const [selectedAmbassador, setSelectedAmbassador] =
     useState<Ambassador | null>(null);
-  const [shops, setShops] = useState<string[]>(["Shop 1", "Shop 2", "Shop 3"]);
   const [selectedShop, setSelectedShop] = useState("");
   const [commission, setCommission] = useState("");
   const [message, setMessage] = useState("");
@@ -33,6 +38,7 @@ export function SearchPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedCommission, setSelectedCommission] = useState<string>("");
 
   useEffect(() => {
     const fetchInfluencers = async () => {
@@ -75,6 +81,14 @@ export function SearchPage() {
     }
   };
 
+  const handleCommissionSelect = (commission: string) => {
+    setSelectedCommission(commission);
+    // setFormDetails((prev) => ({
+    //   ...prev,
+    //   commission,
+    // }));
+  };
+
   const sortedAmbassadors = [...ambassadors].sort((a, b) => {
     switch (sortBy) {
       case "rating":
@@ -99,6 +113,8 @@ export function SearchPage() {
   };
 
   const handleConnectClickAmbassador = (influencer: Ambassador) => {
+    console.log("print businessStore : ", businessStores);
+    console.log("print user : ", user);
     setSelectedAmbassador(influencer);
   };
 
@@ -189,62 +205,100 @@ export function SearchPage() {
         </div>
       </div>
 
-      {/*  formulaire pour les pro d'invation d'ambassadeur   */}
+      {/*  formulaire d'invation des ambassadeur   */}
       {selectedAmbassador && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[99] popup-overlay"
+          className="fixed inset-0 bg-slate-100 flex items-center justify-center z-[99] popup-overlay w-full h-screen"
           onClick={handleOutsideClick}
         >
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">
-              Connecter avec {selectedAmbassador.name}
-            </h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Shop
-              </label>
-              <select
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={selectedShop}
-                onChange={(e) => setSelectedShop(e.target.value)}
+          <div className="flex justify-center items-center w-1/2 shadow-lg h-screen">
+            <div className="p-8 rounded-lg w-full h-screen flex justify-center items-center flex-col">
+              <h2 className="text-4xl font-bold mb-8">
+                Demande de connexion avec {selectedAmbassador.name}
+              </h2>
+              <div className="mb-4 w-full">
+                <h2 className="text-xl font-semibold mb-1">
+                  Choissisez votre boutique cible
+                </h2>
+                <select
+                  className="mt-1 block w-full pl-3 pr-10 py-3 text-base border border-2 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg"
+                  value={selectedShop}
+                  onChange={(e) => setSelectedShop(e.target.value)}
+                >
+                  <option value="">Sélectionner un shop</option>
+                  {businessStores.map((shop) => (
+                    <option key={shop?._id} value={shop?.storeName}>
+                      {shop?.storeName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-4">
+                <section className="mb-4 w-full flex flex-col">
+                  <h2 className="text-lg md:text-xl font-semibold mb-2">
+                    Pourcentage de commission{" "}
+                    <span className="text-red-500">*</span>
+                  </h2>
+                  <div className="flex space-x-4 overflow-x-auto">
+                    {["10%", "15%", "20%", "Custom"].map((commission) => (
+                      <Card
+                        key={commission}
+                        className={`cursor-pointer w-32 md:w-48 ${
+                          selectedCommission === commission
+                            ? "border-2 border-blue-500"
+                            : "border border-gray-200"
+                        }`}
+                        onClick={() => handleCommissionSelect(commission)}
+                      >
+                        <Card.Body>
+                          <Card.Text className="text-sm md:text-md font-bold">
+                            {commission}
+                          </Card.Text>
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </div>
+                </section>
+
+                {/* <h2 className="text-xl font-semibold mb-1">
+                  Pourcentage de commission
+                </h2>
+                <PourcentageCommission
+                  selectedCommission={selectedCommission}
+                  onClick={handleCommissionSelect}
+                /> */}
+                {/* <label className="block text-sm font-medium text-gray-700">
+                  Pourcentage de commission
+                </label>
+                <input
+                  type="number"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  value={commission}
+                  onChange={(e) => setCommission(e.target.value)}
+                /> */}
+              </div>
+              <div className="mb-4 w-full">
+                <h2 className="text-lg md:text-xl font-semibold mb-2">
+                  Votre message pour l'ambassadeur{" "}
+                  <span className="text-red-500">*</span>
+                </h2>
+                <textarea
+                  className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+                  value={message}
+                  maxLength={1500}
+                  placeholder=""
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+              </div>
+              <button
+                className="w-full px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+                onClick={() => handleSendRequest(selectedAmbassador)}
+                disabled={loading}
               >
-                <option value="">Sélectionner un shop</option>
-                {shops.map((shop) => (
-                  <option key={shop} value={shop}>
-                    {shop}
-                  </option>
-                ))}
-              </select>
+                {loading ? "Envoi..." : "Envoyer"}
+              </button>
+              {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Pourcentage de commission
-              </label>
-              <input
-                type="number"
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={commission}
-                onChange={(e) => setCommission(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Message
-              </label>
-              <textarea
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </div>
-            <button
-              className="w-full px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
-              onClick={() => handleSendRequest(selectedAmbassador)}
-              disabled={loading}
-            >
-              {loading ? "Envoi..." : "Envoyer"}
-            </button>
-            {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           </div>
         </div>
       )}

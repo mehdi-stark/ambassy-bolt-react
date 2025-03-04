@@ -1,6 +1,6 @@
 import { FileSearch2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import NewCampaign from "./global_campaigns/NewCampaignForm";
+import NewCampaign from "./global_campaigns/GobalCampaignForm";
 import axios from "axios";
 import CampaignItem from "./CampaignItem";
 // import { campaigns } from "@/store/useStore";

@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { Ambassador } from "../types";
 import axios from "axios";
-import ServiceForm from "./ambassador_campaign/ServiceForm";
+import ServiceForm from "./ambassador_campaign/AmbassadorCampaignForm";
 import { useNavigate } from "react-router-dom";
 
 export function AmbassadorsPage() {
