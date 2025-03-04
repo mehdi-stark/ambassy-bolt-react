@@ -11,12 +11,13 @@ import {
 import axios from "axios";
 import type { Ambassador, Influencer } from "../types";
 import { useBusinessStores, useUserStore } from "../store/Store";
-import PourcentageCommission from "./ambassador_campaign/PourcentageCommission";
-import { Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { Card, Modal, Spinner } from "react-bootstrap";
 
 export function SearchPage() {
   const { user } = useUserStore();
   const { businessStores } = useBusinessStores();
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -38,6 +39,7 @@ export function SearchPage() {
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const [selectedCommission, setSelectedCommission] = useState<string>("");
 
   useEffect(() => {
@@ -50,10 +52,7 @@ export function SearchPage() {
           (user: Ambassador) =>
             user.socialMediaLinks && user.socialMediaLinks.length > 0
         );
-        console.log("response :", response);
-        console.log("filteredAmbassadors :", filteredAmbassadors);
         setAmbassadors(filteredAmbassadors);
-        console.log("print ambassadors :", ambassadors);
       } catch (error) {
         console.error("Failed to fetch influencers:", error);
       }
@@ -83,10 +82,7 @@ export function SearchPage() {
 
   const handleCommissionSelect = (commission: string) => {
     setSelectedCommission(commission);
-    // setFormDetails((prev) => ({
-    //   ...prev,
-    //   commission,
-    // }));
+    setCommission(commission);
   };
 
   const sortedAmbassadors = [...ambassadors].sort((a, b) => {
@@ -113,35 +109,39 @@ export function SearchPage() {
   };
 
   const handleConnectClickAmbassador = (influencer: Ambassador) => {
-    console.log("print businessStore : ", businessStores);
-    console.log("print user : ", user);
     setSelectedAmbassador(influencer);
   };
 
   const handleSendRequest = async () => {
     setLoading(true);
     setError("");
-    await axios
-      .post(import.meta.env.VITE_API_SERVER + "/collaboration-requests", {
-        proId: sessionStorage.getItem("userId"),
-        commission,
-        message,
-        ambassadorId: selectedAmbassador?._id,
-      })
-      .then((response) => {
-        console.log("Request sent:", response.data);
-        setShowPopup(false);
-        setSelectedShop("");
-        setCommission("");
-        setMessage("");
-      })
-      .catch((error) => {
-        console.error("Failed to send request:", error);
-        setError("Failed to send request. Please try again.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_SERVER + "/collaboration-requests",
+        {
+          ambassadorId: selectedAmbassador?._id,
+          proId: user?.userId,
+          commission,
+          message,
+        }
+      );
+      console.log("Request sent:", response.data);
+      setShowPopup(false);
+      setSelectedShop("");
+      setCommission("");
+      setMessage("");
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        navigate("/ambassadors");
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to send request:", error);
+      setError("Failed to send request. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleValidateClick = () => {
@@ -211,7 +211,7 @@ export function SearchPage() {
           className="fixed inset-0 bg-slate-100 flex items-center justify-center z-[99] popup-overlay w-full h-screen"
           onClick={handleOutsideClick}
         >
-          <div className="flex justify-center items-center w-1/2 shadow-lg h-screen">
+          <div className="flex justify-center items-center w-full md:w-1/2 shadow-lg h-screen overflow-auto">
             <div className="p-8 rounded-lg w-full h-screen flex justify-center items-center flex-col">
               <h2 className="text-4xl font-bold mb-8">
                 Demande de connexion avec {selectedAmbassador.name}
@@ -233,49 +233,30 @@ export function SearchPage() {
                   ))}
                 </select>
               </div>
-              <div className="mb-4">
-                <section className="mb-4 w-full flex flex-col">
-                  <h2 className="text-lg md:text-xl font-semibold mb-2">
-                    Pourcentage de commission{" "}
-                    <span className="text-red-500">*</span>
-                  </h2>
-                  <div className="flex space-x-4 overflow-x-auto">
-                    {["10%", "15%", "20%", "Custom"].map((commission) => (
-                      <Card
-                        key={commission}
-                        className={`cursor-pointer w-32 md:w-48 ${
-                          selectedCommission === commission
-                            ? "border-2 border-blue-500"
-                            : "border border-gray-200"
-                        }`}
-                        onClick={() => handleCommissionSelect(commission)}
-                      >
-                        <Card.Body>
-                          <Card.Text className="text-sm md:text-md font-bold">
-                            {commission}
-                          </Card.Text>
-                        </Card.Body>
-                      </Card>
-                    ))}
-                  </div>
-                </section>
-
-                {/* <h2 className="text-xl font-semibold mb-1">
-                  Pourcentage de commission
+              <div className="mb-4 w-full flex flex-col">
+                <h2 className="text-lg md:text-xl font-semibold mb-2">
+                  Pourcentage de commission{" "}
+                  <span className="text-red-500">*</span>
                 </h2>
-                <PourcentageCommission
-                  selectedCommission={selectedCommission}
-                  onClick={handleCommissionSelect}
-                /> */}
-                {/* <label className="block text-sm font-medium text-gray-700">
-                  Pourcentage de commission
-                </label>
-                <input
-                  type="number"
-                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                  value={commission}
-                  onChange={(e) => setCommission(e.target.value)}
-                /> */}
+                <div className="flex space-x-4 overflow-x-auto">
+                  {["10", "15", "20", "Custom"].map((commission) => (
+                    <Card
+                      key={commission}
+                      className={`cursor-pointer w-32 md:w-48 ${
+                        selectedCommission === commission
+                          ? "border-2 border-blue-500"
+                          : "border border-gray-200"
+                      }`}
+                      onClick={() => handleCommissionSelect(commission)}
+                    >
+                      <Card.Body>
+                        <Card.Text className="text-sm md:text-md font-bold">
+                          {commission}%
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
               </div>
               <div className="mb-4 w-full">
                 <h2 className="text-lg md:text-xl font-semibold mb-2">
@@ -283,19 +264,33 @@ export function SearchPage() {
                   <span className="text-red-500">*</span>
                 </h2>
                 <textarea
-                  className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+                  className="w-full p-3 border rounded-lg h-64 md:h-[400px] focus:outline-none focus:ring-2 focus:ring-gradient-primary"
                   value={message}
                   maxLength={1500}
-                  placeholder=""
+                  placeholder="Bonjour [Nom du destinataire],
+
+Je suis [Votre Nom], [Votre Position] chez [Nom de votre entreprise]. Je vous écris pour exprimer mon intérêt à collaborer avec vous.
+
+[Décrivez brièvement votre entreprise et ce que vous faites.]
+
+Je pense que notre collaboration pourrait être bénéfique pour les raisons suivantes :
+1. [Raison 1 : Par exemple, nos produits/services se complètent bien avec les vôtres.]
+2. [Raison 2 : Par exemple, nous avons une base de clients similaire et pouvons nous entraider à atteindre de nouveaux marchés.]
+3. [Raison 3 : Par exemple, nous avons des valeurs communes et une vision alignée.]
+
+Je serais ravi(e) de discuter plus en détail de cette opportunité. Merci de considérer ma demande.
+
+Cordialement,
+[Votre Nom]"
                   onChange={(e) => setMessage(e.target.value)}
                 />
               </div>
               <button
                 className="w-full px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
-                onClick={() => handleSendRequest(selectedAmbassador)}
+                onClick={handleSendRequest}
                 disabled={loading}
               >
-                {loading ? "Envoi..." : "Envoyer"}
+                {loading ? <Spinner animation="border" size="sm" /> : "Envoyer"}
               </button>
               {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
             </div>
@@ -303,8 +298,16 @@ export function SearchPage() {
         </div>
       )}
 
+      <Modal show={success} onHide={() => setSuccess(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Succès</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Votre demande a été envoyée avec succès !</p>
+        </Modal.Body>
+      </Modal>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {/* {sortedInfluencers.map((influencer) => ( */}
         {sortedAmbassadors.map((influencer) => (
           <div
             key={influencer._id}
@@ -409,67 +412,6 @@ export function SearchPage() {
           </div>
         ))}
       </div>
-
-      {/* {showPopup && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">Envoyer une demande</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Shop
-              </label>
-              <select
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={selectedShop}
-                onChange={(e) => setSelectedShop(e.target.value)}
-              >
-                {shops.map((shop) => (
-                  <option key={shop} value={shop}>
-                    {shop}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Pourcentage de commission
-              </label>
-              <input
-                type="number"
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={commission}
-                onChange={(e) => setCommission(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Message
-              </label>
-              <textarea
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md mr-2"
-                onClick={() => setShowPopup(false)}
-              >
-                Annuler
-              </button>
-              <button
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md"
-                onClick={() =>
-                  selectedAmbassador && handleSendRequest(selectedAmbassador)
-                }
-              >
-                Envoyer
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }

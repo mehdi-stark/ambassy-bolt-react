@@ -75,6 +75,7 @@ const NewCampaign = ({ onClose }) => {
       campaignScript: expectations,
       commissionPercentage,
       status: "active",
+      type: "global",
       category: "", // You need to set this value
       requirements: "", // You need to set this value
       platform: selectedPlatforms.length > 0 ? selectedPlatforms[0] : "",

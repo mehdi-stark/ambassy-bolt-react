@@ -3,18 +3,20 @@ import React, { useEffect, useState } from "react";
 import NewCampaign from "./global_campaigns/GobalCampaignForm";
 import axios from "axios";
 import CampaignItem from "./CampaignItem";
+import { useCampaignStore, useUserStore } from "../store/Store";
 // import { campaigns } from "@/store/useStore";
-
 const CampaignsPage = () => {
   const [totalCampaigns, setTotalCampaigns] = useState(0);
   const [activeCampaigns, setActiveCampaigns] = useState(0);
   const [archivedCampaigns, setArchivedCampaigns] = useState(0);
-  const [campaigns, setCampaigns] = useState<any[]>([]);
+  // const [campaigns, setCampaigns] = useState<any[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [activeTab, setActiveTab] = useState<string | "all">("all");
-  const user = sessionStorage.getItem("user")
-    ? JSON.parse(sessionStorage.getItem("user") as string)
-    : null;
+  // const user = sessionStorage.getItem("user")
+  //   ? JSON.parse(sessionStorage.getItem("user") as string)
+  //   : null;
+  const { user } = useUserStore();
+  const { campaigns, setCampaigns, addCampaign } = useCampaignStore();
 
   console.log("campaigns", campaigns);
 
@@ -29,6 +31,7 @@ const CampaignsPage = () => {
       // Stocke dans le sessionStorage
       sessionStorage.setItem("campaigns", JSON.stringify(data));
       updateCampaignsState(data);
+      setCampaigns(data);
     } catch (error) {
       console.error("Erreur lors de la récupération des campagnes :", error);
     }

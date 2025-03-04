@@ -70,7 +70,7 @@ const ServiceForm = ({ ambassador, onReturn }) => {
 
       {/* Form Section */}
       <div className="w-full md:w-1/2 bg-white md:h-screen overflow-auto">
-        <AmbassadorCampaignForm onReturn={onReturn} />
+        <AmbassadorCampaignForm ambassador={ambassador} onReturn={onReturn} />
       </div>
     </div>
   );

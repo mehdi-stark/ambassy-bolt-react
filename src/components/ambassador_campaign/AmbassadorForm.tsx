@@ -1,16 +1,30 @@
 import { useUserStore, useBusinessStores } from "../../store/Store";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, ProgressBar, Form, Card } from "react-bootstrap";
+import {
+  Button,
+  ProgressBar,
+  Form,
+  Card,
+  Spinner,
+  Modal,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PlatformItem from "../global_campaigns/PlatformItem";
 import { platforms } from "../../types";
 
-const AmbassadorCampaignForm = ({ onReturn }) => {
+const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [selectedCommission, setSelectedCommission] = useState<string>("");
-  const [formDetails, setFormDetails] = useState({
+  const [formDetails, setFormDetails] = useState<{
+    todoByInfluencer: string;
+    offerSummary: string;
+    storeUrl: string;
+    selectedPlatforms: string[];
+    additionalInfo: string;
+    commission: string;
+  }>({
     todoByInfluencer: "",
     offerSummary: "",
     storeUrl: "",
@@ -18,14 +32,19 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
     additionalInfo: "",
     commission: "",
   });
-  const userData = useUserStore();
+
+  const { user } = useUserStore();
+  const { businessStores } = useBusinessStores();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const isFormValid =
     formDetails.todoByInfluencer &&
     formDetails.offerSummary &&
     formDetails.storeUrl &&
     formDetails.selectedPlatforms.length > 0 &&
-    formDetails.commission;
+    (step !== 3 || formDetails.commission);
 
   const nextStep = () => {
     setFormDetails((prev) => ({
@@ -63,12 +82,50 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
     }));
   };
 
-  function handleFormSubmit() {
-    console.log("Détails du formulaire:", formDetails);
-    // axios.post("/api/campaigns", formDetails).then((response) => {
-    //   console.log("Réponse de l'API:", response);
-    // });
-  }
+  const handleFormSubmit = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const newCampaign = {
+        proId: user?.userId,
+        ambassadorId: ambassador?._id,
+        commissionPercentage: formDetails.commission,
+        storeUrl: formDetails.storeUrl,
+        campaignSummary: formDetails.offerSummary,
+        campaignScript: formDetails.todoByInfluencer,
+        type: "ambassador",
+        affiliateLink: {
+          title: formDetails.offerSummary,
+        },
+        category: "",
+        requirements: "",
+        platform:
+          selectedPlatforms.length > 0
+            ? selectedPlatforms[0]?.toLowerCase()
+            : "",
+        createdBy: user?.userId,
+      };
+
+      console.log("Détails du formulaire:", formDetails);
+      const response = await axios.post(
+        import.meta.env.VITE_API_SERVER + "/campaigns",
+        newCampaign
+      );
+
+      console.log("Réponse de l'API:", response);
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        onReturn();
+      }, 3000);
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du formulaire:", error);
+      setError("Erreur lors de l'envoi du formulaire. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col max-w-2xl mx-auto h-full overflow-y-auto">
@@ -110,7 +167,7 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
       )}
 
       {step === 2 && (
-        <div className="step-1  p-2 w-full">
+        <div className="step-1 p-2 w-full">
           <h1 className="text-2xl font-bold mb-8">
             Quelle est votre idée de campagne ?
           </h1>
@@ -304,8 +361,8 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
       )}
 
       {step === 3 && (
-        <div className="step-1  p-2 w-full">
-          <h1 className="text-2xl font-bold mb-8">Quelle est le benefice</h1>
+        <div className="step-1 p-2 w-full">
+          <h1 className="text-2xl font-bold mb-8">Quelle est le bénéfice</h1>
 
           <div className="space-y-6">
             <section>
@@ -315,7 +372,7 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
               </h2>
 
               <div className="flex space-x-4">
-                {["10%", "15%", "20%", "Custom"].map((commission) => (
+                {["10", "15", "20", "Custom"].map((commission) => (
                   <Card
                     key={commission}
                     className={`cursor-pointer w-48 ${
@@ -329,7 +386,7 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
                   >
                     <Card.Body>
                       <Card.Text className="text-md font-bold">
-                        {commission}
+                        {commission}%
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -370,11 +427,31 @@ const AmbassadorCampaignForm = ({ onReturn }) => {
                 }`}
                 onClick={handleFormSubmit}
               >
-                Envoyer
+                {loading ? <Spinner animation="border" size="sm" /> : "Envoyer"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      <Modal show={success} onHide={() => setSuccess(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Succès</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Votre campagne a été créée avec succès !</p>
+        </Modal.Body>
+      </Modal>
+
+      {error && (
+        <Modal show={!!error} onHide={() => setError("")} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Erreur</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{error}</p>
+          </Modal.Body>
+        </Modal>
       )}
     </div>
   );
