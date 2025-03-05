@@ -7,6 +7,7 @@ import PlatformItem from "./PlatformItem";
 import countries from "../../assets/favorite_countries.json";
 import languages from "../../assets/favorite_langues.json";
 import { platforms } from "../../types";
+import { useBusinessStores, useUserStore } from "../../store/Store";
 
 const NewCampaign = ({ onClose }) => {
   const [step, setStep] = useState(1);
@@ -16,12 +17,15 @@ const NewCampaign = ({ onClose }) => {
   const [selectedCommission, setSelectedCommission] = useState<string>("");
 
   const [userData, setUserData] = useState<any>(null);
-  const [businessStores, setBusinessStores] = useState<any[]>([]);
   const [selectedShop, setSelectedShop] = useState("");
   const [commissionPercentage, setCommissionPercentage] = useState(0);
   const [summary, setSummary] = useState("");
   const [expectations, setExpectations] = useState("");
   const navigate = useNavigate();
+
+  const { businessStores, setBusinessStores, addBusinessStore } =
+    useBusinessStores();
+  const { user } = useBusinessStores();
 
   const [formDetails, setFormDetails] = useState({
     todoByInfluencer: "",
@@ -32,14 +36,14 @@ const NewCampaign = ({ onClose }) => {
     commission: "",
   });
 
-  useEffect(() => {
-    const user = sessionStorage.getItem("userComplete");
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      setUserData(parsedUser);
-      setBusinessStores(parsedUser.businessStores || []);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const user = sessionStorage.getItem("userComplete");
+  //   if (user) {
+  //     const parsedUser = JSON.parse(user);
+  //     setUserData(parsedUser);
+  //     setBusinessStores(parsedUser.businessStores || []);
+  //   }
+  // }, []);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -61,6 +65,10 @@ const NewCampaign = ({ onClose }) => {
       ...prev,
       commission,
     }));
+  };
+
+  const generateLink = () => {
+    // TODO: ajouter appel api pour generer lien
   };
 
   const handleSubmit = () => {
@@ -208,6 +216,26 @@ const NewCampaign = ({ onClose }) => {
                 className="w-full md:w-14rem border border-2 border-gray-200"
               />
             </section>
+            {selectedShop && (
+              <section className="mb-4 w-full flex flex-col">
+                <h2 className="text-xl font-semibold mb-2">
+                  Lien d'affiliation <span className="text-red-500">*</span>
+                </h2>
+                <input
+                  type="text"
+                  disabled={true}
+                  value="https"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
+                />
+                {/* <button className="">Generer</button> */}
+                <Button
+                  onClick={generateLink}
+                  className="bg-gradient-primary w-full"
+                >
+                  Generer
+                </Button>
+              </section>
+            )}
             <section className="mb-4 w-full flex flex-col">
               <h2 className="text-lg md:text-xl font-semibold mb-2">
                 Pourcentage de commission{" "}

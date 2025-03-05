@@ -30,6 +30,7 @@ interface BusinessState {
   setBusinessStores: (stores: any[]) => void;
   addBusinessStore: (store: any) => void;
   removeBusinessStore: (id: string) => void;
+  clearBusinessStores: () => void;
 }
 
 export const useBusinessStores = create<BusinessState>(
@@ -47,6 +48,7 @@ export const useBusinessStores = create<BusinessState>(
             (store) => store.id !== id
           ),
         })),
+      clearBusinessStores: () => set({ businessStores: [] }), // Implémentation de la fonction clearBusinessStores
     }),
     {
       name: "business-store", // unique name for the storage key

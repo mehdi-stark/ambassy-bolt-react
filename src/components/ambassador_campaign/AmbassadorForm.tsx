@@ -21,6 +21,7 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
     todoByInfluencer: string;
     offerSummary: string;
     storeUrl: string;
+    storeName: string;
     selectedPlatforms: string[];
     additionalInfo: string;
     commission: string;
@@ -28,13 +29,15 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
     todoByInfluencer: "",
     offerSummary: "",
     storeUrl: "",
+    storeName: "",
     selectedPlatforms: [],
     additionalInfo: "",
     commission: "",
   });
 
   const { user } = useUserStore();
-  const { businessStores } = useBusinessStores();
+  const { businessStores, addBusinessStore, clearBusinessStores } =
+    useBusinessStores();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -80,6 +83,38 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
       ...prev,
       commission,
     }));
+  };
+
+  const handleBusinessSubmit = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const business = {
+        proId: user?.userId,
+        ambassadorId: ambassador?._id,
+        businessType: "ecommerce",
+        storeName: formDetails.storeName,
+        storeUrl: formDetails.storeUrl,
+        platform: "shopify",
+        createdBy: user?.userId,
+      };
+
+      console.log("Détails du formulaire:", formDetails);
+      const response = await axios.post(
+        import.meta.env.VITE_API_SERVER + "/business/create",
+        business
+      );
+
+      console.log("Réponse de l'API:", response);
+      addBusinessStore(response.data?.store);
+      nextStep();
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du formulaire:", error);
+      setError("Erreur lors de l'envoi du formulaire. Veuillez réessayer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFormSubmit = async () => {
@@ -168,12 +203,25 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
 
       {step === 2 && (
         <div className="step-1 p-2 w-full">
-          <h1 className="text-2xl font-bold mb-8">
+          <h1 className="text-2xl font-bold mb-4">
             Quelle est votre idée de campagne ?
           </h1>
 
           <div className="space-y-6">
             <section>
+              <h2 className="text-xl font-semibold mb-2">
+                Nom de votre boutique <span className="text-red-500">*</span>
+              </h2>
+              <input
+                type="text"
+                value={formDetails.storeName}
+                placeholder="Exemple : Theires du monde"
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
+                onChange={(e) =>
+                  setFormDetails({ ...formDetails, storeName: e.target.value })
+                }
+              />
+
               <h2 className="text-xl font-semibold mb-2">
                 URL de votre boutique <span className="text-red-500">*</span>
               </h2>
@@ -351,7 +399,7 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                     ? "bg-gradient-primary text-white hover:bg-orange-600"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
-                onClick={nextStep}
+                onClick={handleBusinessSubmit}
               >
                 Continuer
               </button>
@@ -361,7 +409,7 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
       )}
 
       {step === 3 && (
-        <div className="step-1 p-2 w-full">
+        <div className="step-1 p-2 w-full mb-5">
           <h1 className="text-2xl font-bold mb-8">Quelle est le bénéfice</h1>
 
           <div className="space-y-6">
