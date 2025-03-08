@@ -8,18 +8,24 @@ import {
   Card,
   Spinner,
   Modal,
+  DropdownButton,
+  Dropdown,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PlatformItem from "../global_campaigns/PlatformItem";
 import { platforms } from "../../types";
+// import { Dropdown } from "primereact/dropdown";
 
 const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
+  const [selectedShop, setSelectedShop] = useState("");
+  const [dropDownValue, setDropDownValue] = useState("Selectionnez un shop");
   const [selectedCommission, setSelectedCommission] = useState<string>("");
   const [formDetails, setFormDetails] = useState<{
     todoByInfluencer: string;
     offerSummary: string;
+    storeId: string;
     storeUrl: string;
     storeName: string;
     selectedPlatforms: string[];
@@ -28,6 +34,7 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
   }>({
     todoByInfluencer: "",
     offerSummary: "",
+    storeId: "",
     storeUrl: "",
     storeName: "",
     selectedPlatforms: [],
@@ -36,18 +43,22 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
   });
 
   const { user } = useUserStore();
-  const { businessStores, addBusinessStore, clearBusinessStores } =
-    useBusinessStores();
+  const {
+    businessStores,
+    setBusinessStores,
+    addBusinessStore,
+    clearBusinessStores,
+  } = useBusinessStores();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const isFormValid =
-    formDetails.todoByInfluencer &&
-    formDetails.offerSummary &&
-    formDetails.storeUrl &&
-    formDetails.selectedPlatforms.length > 0 &&
-    (step !== 3 || formDetails.commission);
+    // formDetails.todoByInfluencer &&
+    // formDetails.offerSummary &&
+    // ((formDetails.storeUrl && formDetails.storeName) || formDetails.storeId) &&
+    // formDetails.selectedPlatforms.length > 0 &&
+    step !== 3 || formDetails.commission;
 
   const nextStep = () => {
     setFormDetails((prev) => ({
@@ -162,6 +173,38 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
     }
   };
 
+  const handleSelectShop = (shop) => {
+    console.log("print shop", shop);
+    setSelectedShop(shop);
+    if (shop === "addNew") {
+      setFormDetails({ ...formDetails, storeName: "", storeUrl: "" });
+    } else {
+      const selectedStore = businessStores.find(
+        (store) => store.storeName === shop
+      );
+
+      console.log("print businessStores", selectedStore);
+      setFormDetails({
+        ...formDetails,
+        storeName: selectedStore.storeName,
+        storeUrl: selectedStore.storeUrl,
+        storeId: selectedStore._id,
+      });
+    }
+    console.log("formDetails", formDetails);
+  };
+
+  const generateLink = (val) => {
+    // TODO: ajouter appel api pour generer lien
+    console.log("generate link form : ", val);
+  };
+
+  const isOpenGenerateLink =
+    (selectedShop && selectedShop !== "addNew") ||
+    (selectedShop === "addNew" &&
+      formDetails.storeName &&
+      formDetails.storeUrl);
+
   return (
     <div className="flex flex-col max-w-2xl mx-auto h-full overflow-y-auto">
       <div className="mt-2">
@@ -208,34 +251,58 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
           </h1>
 
           <div className="space-y-6">
-            <section>
-              <h2 className="text-xl font-semibold mb-2">
-                Nom de votre boutique <span className="text-red-500">*</span>
+            <section className="mb-4 w-full flex flex-col">
+              <h2 className="text-lg md:text-xl font-semibold mb-2">
+                Choisir votre shop <span className="text-red-500">*</span>
               </h2>
-              <input
-                type="text"
-                value={formDetails.storeName}
-                placeholder="Exemple : Theires du monde"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
-                onChange={(e) =>
-                  setFormDetails({ ...formDetails, storeName: e.target.value })
-                }
-              />
-
-              <h2 className="text-xl font-semibold mb-2">
-                URL de votre boutique <span className="text-red-500">*</span>
-              </h2>
-              <input
-                type="text"
-                value={formDetails.storeUrl}
-                placeholder="Exemple : ma-boutique.shopify.com"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary"
-                onChange={(e) =>
-                  setFormDetails({ ...formDetails, storeUrl: e.target.value })
-                }
-              />
+              <select
+                value={selectedShop}
+                onChange={(e) => handleSelectShop(e.target.value)}
+                className="w-full p-3 border text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary appearance-none"
+              >
+                <option value="" disabled>
+                  Sélectionner un shop {" > "}
+                </option>
+                {businessStores.map((store) => (
+                  <option key={store.storeName} value={store.storeName}>
+                    {store.storeName}
+                  </option>
+                ))}
+                <option value="addNew">Ajouter un nouveau shop</option>
+              </select>
             </section>
+            {selectedShop === "addNew" && (
+              <section>
+                <h2 className="text-xl font-semibold mb-2">
+                  Nom de votre boutique <span className="text-red-500">*</span>
+                </h2>
+                <input
+                  type="text"
+                  value={formDetails.storeName}
+                  placeholder="Exemple : Theires du monde"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
+                  onChange={(e) =>
+                    setFormDetails({
+                      ...formDetails,
+                      storeName: e.target.value,
+                    })
+                  }
+                />
 
+                <h2 className="text-xl font-semibold mb-2">
+                  URL de votre boutique <span className="text-red-500">*</span>
+                </h2>
+                <input
+                  type="text"
+                  value={formDetails.storeUrl}
+                  placeholder="Exemple : ma-boutique.shopify.com"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary"
+                  onChange={(e) =>
+                    setFormDetails({ ...formDetails, storeUrl: e.target.value })
+                  }
+                />
+              </section>
+            )}
             <section>
               <h2 className="text-xl font-semibold mb-2">
                 Donnez un résumé rapide de votre offre{" "}
@@ -247,12 +314,13 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                 placeholder="Fournissez aux influenceurs un bref aperçu de votre marque et des objectifs de la campagne..."
                 className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
                 value={formDetails.offerSummary}
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormDetails({
                     ...formDetails,
                     offerSummary: e.target.value,
-                  })
-                }
+                  });
+                  console.log("formDetails", formDetails);
+                }}
               />
               <div className="mt-2">
                 <p className="text-gray-600 mb-2 text-sm">
@@ -321,12 +389,13 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                 placeholder="Fournissez aux influenceurs la description de votre tâche..."
                 className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-gradient-primary"
                 value={formDetails.todoByInfluencer}
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormDetails({
                     ...formDetails,
                     todoByInfluencer: e.target.value,
-                  })
-                }
+                  });
+                  console.log("formDetails", formDetails);
+                }}
               />
               <div className="mt-2">
                 <p className="text-gray-600 mb-2 text-sm">
@@ -399,7 +468,11 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                     ? "bg-gradient-primary text-white hover:bg-orange-600"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
-                onClick={handleBusinessSubmit}
+                onClick={
+                  selectedShop !== "addNew" && formDetails.storeId
+                    ? nextStep
+                    : handleBusinessSubmit
+                }
               >
                 Continuer
               </button>
@@ -441,6 +514,27 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                 ))}
               </div>
             </section>
+
+            {isOpenGenerateLink && (
+              <section className="mb-4 w-full flex flex-col">
+                <h2 className="text-xl font-semibold mb-2">
+                  Lien d'affiliation <span className="text-red-500">*</span>
+                </h2>
+                <input
+                  type="text"
+                  disabled={true}
+                  value="https"
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
+                />
+                {/* <button className="">Generer</button> */}
+                <Button
+                  onClick={generateLink}
+                  className="bg-gradient-primary w-full"
+                >
+                  Generer
+                </Button>
+              </section>
+            )}
 
             <section>
               <h2 className="text-xl font-semibold mb-2">
