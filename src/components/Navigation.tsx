@@ -152,6 +152,36 @@ export function Navigation() {
               Profil
             </button>
 
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/profile");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/profile")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              <Users className="w-5 h-5 mr-3" />
+              Aide/Support
+            </button>
+
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/profile");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/profile")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-500 hover:bg-gray-50"
+              }`}
+            >
+              <Users className="w-5 h-5 mr-3" />
+              Reglages
+            </button>
+
             <LogoutButton />
             {/* <UserButton /> */}
             {/* <button className="flex items-center w-full px-3 py-2.5 text-gray-500 hover:bg-gray-50 rounded-lg font-medium transition-colors">

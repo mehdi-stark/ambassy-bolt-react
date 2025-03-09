@@ -14,15 +14,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import PlatformItem from "../global_campaigns/PlatformItem";
 import { platforms } from "../../types";
+import { generateAffiliateLink } from "../../api/affiliateLink";
+import { Loader2 } from "lucide-react";
+import { set } from "date-fns";
 // import { Dropdown } from "primereact/dropdown";
 
 const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
+  const { user } = useUserStore();
+  const {
+    businessStores,
+    setBusinessStores,
+    addBusinessStore,
+    clearBusinessStores,
+  } = useBusinessStores();
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [selectedShop, setSelectedShop] = useState("");
   const [dropDownValue, setDropDownValue] = useState("Selectionnez un shop");
   const [selectedCommission, setSelectedCommission] = useState<string>("");
   const [formDetails, setFormDetails] = useState<{
+    ambassadorId: string;
+    proId: string;
+    affiliateLink: string;
     todoByInfluencer: string;
     offerSummary: string;
     storeId: string;
@@ -32,6 +45,9 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
     additionalInfo: string;
     commission: string;
   }>({
+    ambassadorId: ambassador._id,
+    proId: user._id,
+    affiliateLink: "",
     todoByInfluencer: "",
     offerSummary: "",
     storeId: "",
@@ -41,17 +57,10 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
     additionalInfo: "",
     commission: "",
   });
-
-  const { user } = useUserStore();
-  const {
-    businessStores,
-    setBusinessStores,
-    addBusinessStore,
-    clearBusinessStores,
-  } = useBusinessStores();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isFormValid =
     // formDetails.todoByInfluencer &&
@@ -196,7 +205,26 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
 
   const generateLink = (val) => {
     // TODO: ajouter appel api pour generer lien
+    setIsLoading(true);
+    setError("");
     console.log("generate link form : ", val);
+    const newLink = {
+      proId: user._id,
+      ambassadorId: ambassador._id,
+      storeId: formDetails.storeId,
+    };
+    generateAffiliateLink(newLink)
+      .then((response) => {
+        console.log("data", response.data);
+        setFormDetails({ ...formDetails, affiliateLink: response.data?.link });
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const isOpenGenerateLink =
@@ -523,15 +551,27 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
                 <input
                   type="text"
                   disabled={true}
-                  value="https"
+                  value={formDetails.affiliateLink}
                   className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
                 />
                 {/* <button className="">Generer</button> */}
-                <Button
+                {/* <Button
                   onClick={generateLink}
                   className="bg-gradient-primary w-full"
                 >
                   Generer
+                </Button> */}
+
+                <Button
+                  disabled={isLoading || formDetails.affiliateLink !== ""}
+                  onClick={generateLink}
+                  className="bg-gradient-primary w-full"
+                >
+                  {isLoading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    "Generer"
+                  )}
                 </Button>
               </section>
             )}
