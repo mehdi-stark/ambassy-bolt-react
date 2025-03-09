@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  HelpCircle,
   Search,
   LayoutDashboard,
   Users,
@@ -8,6 +9,7 @@ import {
   ReceiptText,
   LogOut,
   Menu,
+  Settings,
   X,
   UserCheck,
 } from "lucide-react";
@@ -155,30 +157,30 @@ export function Navigation() {
             <button
               onClick={() => {
                 toggleSidebar();
-                handleNavigation("/profile");
+                handleNavigation("/help");
               }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                isActive("/profile")
+                isActive("/help")
                   ? "bg-indigo-50 text-indigo-600"
                   : "text-gray-500 hover:bg-gray-50"
               }`}
             >
-              <Users className="w-5 h-5 mr-3" />
+              <HelpCircle className="w-5 h-5 mr-3" />
               Aide/Support
             </button>
 
             <button
               onClick={() => {
                 toggleSidebar();
-                handleNavigation("/profile");
+                handleNavigation("/settings");
               }}
               className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                isActive("/profile")
+                isActive("/settings")
                   ? "bg-indigo-50 text-indigo-600"
                   : "text-gray-500 hover:bg-gray-50"
               }`}
             >
-              <Users className="w-5 h-5 mr-3" />
+              <Settings className="w-5 h-5 mr-3" />
               Reglages
             </button>
 

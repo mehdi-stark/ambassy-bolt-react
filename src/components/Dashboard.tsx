@@ -218,9 +218,9 @@ export function Dashboard() {
                   <Store className="w-6 h-6 text-indigo-600" />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h4 className="font-medium text-gray-900">
+                  <h5 className="font-medium text-gray-900">
                     {store.storeName}
-                  </h4>
+                  </h5>
                   <p className="text-sm text-gray-500">{store.storeUrl}</p>
                 </div>
                 <div className="text-right">

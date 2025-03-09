@@ -21,6 +21,9 @@ import CampaignsPage from "./components/CampaignsPage";
 import StoreForm from "./components/auth/registration form/StoreForm";
 import PricingPage from "./components/PricingPage";
 import SubscriptionSuccess from "./components/subscription/SubscriptionSuccess";
+import Settings from "./components/SettingsPage";
+import { SupportPage } from "./components/SupportPage";
+import SettingsPage from "./components/SettingsPage";
 
 function App() {
   return (
@@ -40,6 +43,7 @@ function AppContent() {
   const hideNavigationPaths = [
     "/login",
     "/register",
+    "/auth-loading",
     "/user-register",
     "/register/merchant",
     "/registration-form-store",
@@ -107,6 +111,8 @@ function AppContent() {
                 <Route path="/ambassadors" element={<AmbassadorsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/pricing" element={<PricingPage />} />
+                <Route path="/help" element={<SupportPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
 
                 {/* Subscription */}
                 <Route
