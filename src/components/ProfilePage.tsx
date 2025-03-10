@@ -1,15 +1,20 @@
 import { useUser } from "@clerk/clerk-react";
 import { Navigation } from "./Navigation";
-import { Instagram, Twitch } from "lucide-react";
+import { Instagram, Store, Twitch } from "lucide-react";
 import shopifyLogo from "../assets/logo-shopify.png";
 import axios from "axios";
-import { useUserStore } from "../store/Store";
-
-const shopUrl = "e5jqg8-y2.myshopify.com";
+import {
+  useUserStore,
+  useBusinessStores,
+  useCampaignStore,
+} from "../store/Store";
 
 export const ProfilePage = () => {
-  const { user } = useUserStore();
+  const { user, subscription } = useUserStore();
+  const { businessStores } = useBusinessStores();
+  const { campaigns } = useCampaignStore();
   const userClerk = useUser();
+  const shopUrl = "e5jqg8-y2.myshopify.com";
 
   const handleShopifyLogin = () => {
     const CLIENT_ID = import.meta.env.VITE_SHOPIFY_CLIENT_KEY;
@@ -116,6 +121,12 @@ export const ProfilePage = () => {
     //   });
   };
 
+  const handleAddStoreClick = () => {
+    console.log("handleAddStoreClick");
+  };
+
+  console.log("print subscription", subscription);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <Navigation />
@@ -130,44 +141,90 @@ export const ProfilePage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+      <div className="flex flex-col space-y-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"> */}
+        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Informations du Profil</h2>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">
-              ID:
+              Adresse email:
             </label>
             <input
               type="text"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-2"
               disabled
               value={userClerk.user?.emailAddresses[0].emailAddress}
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Mot de passe:
+            <label className="block text-sm font-medium text-gray-700 p-1">
+              Mot de passe actuel:
             </label>
             <input
               type="password"
               placeholder="••••••••"
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-2"
             />
           </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Nouveau Mot de passe:
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-2"
+            />
+          </div>
+          <button className="px-4 py-2 bg-gradient-primary hover-gradient-primary text-white rounded-xl font-medium transition-colors w-full">
+            Modifier
+          </button>
         </section>
 
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Abonnement</h2>
-          <p className="text-gray-600">Plan actuel: Premium</p>
+          <p className="text-gray-600">Plan actuel: {subscription.plan}</p>
         </section>
 
         {/* Section Pro */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
           <h2 className="text-xl font-bold mb-4">Mes Shops</h2>
-          <ul className="text-gray-600">
+          <div className="p-6 space-y-4 flex flex-col">
+            {businessStores.map((store) => (
+              <div
+                key={store.id}
+                className="flex items-center p-4 bg-gray-50 rounded-xl"
+              >
+                <div className="bg-white p-3 rounded-lg border border-gray-100">
+                  <Store className="w-6 h-6 text-indigo-600" />
+                </div>
+                <div className="ml-4 flex-1">
+                  <h5 className="font-medium text-gray-900">
+                    {store.storeName}
+                  </h5>
+                  <p className="text-sm text-gray-500">{store.storeUrl}</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-gray-900">
+                    {store.stats.totalProducts} produits
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {store.stats.monthlyOrders} commandes/mois
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              className="text-indigo-600 hover:text-indigo-800 font-medium"
+              onClick={handleAddStoreClick}
+            >
+              Ajouter
+            </button>
+          </div>
+          {/* <ul className="text-gray-600">
             <li>Shop 1</li>
             <li>Shop 2</li>
-          </ul>
+          </ul> */}
         </section>
 
         <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
@@ -179,43 +236,45 @@ export const ProfilePage = () => {
         </section>
 
         {/* Section Ambassador */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="relative h-48 sm:h-56">
-            <h3 className="flex items-center justify-center text-center text-gradient text-2xl font-bold">
-              Mes réseaux sociaux
-            </h3>
-            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-              <div className="flex items-center justify-center gap-3">
-                <div className="flex flex-col items-center text-sm space-y-3">
-                  <div className="flex flex-row items-center">
-                    <Instagram className="w-4 h-4 mr-1" />
-                    <button onClick={handleMeta}>
-                      Se connecter a Instagram
-                    </button>
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <Twitch className="w-4 h-4 mr-1" />
-                    <button onClick={handleTikTokLogin}>
-                      Se connecter a Tiktok
-                    </button>
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <img src={shopifyLogo} className="w-4 h-4 mr-1" />
-                    <button onClick={handleShopifyLogin}>
-                      Se connecter a Shopify
-                    </button>
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <img src={shopifyLogo} className="w-4 h-4 mr-1" />
-                    <button onClick={fetchShopifyData}>
-                      Recup data Shopify
-                    </button>
+        {user.role === "ambassador" && (
+          <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div className="relative h-48 sm:h-56">
+              <h3 className="flex items-center justify-center text-center text-gradient text-2xl font-bold">
+                Mes réseaux sociaux
+              </h3>
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                <div className="flex items-center justify-center gap-3">
+                  <div className="flex flex-col items-center text-sm space-y-3">
+                    <div className="flex flex-row items-center">
+                      <Instagram className="w-4 h-4 mr-1" />
+                      <button onClick={handleMeta}>
+                        Se connecter a Instagram
+                      </button>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <Twitch className="w-4 h-4 mr-1" />
+                      <button onClick={handleTikTokLogin}>
+                        Se connecter a Tiktok
+                      </button>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <img src={shopifyLogo} className="w-4 h-4 mr-1" />
+                      <button onClick={handleShopifyLogin}>
+                        Se connecter a Shopify
+                      </button>
+                    </div>
+                    <div className="flex flex-row items-center">
+                      <img src={shopifyLogo} className="w-4 h-4 mr-1" />
+                      <button onClick={fetchShopifyData}>
+                        Recup data Shopify
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -1,53 +1,61 @@
-import React from "react";
-import { Navigation } from "./Navigation";
-import { useUser } from "@clerk/clerk-react";
-import { useUserStore } from "../store/Store";
+import React, { useState } from "react";
 
 const SettingsPage = () => {
-  const { user } = useUserStore();
-  const userClerk = useUser();
+  const [theme, setTheme] = useState("light");
+  const [notifications, setNotifications] = useState(true);
+  const [language, setLanguage] = useState("en");
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
+  const toggleNotifications = () => {
+    setNotifications(!notifications);
+  };
+
+  const changeLanguage = (event) => {
+    setLanguage(event.target.value);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">
-              <span className="text-gradient">Paramètres</span>
-            </h1>
-            <p className="text-gray-600">
-              Gérez les paramètres de votre compte
-            </p>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Informations du Compte</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Email:
-              </label>
-              <input
-                type="text"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
-                disabled
-                value={userClerk.user?.emailAddresses[0].emailAddress}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Mot de passe:
-              </label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm h-10 p-1"
-              />
-            </div>
-          </section>
-        </div>
+    <div
+      className={`h-screen  w-screen p-6 max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md ${theme}`}
+    >
+      <h1 className="text-2xl font-semibold mb-6">Settings</h1>
+      <div className="mb-6">
+        <h2 className="text-xl font-medium mb-2">Theme</h2>
+        <button
+          onClick={toggleTheme}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Switch to {theme === "light" ? "Dark" : "Light"} Theme
+        </button>
+      </div>
+      <div className="mb-6">
+        <h2 className="text-xl font-medium mb-2">Notifications</h2>
+        <label className="flex items-center">
+          <input
+            type="checkbox"
+            checked={notifications}
+            onChange={toggleNotifications}
+            className="form-checkbox h-5 w-5 text-blue-600"
+          />
+          <span className="ml-2 text-gray-700 dark:text-gray-300">
+            Enable Notifications
+          </span>
+        </label>
+      </div>
+      <div className="mb-6">
+        <h2 className="text-xl font-medium mb-2">Language</h2>
+        <select
+          value={language}
+          onChange={changeLanguage}
+          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+        >
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+        </select>
       </div>
     </div>
   );
