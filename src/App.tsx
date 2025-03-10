@@ -24,6 +24,7 @@ import SubscriptionSuccess from "./components/subscription/SubscriptionSuccess";
 import Settings from "./components/SettingsPage";
 import { SupportPage } from "./components/SupportPage";
 import SettingsPage from "./components/SettingsPage";
+import { RegisterPageV2 } from "./components/auth/RegisterPage copy";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function AppContent() {
     "/auth-loading",
     "/user-register",
     "/register/merchant",
+    "/registration",
     "/registration-form-store",
     "/registration-form-social",
     "/subscription-success",
@@ -65,6 +67,8 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth-loading" element={<AuthLoadingPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/registration" element={<RegisterPageV2 />} />
+
           <Route path="/user-register" element={<UserRegistration />} />
           <Route
             path="/register/merchant"

@@ -1,28 +1,68 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Mail, Lock, User, Building } from "lucide-react";
+import { Mail, Lock, User, Building, Globe } from "lucide-react";
 import { AuthLayout } from "./AuthLayout";
+import { useSignUp } from "@clerk/clerk-react";
 
-export function RegisterPage() {
+export function RegisterPageV2() {
+  const { isLoaded, signUp, setActive } = useSignUp();
   const navigate = useNavigate();
-  const [role, setRole] = useState<"client" | "influencer">("client");
+
+  const [role, setRole] = useState<"pro" | "ambassador">("pro");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [url, setUrl] = useState(""); // URL du store ou du compte social
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (role === "client") {
-      navigate("/register/merchant");
-    } else {
-      // TODO: Implement influencer registration
-      navigate("/dashboard");
+  const handleSignUp = async () => {
+    if (!isLoaded) return;
+
+    setIsLoading(true); // Affichage du loader
+
+    try {
+      // Étape 1 : Création du compte
+      await signUp.create({
+        emailAddress: email,
+        password: password,
+      });
+
+      // Étape 2 : Ajouter le rôle et l'URL associée dans `unsafeMetadata`
+      await signUp.update({
+        unsafeMetadata: {
+          role,
+          url, // Stocke l'URL dans les metadata
+        },
+      });
+
+      // Étape 3 : Envoi du code de vérification par email
+      await signUp.prepareEmailAddressVerification();
+
+      // Étape 4 : Finalisation et connexion automatique
+      const completeSignUp = await signUp.attemptEmailAddressVerification({
+        code: prompt("Entrez le code reçu par email"),
+      });
+
+      if (completeSignUp.status === "complete") {
+        setActive({ session: completeSignUp.createdSessionId });
+        window.location.href = "/dashboard"; // Redirection après inscription
+      }
+    } catch (err: any) {
+      // Gestion des erreurs
+      if (err.errors && err.errors[0]?.code === "form_identifier_exists") {
+        setError("Cet email est déjà utilisé. Veuillez en choisir un autre.");
+      } else {
+        setError("Une erreur est survenue. Veuillez réessayer.");
+      }
+    } finally {
+      setIsLoading(false); // Masquer le loader après la tentative
     }
   };
 
   return (
     <AuthLayout title="Créer un compte" subtitle="Rejoignez notre communauté">
-      <form className="space-y-6" onSubmit={handleSubmit}>
+      <form className="space-y-6">
+        {/* Sélection du rôle */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Je suis...
@@ -31,58 +71,33 @@ export function RegisterPage() {
             <button
               type="button"
               className={`p-4 text-center rounded-lg border ${
-                role === "client"
+                role === "pro"
                   ? "border-indigo-600 bg-indigo-50 text-indigo-600"
                   : "border-gray-200 hover:border-gray-300"
               }`}
-              onClick={() => setRole("client")}
+              onClick={() => setRole("pro")}
             >
               <Building className="h-6 w-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Une marque</span>
+              <span className="text-sm font-medium">Un Pro</span>
             </button>
             <button
               type="button"
               className={`p-4 text-center rounded-lg border ${
-                role === "influencer"
+                role === "ambassador"
                   ? "border-indigo-600 bg-indigo-50 text-indigo-600"
                   : "border-gray-200 hover:border-gray-300"
               }`}
-              onClick={() => setRole("influencer")}
+              onClick={() => setRole("ambassador")}
             >
               <User className="h-6 w-6 mx-auto mb-2" />
-              <span className="text-sm font-medium">Un influenceur</span>
+              <span className="text-sm font-medium">Un ambassadeur</span>
             </button>
           </div>
         </div>
 
+        {/* Champ Adresse Email */}
         <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            {role === "client" ? "Nom de l'entreprise" : "Nom complet"}
-          </label>
-          <div className="mt-1 relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <User className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label className="block text-sm font-medium text-gray-700">
             Adresse email
           </label>
           <div className="mt-1 relative">
@@ -90,10 +105,7 @@ export function RegisterPage() {
               <Mail className="h-5 w-5 text-gray-400" />
             </div>
             <input
-              id="email"
-              name="email"
               type="email"
-              autoComplete="email"
               required
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="vous@exemple.com"
@@ -103,11 +115,9 @@ export function RegisterPage() {
           </div>
         </div>
 
+        {/* Champ Mot de passe */}
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label className="block text-sm font-medium text-gray-700">
             Mot de passe
           </label>
           <div className="mt-1 relative">
@@ -115,10 +125,7 @@ export function RegisterPage() {
               <Lock className="h-5 w-5 text-gray-400" />
             </div>
             <input
-              id="password"
-              name="password"
               type="password"
-              autoComplete="new-password"
               required
               className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="••••••••"
@@ -128,15 +135,44 @@ export function RegisterPage() {
           </div>
         </div>
 
+        {/* Champ URL spécifique au rôle */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            {role === "pro"
+              ? "URL de votre boutique en ligne"
+              : "Lien Instagram/TikTok"}
+          </label>
+          <div className="mt-1 relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Globe className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="url"
+              required
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="https://mon-site.com"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Affichage des erreurs */}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+
+        {/* Bouton d'inscription */}
         <div>
           <button
-            type="submit"
+            type="button"
             className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-gradient-primary hover-gradient-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={handleSignUp}
+            disabled={isLoading} // Désactiver le bouton pendant le chargement
           >
-            Créer un compte
+            {isLoading ? "Création en cours..." : "Créer un compte"}
           </button>
         </div>
 
+        {/* Lien vers connexion */}
         <div className="text-center">
           <Link
             to="/login"
