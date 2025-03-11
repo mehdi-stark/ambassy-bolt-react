@@ -9,18 +9,19 @@ const statusMap = {
   rejected: { color: "bg-red-200 text-red-700", label: "refusée" },
 };
 
-const CampaignItem = (campaigns, status) => {
+const CampaignItem = ({ campaigns, status, handleClickSeeDetails }) => {
   const [sortConfig, setSortConfig] = useState({
     key: "date",
     direction: "ascending",
   });
 
   console.log("print status", status);
+  console.log("print campaigns", campaigns);
 
   const sortedTransactions = useMemo(() => {
     if (!campaigns) return [];
 
-    let sortableTransactions = [...campaigns.campaigns];
+    let sortableTransactions = [...campaigns];
     sortableTransactions.sort((a, b) => {
       if (sortConfig.key === "date") {
         return new Date(a[sortConfig.key]) - new Date(b[sortConfig.key]);
@@ -50,7 +51,6 @@ const CampaignItem = (campaigns, status) => {
     return format(date, "MMM dd, yyyy"); // Formatage en "Feb 23, 2025"
   };
 
-  console.log("print campaigns", campaigns.campaigns);
   return (
     <div className="w-full p-2">
       <div className="flex justify-between items-center mb-4">
@@ -94,7 +94,7 @@ const CampaignItem = (campaigns, status) => {
               <td className="px-4 py-3">{campaign.id}</td>
               <td className="px-4 py-3">{formatDate(campaign.createdAt)}</td>
               <td className="px-4 py-3">{campaign.category}</td>
-              <td className="px-4 py-3">{campaign.businessId?.storeName}</td>
+              <td className="px-4 py-3">{campaign?.storeUrl}</td>
               <td className="px-4 py-3">
                 {campaign.commissionPercentage.toFixed(2)}
               </td>
@@ -109,7 +109,12 @@ const CampaignItem = (campaigns, status) => {
               </td>
               <td className="px-4 py-3">${campaign.amount}</td>
               <td className="px-4 py-3">
-                <button className="text-blue-500">Voir détails</button>
+                <button
+                  className="text-blue-500"
+                  onClick={() => handleClickSeeDetails(campaign)}
+                >
+                  Voir détails
+                </button>
               </td>
             </tr>
           ))}

@@ -4,8 +4,11 @@ import NewCampaign from "./global_campaigns/GobalCampaignForm";
 import axios from "axios";
 import CampaignItem from "./CampaignItem";
 import { useCampaignStore, useUserStore } from "../store/Store";
+import { formatDate } from "date-fns";
 // import { campaigns } from "@/store/useStore";
 const CampaignsPage = () => {
+  const [showingDetails, setShowingDetails] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [totalCampaigns, setTotalCampaigns] = useState(0);
   const [activeCampaigns, setActiveCampaigns] = useState(0);
   const [archivedCampaigns, setArchivedCampaigns] = useState(0);
@@ -17,8 +20,6 @@ const CampaignsPage = () => {
   //   : null;
   const { user } = useUserStore();
   const { campaigns, setCampaigns, addCampaign } = useCampaignStore();
-
-  console.log("campaigns", campaigns);
 
   const fetchCampaigns = async () => {
     try {
@@ -88,6 +89,14 @@ const CampaignsPage = () => {
     if ((event.target as HTMLElement).classList.contains("popup-overlay")) {
       setShowPopup(false);
     }
+  };
+
+  const handleClickSeeDetails = (campaign) => {
+    console.log("Voir détails");
+    console.log("selected Campaign :", campaign);
+    setSelectedCampaign(campaign);
+    setShowingDetails(true);
+    console.log("selected Campaign :", selectedCampaign);
   };
 
   return (
@@ -185,7 +194,11 @@ const CampaignsPage = () => {
           </div>
         ) : (
           <section className="campaign-list flex w-full bg-white p-8 rounded-xl border border-gray-100">
-            <CampaignItem campaigns={campaigns} status={activeTab} />
+            <CampaignItem
+              campaigns={campaigns}
+              status={activeTab}
+              handleClickSeeDetails={handleClickSeeDetails}
+            />
             {/* <ul id="campaigns">
             {campaigns.map((campaign, index) => (
               <li key={index}>
@@ -209,6 +222,45 @@ const CampaignsPage = () => {
             </div>
             <div className="w-full h-full md:w-1/2 p-4">
               <Testimonial />
+            </div> */}
+          </div>
+        )}
+
+        {showingDetails && selectedCampaign && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <h2>{selectedCampaign.name}</h2>
+            {/* <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+              <h2 className="text-xl font-bold mb-4">Détails de la Campagne</h2>
+              <p>
+                <strong>ID:</strong> {selectedCampaign.id}
+              </p>
+              <p>
+                <strong>Date:</strong> {formatDate(selectedCampaign.createdAt)}
+              </p>
+              <p>
+                <strong>Catégorie:</strong> {selectedCampaign.category}
+              </p>
+              <p>
+                <strong>Nom Boutique:</strong>{" "}
+                {selectedCampaign.businessId?.storeName}
+              </p>
+              <p>
+                <strong>Commission:</strong>{" "}
+                {selectedCampaign.commissionPercentage.toFixed(2)}%
+              </p>
+              <p>
+                <strong>Montant:</strong> ${selectedCampaign.amount}
+              </p>
+              <p>
+                <strong>Statut:</strong>{" "}
+                {statusMap[selectedCampaign.status].label}
+              </p>
+              <button
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+                onClick={() => setShowingDetails(false)}
+              >
+                Fermer
+              </button>
             </div> */}
           </div>
         )}
