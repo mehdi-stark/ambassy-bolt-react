@@ -5,6 +5,8 @@ import axios from "axios";
 import CampaignItem from "./CampaignItem";
 import { useCampaignStore, useUserStore } from "../store/Store";
 import { formatDate } from "date-fns";
+import { statusMap } from "../types";
+
 // import { campaigns } from "@/store/useStore";
 const CampaignsPage = () => {
   const [showingDetails, setShowingDetails] = useState(false);
@@ -227,26 +229,29 @@ const CampaignsPage = () => {
         )}
 
         {showingDetails && selectedCampaign && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <h2>{selectedCampaign.name}</h2>
-            {/* <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+          <div className="fixed inset-0 flex items-center justify-center bg-white">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
               <h2 className="text-xl font-bold mb-4">Détails de la Campagne</h2>
               <p>
                 <strong>ID:</strong> {selectedCampaign.id}
               </p>
               <p>
-                <strong>Date:</strong> {formatDate(selectedCampaign.createdAt)}
+                <strong>Date:</strong> {selectedCampaign.createdAt}
               </p>
               <p>
                 <strong>Catégorie:</strong> {selectedCampaign.category}
               </p>
               <p>
                 <strong>Nom Boutique:</strong>{" "}
-                {selectedCampaign.businessId?.storeName}
+                {selectedCampaign.businessId?.storeName ||
+                  selectedCampaign?.storeName}
               </p>
               <p>
                 <strong>Commission:</strong>{" "}
                 {selectedCampaign.commissionPercentage.toFixed(2)}%
+              </p>
+              <p>
+                <strong>Store Url:</strong> {selectedCampaign.storeUrl}
               </p>
               <p>
                 <strong>Montant:</strong> ${selectedCampaign.amount}
@@ -261,7 +266,7 @@ const CampaignsPage = () => {
               >
                 Fermer
               </button>
-            </div> */}
+            </div>
           </div>
         )}
       </div>

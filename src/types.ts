@@ -5,6 +5,13 @@ import Twitter from './assets/Twitter.svg';
 import Snap from './assets/logo-snapchat.png';
 import Instagram from './assets/logo-instagram.jpg';
 
+export const statusMap = {
+  new: { color: "bg-blue-200 text-blue-700", label: "nouveau" },
+  active: { color: "bg-green-200 text-green-700", label: "active" },
+  ended: { color: "bg-yellow-200 text-yellow-700", label: "terminée" },
+  archived: { color: "bg-gray-200 text-gray-700", label: "archivée" },
+  rejected: { color: "bg-red-200 text-red-700", label: "refusée" },
+};
 export interface User {
   id: string;
   name: string;

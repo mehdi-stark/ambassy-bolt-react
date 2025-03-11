@@ -18,10 +18,12 @@ const SettingsPage = () => {
   };
 
   return (
-    <div
-      className={`h-screen  w-screen p-6 max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-md ${theme}`}
-    >
-      <h1 className="text-2xl font-semibold mb-6">Settings</h1>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold">
+          <span className="text-gradient">Reglages</span>
+        </h2>
+      </div>
       <div className="mb-6">
         <h2 className="text-xl font-medium mb-2">Theme</h2>
         <button

@@ -60,7 +60,12 @@ export const SupportPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold">
+          <span className="text-gradient">Aide et Support</span>
+        </h2>
+      </div>
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-white shadow-md rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">FAQ</h2>

@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
-
-const statusMap = {
-  new: { color: "bg-blue-200 text-blue-700", label: "nouveau" },
-  active: { color: "bg-green-200 text-green-700", label: "active" },
-  ended: { color: "bg-yellow-200 text-yellow-700", label: "terminée" },
-  archived: { color: "bg-gray-200 text-gray-700", label: "archivée" },
-  rejected: { color: "bg-red-200 text-red-700", label: "refusée" },
-};
+import { statusMap } from "../types";
 
 const CampaignItem = ({ campaigns, status, handleClickSeeDetails }) => {
   const [sortConfig, setSortConfig] = useState({
@@ -48,7 +41,7 @@ const CampaignItem = ({ campaigns, status, handleClickSeeDetails }) => {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM dd, yyyy"); // Formatage en "Feb 23, 2025"
+    return format(date, "MMM dd, yyyy");
   };
 
   return (
@@ -67,59 +60,55 @@ const CampaignItem = ({ campaigns, status, handleClickSeeDetails }) => {
             {sortConfig.key === "date" &&
               (sortConfig.direction === "ascending" ? "↑" : "↓")}
           </button>
-          {/* <button
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            onClick={() => requestSort("status")}
-          >
-            Statut
-          </button> */}
         </div>
       </div>
-      <table className="w-full">
-        <thead className="text-gray-400">
-          <tr className="font-thin" id-="table-head">
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">DATE</th>
-            <th className="px-4 py-2">CATEGORIE</th>
-            <th className="px-4 py-2">NOM BOUTIQUE</th>
-            <th className="px-4 py-2">% COMISSION</th>
-            <th className="px-4 py-2">STATUS</th>
-            <th className="px-4 py-2">MONTANT</th>
-            <th className="px-4 py-2">ACTION</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedTransactions.map((campaign) => (
-            <tr key={campaign.id} className="border-b hover:bg-gray-100">
-              <td className="px-4 py-3">{campaign.id}</td>
-              <td className="px-4 py-3">{formatDate(campaign.createdAt)}</td>
-              <td className="px-4 py-3">{campaign.category}</td>
-              <td className="px-4 py-3">{campaign?.storeUrl}</td>
-              <td className="px-4 py-3">
-                {campaign.commissionPercentage.toFixed(2)}
-              </td>
-              <td className="px-4 py-3">
-                <span
-                  className={`inline-block px-2 py-1 rounded ${
-                    statusMap[campaign.status].color
-                  }`}
-                >
-                  {statusMap[campaign.status].label}
-                </span>
-              </td>
-              <td className="px-4 py-3">${campaign.amount}</td>
-              <td className="px-4 py-3">
-                <button
-                  className="text-blue-500"
-                  onClick={() => handleClickSeeDetails(campaign)}
-                >
-                  Voir détails
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="text-gray-400">
+            <tr className="font-thin">
+              <th className="px-4 py-2">ID</th>
+              <th className="px-4 py-2">DATE</th>
+              <th className="px-4 py-2">CATEGORIE</th>
+              <th className="px-4 py-2">NOM BOUTIQUE</th>
+              <th className="px-4 py-2">% COMISSION</th>
+              <th className="px-4 py-2">STATUS</th>
+              <th className="px-4 py-2">MONTANT</th>
+              <th className="px-4 py-2">ACTION</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedTransactions.map((campaign) => (
+              <tr key={campaign.id} className="border-b hover:bg-gray-100">
+                <td className="px-4 py-3">{campaign.id}</td>
+                <td className="px-4 py-3">{formatDate(campaign.createdAt)}</td>
+                <td className="px-4 py-3">{campaign.category}</td>
+                <td className="px-4 py-3">{campaign?.storeUrl}</td>
+                <td className="px-4 py-3">
+                  {campaign.commissionPercentage.toFixed(2)}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-block px-2 py-1 rounded ${
+                      statusMap[campaign.status].color
+                    }`}
+                  >
+                    {statusMap[campaign.status].label}
+                  </span>
+                </td>
+                <td className="px-4 py-3">${campaign.amount}</td>
+                <td className="px-4 py-3">
+                  <button
+                    className="text-blue-500"
+                    onClick={() => handleClickSeeDetails(campaign)}
+                  >
+                    Voir détails
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
