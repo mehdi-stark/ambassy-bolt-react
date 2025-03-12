@@ -230,7 +230,7 @@ const CampaignsPage = () => {
 
         {showingDetails && selectedCampaign && (
           <div className="fixed inset-0 flex items-center justify-center bg-white">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/3">
               <h2 className="text-xl font-bold mb-4">Détails de la Campagne</h2>
               <p>
                 <strong>ID:</strong> {selectedCampaign.id}
@@ -261,7 +261,7 @@ const CampaignsPage = () => {
                 {statusMap[selectedCampaign.status].label}
               </p>
               <button
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded justify-center items-center"
                 onClick={() => setShowingDetails(false)}
               >
                 Fermer

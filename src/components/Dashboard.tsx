@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { BarChart, Users, TrendingUp, DollarSign, Store } from "lucide-react";
-import { useUserStore, useBusinessStores } from "../store/Store";
+import {
+  useUserStore,
+  useBusinessStores,
+  useCampaignStore,
+} from "../store/Store";
 import { Campaign } from "../types";
 
 const mockCampaigns: Campaign[] = [
@@ -39,6 +43,8 @@ export function Dashboard() {
   // const [businessStores, setBusinessStores] = useState<any[]>([]);
   const { user } = useUserStore();
   const { businessStores } = useBusinessStores();
+  const { campaigns } = useCampaignStore();
+  const [activeCampaigns, setActiveCampaigns] = useState<number>(0);
   console.log("user store", user);
 
   // useEffect(() => {
@@ -54,6 +60,10 @@ export function Dashboard() {
   //   "print sessionStorage :",
   //   JSON.parse(sessionStorage.getItem("user") || "{}")
   // );
+
+  useEffect(() => {
+    setActiveCampaigns(campaigns.filter((c) => c.status === "active").length);
+  }, [campaigns]);
 
   const handleAddStoreClick = async () => {
     try {
@@ -112,13 +122,13 @@ export function Dashboard() {
               Campagnes actives
             </span>
           </div>
-          <div className="text-2xl font-bold mb-1">8</div>
+          <div className="text-2xl font-bold mb-1">{activeCampaigns}</div>
           <div className="text-sm text-emerald-500 font-medium">
             +3 nouvelles
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-gray-100">
+        {/* <div className="bg-white p-6 rounded-2xl border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <div className="bg-blue-50 p-3 rounded-xl">
               <TrendingUp className="w-6 h-6 text-blue-600" />
@@ -146,7 +156,7 @@ export function Dashboard() {
           <div className="text-sm text-emerald-500 font-medium">
             +5% ce mois
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

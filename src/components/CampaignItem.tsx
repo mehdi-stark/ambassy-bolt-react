@@ -49,11 +49,13 @@ const CampaignItem = ({ campaigns, status, handleClickSeeDetails }) => {
       <div className="flex justify-between items-center mb-4">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold">Liste</h1>
-          <p className="text-gray-400 font-medium">Gerer vos campagnes ici</p>
+          <p className="text-gray-400 font-medium md:text-md text-sm">
+            Gerer vos campagnes ici
+          </p>
         </div>
         <div className="flex space-x-4">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded flex items-center"
+            className="bg-blue-500 text-white md:px-4 py-2 rounded flex items-center md:text-md text-sm px-2"
             onClick={() => requestSort("date")}
           >
             Date & Heure{" "}
