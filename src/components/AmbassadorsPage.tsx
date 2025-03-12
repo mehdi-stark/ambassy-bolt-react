@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import type { Ambassador } from "../types";
 import axios from "axios";
-import ServiceForm from "./ambassador_campaign/AmbassadorCampaignForm";
+import AmbassadorCampaign from "./ambassador_campaign/AmbassadorCampaign";
 import { useNavigate } from "react-router-dom";
 
 export function AmbassadorsPage() {
@@ -305,10 +305,10 @@ export function AmbassadorsPage() {
         rounded-xl"
           onClick={handleOutsideClick}
         >
-          <ServiceForm
+          <AmbassadorCampaign
             ambassador={selectedAmbassador}
             onReturn={onReturn}
-          ></ServiceForm>
+          ></AmbassadorCampaign>
         </div>
       )}
     </div>

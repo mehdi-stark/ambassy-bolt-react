@@ -25,6 +25,8 @@ import Settings from "./components/SettingsPage";
 import { SupportPage } from "./components/SupportPage";
 import SettingsPage from "./components/SettingsPage";
 import { RegisterPageV2 } from "./components/auth/RegisterPage copy";
+import GlobalCampaign from "./components/global_campaigns/GobalCampaignForm";
+import AmbassadorCampaign from "./components/ambassador_campaign/AmbassadorCampaign";
 
 function App() {
   return (
@@ -117,6 +119,13 @@ function AppContent() {
                 <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/help" element={<SupportPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
+
+                {/* Campaigns */}
+                {/* <Route
+                  path="/ambassador-campaign"
+                  element={<AmbassadorCampaign />}
+                /> */}
+                <Route path="/global-campaign" element={<GlobalCampaign />} />
 
                 {/* Subscription */}
                 <Route

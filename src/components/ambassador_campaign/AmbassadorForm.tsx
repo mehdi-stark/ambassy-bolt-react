@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react";
 import { set } from "date-fns";
 // import { Dropdown } from "primereact/dropdown";
 
-const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
+const AmbassadorForm = ({ onReturn, ambassador }) => {
   const { user } = useUserStore();
   const {
     businessStores,
@@ -639,4 +639,4 @@ const AmbassadorCampaignForm = ({ onReturn, ambassador }) => {
   );
 };
 
-export default AmbassadorCampaignForm;
+export default AmbassadorForm;

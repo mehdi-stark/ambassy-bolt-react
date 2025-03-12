@@ -6,6 +6,7 @@ import {
   useCampaignStore,
 } from "../store/Store";
 import { Campaign } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const mockCampaigns: Campaign[] = [
   {
@@ -45,7 +46,7 @@ export function Dashboard() {
   const { businessStores } = useBusinessStores();
   const { campaigns } = useCampaignStore();
   const [activeCampaigns, setActiveCampaigns] = useState<number>(0);
-  console.log("user store", user);
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   console.log("Dashboard");
@@ -92,7 +93,12 @@ export function Dashboard() {
         <h2 className="text-3xl font-bold">
           <span className="text-gradient">Tableau de Bord</span>
         </h2>
-        <button className="px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors">
+        <button
+          onClick={() => {
+            navigate("/global-campaign");
+          }}
+          className="px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+        >
           Nouvelle Campagne
         </button>
       </div>
@@ -184,7 +190,7 @@ export function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {mockCampaigns.map((campaign) => (
+                {campaigns?.slice(0, 5).map((campaign) => (
                   <tr key={campaign.id} className="border-t border-gray-100">
                     <td className="py-4 px-6">{campaign.description}</td>
                     <td className="py-4 px-6">
@@ -204,6 +210,12 @@ export function Dashboard() {
                 ))}
               </tbody>
             </table>
+            <button
+              className="p-2 text-indigo-600 hover:text-indigo-800 font-medium justify-center items-center"
+              onClick={() => navigate("/campaigns")}
+            >
+              Voir plus ...
+            </button>
           </div>
         </div>
 
@@ -228,7 +240,7 @@ export function Dashboard() {
                   <Store className="w-6 h-6 text-indigo-600" />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h5 className="font-medium text-gray-900">
+                  <h5 className="font-medium text-gray-900 md:text-md">
                     {store.storeName}
                   </h5>
                   <p className="text-sm text-gray-500">{store.storeUrl}</p>

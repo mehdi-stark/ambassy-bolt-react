@@ -10,8 +10,13 @@ export function AuthLoadingPage() {
   const navigate = useNavigate();
 
   // Récupération des setters depuis Zustand
-  const { setUser, setCollaborationRequests, clearUser, setSubscription } =
-    useUserStore();
+  const {
+    setUser,
+    setCollaborationRequests,
+    clearUser,
+    setSubscription,
+    setRole,
+  } = useUserStore();
   const { setBusinessStores } = useBusinessStores();
 
   useEffect(() => {
@@ -33,12 +38,14 @@ export function AuthLoadingPage() {
             console.log("subscription :", userResponse?.subscription);
 
             // Stocker les données dans Zustand
+            setRole(userResponse.roles[0]);
             setUser({
               userId: userResponse.id || userResponse._id,
               avatar: userResponse.avatar,
               clerkId: user.id,
               email: user.primaryEmailAddress?.emailAddress,
               name: user.fullName,
+              role: userResponse.roles[0],
               completeUser: userResponse,
             });
 

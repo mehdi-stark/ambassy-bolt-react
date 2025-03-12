@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export function getCampaign(campaignId) {
     return axios.get(import.meta.env.VITE_API_SERVER + `/campaigns/${campaignId}`);
 }
@@ -21,3 +23,14 @@ export function deleteCampaign(campaignId) {
 export function getCampaigns() {
     return axios.get(import.meta.env.VITE_API_SERVER + '/campaigns');
 }
+
+const CampaignsApi = {
+    getCampaign,
+    getCampaignByUser,
+    createCampaign,
+    updateCampaign,
+    deleteCampaign,
+    getCampaigns
+}
+
+export default CampaignsApi 

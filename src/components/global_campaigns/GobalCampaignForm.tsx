@@ -8,8 +8,10 @@ import countries from "../../assets/favorite_countries.json";
 import languages from "../../assets/favorite_langues.json";
 import { platforms } from "../../types";
 import { useBusinessStores, useUserStore } from "../../store/Store";
+import GlobalCampaignApi from "../../api/globalCampaign.js";
 
-const NewCampaign = ({ onClose }) => {
+// const GlobalCampaign = ({ onClose }) => {
+const GlobalCampaign = () => {
   const [step, setStep] = useState(1);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -25,7 +27,7 @@ const NewCampaign = ({ onClose }) => {
 
   const { businessStores, setBusinessStores, addBusinessStore } =
     useBusinessStores();
-  const { user } = useBusinessStores();
+  const { user } = useUserStore();
 
   const [formDetails, setFormDetails] = useState({
     todoByInfluencer: "",
@@ -44,6 +46,10 @@ const NewCampaign = ({ onClose }) => {
   //     setBusinessStores(parsedUser.businessStores || []);
   //   }
   // }, []);
+
+  const onClose = () => {
+    navigate("/dashboard");
+  };
 
   const nextStep = () => {
     setStep(step + 1);
@@ -72,16 +78,17 @@ const NewCampaign = ({ onClose }) => {
   };
 
   const handleSubmit = () => {
+    console.log("print user", user);
     const newCampaign = {
-      proId: userData._id,
-      ambassadorId: userData._id, // Assuming the same user is the ambassador
+      proId: user.userId,
+      // ambassadorId: userData._id, // Assuming the same user is the ambassador
       businessId: selectedShop,
-      amount: 0, // You need to set this value
-      affiliateLink: {
-        title: summary,
-      },
+      // amount: 0, // You need to set this value
+      // affiliateLink: {
+      //   title: summary,
+      // },
       campaignScript: expectations,
-      commissionPercentage,
+      commissionPercentage: selectedCommission,
       status: "active",
       type: "global",
       category: "", // You need to set this value
@@ -90,11 +97,12 @@ const NewCampaign = ({ onClose }) => {
       targetCountries: selectedCountries,
       targetAudience: "", // You need to set this value
       targetLanguages: selectedLanguages,
-      createdBy: userData._id,
+      createdBy: user.userId,
     };
 
     // Send newCampaign to your API
     console.log("New Campaign Data:", newCampaign);
+    GlobalCampaignApi.createCampaign(newCampaign);
   };
 
   return (
@@ -216,45 +224,29 @@ const NewCampaign = ({ onClose }) => {
                 className="w-full md:w-14rem border border-2 border-gray-200"
               />
             </section>
-            {selectedShop && (
-              <section className="mb-4 w-full flex flex-col">
-                <h2 className="text-xl font-semibold mb-2">
-                  Lien d'affiliation <span className="text-red-500">*</span>
-                </h2>
-                <input
-                  type="text"
-                  disabled={true}
-                  value="https"
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gradient-primary mb-2"
-                />
-                {/* <button className="">Generer</button> */}
-                <Button
-                  onClick={generateLink}
-                  className="bg-gradient-primary w-full"
-                >
-                  Generer
-                </Button>
-              </section>
-            )}
+
             <section className="mb-4 w-full flex flex-col">
               <h2 className="text-lg md:text-xl font-semibold mb-2">
                 Pourcentage de commission{" "}
                 <span className="text-red-500">*</span>
               </h2>
               <div className="flex space-x-4 overflow-x-auto">
-                {["10%", "15%", "20%", "Custom"].map((commission) => (
+                {["10", "15", "20", "Custom"].map((commission) => (
                   <Card
                     key={commission}
-                    className={`cursor-pointer w-32 md:w-48 ${
-                      selectedCommission === commission
-                        ? "border-2 border-blue-500"
-                        : "border border-gray-200"
+                    className={`cursor-pointer w-48 ${
+                      selectedCommission === commission ? "border-2" : "border"
                     }`}
+                    style={{
+                      borderColor:
+                        selectedCommission === commission ? "blue" : "red",
+                    }}
                     onClick={() => handleCommissionSelect(commission)}
                   >
                     <Card.Body>
                       <Card.Text className="text-sm md:text-md font-bold">
                         {commission}
+                        {commission !== "Custom" ? "%" : ""}
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -418,7 +410,7 @@ const NewCampaign = ({ onClose }) => {
                 Retour
               </button>
               <Button onClick={handleSubmit} className="bg-gradient-primary">
-                Valider
+                Confirmer
               </Button>
             </div>
           </div>
@@ -428,4 +420,4 @@ const NewCampaign = ({ onClose }) => {
   );
 };
 
-export default NewCampaign;
+export default GlobalCampaign;

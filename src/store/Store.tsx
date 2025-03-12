@@ -3,9 +3,11 @@ import { persist } from "zustand/middleware";
 
 interface UserState {
   user: any | null;
+  role: string;
   collaborationRequests: any[];
   subscription: any;
   setUser: (user: any) => void;
+  setRole: (role: string) => void;
   setSubscription: (subsciption: any) => void;
   setCollaborationRequests: (requests: any[]) => void;
   clearUser: () => void;
@@ -15,9 +17,11 @@ export const useUserStore = create<UserState>(
   persist(
     (set) => ({
       user: null,
+      role: "",
       collaborationRequests: [],
       subscription: null,
       setUser: (user) => set({ user }),
+      setRole: (role) => set({ role }),
       setSubscription: (subscription) => set({ subscription }),
       setCollaborationRequests: (requests) =>
         set({ collaborationRequests: requests }),

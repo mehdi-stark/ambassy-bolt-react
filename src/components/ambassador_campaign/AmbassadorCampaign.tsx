@@ -1,8 +1,8 @@
 import React from "react";
-import AmbassadorCampaignForm from "./AmbassadorForm";
+import AmbassadorForm from "./AmbassadorForm";
 import { Ambassador } from "../../types";
 
-const ServiceForm = ({ ambassador, onReturn }) => {
+const AmbassadorCampaign = ({ ambassador, onReturn }) => {
   console.log("ambassador", ambassador);
 
   return (
@@ -70,10 +70,10 @@ const ServiceForm = ({ ambassador, onReturn }) => {
 
       {/* Form Section */}
       <div className="w-full md:w-1/2 bg-white md:h-screen overflow-auto">
-        <AmbassadorCampaignForm ambassador={ambassador} onReturn={onReturn} />
+        <AmbassadorForm ambassador={ambassador} onReturn={onReturn} />
       </div>
     </div>
   );
 };
 
-export default ServiceForm;
+export default AmbassadorCampaign;
