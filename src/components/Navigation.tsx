@@ -74,94 +74,92 @@ export function Navigation() {
 
         {/* Navigation items */}
         <div className="flex flex-col h-[calc(100%-4rem)] justify-between p-2">
-          {role === "pro" && (
-            <div className="space-y-1 md:mt-[32px] mt-12">
-              {/* <div className="space-y-1" style={{ marginTop: "64px" }}> */}
-              <button
-                onClick={() => {
-                  navigate("/global-campaign");
-                }}
-                className="w-full mt-4 px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-lg font-medium transition-colors"
-              >
-                Nouvelle Campagne
-              </button>
-              <button
-                onClick={() => {
-                  toggleSidebar();
-                  handleNavigation("/search");
-                }}
-                className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                  isActive("/search")
-                    ? "bg-indigo-50 text-indigo-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                <Search className="w-5 h-5 mr-3" />
-                Rechercher
-              </button>
+          <div className="space-y-1 md:mt-[32px] mt-12">
+            {/* <div className="space-y-1" style={{ marginTop: "64px" }}> */}
+            <button
+              onClick={() => {
+                navigate("/global-campaign");
+              }}
+              className="w-full mt-4 px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-lg font-medium transition-colors"
+            >
+              Nouvelle Campagne
+            </button>
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/search");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/search")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <Search className="w-5 h-5 mr-3" />
+              Rechercher
+            </button>
 
-              <button
-                onClick={() => {
-                  toggleSidebar();
-                  handleNavigation("/campaigns");
-                }}
-                className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                  isActive("/campaigns")
-                    ? "bg-indigo-50 text-indigo-600"
-                    : "text-gray-600 hover:bg-gray-50"
-                }`}
-              >
-                <ReceiptText className="w-5 h-5 mr-3" />
-                Mes Campagnes
-              </button>
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/campaigns");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/campaigns")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <ReceiptText className="w-5 h-5 mr-3" />
+              Mes Campagnes
+            </button>
 
-              {role === "pro" ? (
-                <button
-                  onClick={() => {
-                    toggleSidebar();
-                    handleNavigation("/ambassadors");
-                  }}
-                  className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                    isActive("/ambassadors")
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <UserCheck className="w-5 h-5 mr-3" />
-                  Mes Ambassadeurs
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    toggleSidebar();
-                    handleNavigation("/ambassadors");
-                  }}
-                  className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                    isActive("/ambassadors")
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  <UserCheck className="w-5 h-5 mr-3" />
-                  Mes Collaborateurs
-                </button>
-              )}
+            {role === "pro" ? (
               <button
                 onClick={() => {
                   toggleSidebar();
-                  handleNavigation("/dashboard");
+                  handleNavigation("/ambassadors");
                 }}
                 className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
-                  isActive("/dashboard")
+                  isActive("/ambassadors")
                     ? "bg-indigo-50 text-indigo-600"
                     : "text-gray-600 hover:bg-gray-50"
                 }`}
               >
-                <LayoutDashboard className="w-5 h-5 mr-3" />
-                Dashboard
+                <UserCheck className="w-5 h-5 mr-3" />
+                Mes Ambassadeurs
               </button>
-            </div>
-          )}
+            ) : (
+              <button
+                onClick={() => {
+                  toggleSidebar();
+                  handleNavigation("/collaborators");
+                }}
+                className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                  isActive("/collaborators")
+                    ? "bg-indigo-50 text-indigo-600"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                <UserCheck className="w-5 h-5 mr-3" />
+                Mes Collaborateurs
+              </button>
+            )}
+            <button
+              onClick={() => {
+                toggleSidebar();
+                handleNavigation("/dashboard");
+              }}
+              className={`flex items-center w-full px-3 py-2.5 rounded-lg font-medium transition-colors ${
+                isActive("/dashboard")
+                  ? "bg-indigo-50 text-indigo-600"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <LayoutDashboard className="w-5 h-5 mr-3" />
+              Dashboard
+            </button>
+          </div>
 
           <div className="space-y-1 p-2">
             <button

@@ -27,6 +27,8 @@ import SettingsPage from "./components/SettingsPage";
 import { RegisterPageV2 } from "./components/auth/RegisterPage copy";
 import GlobalCampaign from "./components/global_campaigns/GobalCampaignForm";
 import AmbassadorCampaign from "./components/ambassador_campaign/AmbassadorCampaign";
+import { RegisterPageRole } from "./components/auth/RegisterPageRole";
+import { CollaboratorsPage } from "./components/CollaboratorsPage";
 
 function App() {
   return (
@@ -69,6 +71,7 @@ function AppContent() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/auth-loading" element={<AuthLoadingPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register-role" element={<RegisterPageRole />} />
           <Route path="/registration" element={<RegisterPageV2 />} />
 
           <Route path="/user-register" element={<UserRegistration />} />
@@ -115,6 +118,7 @@ function AppContent() {
                   }
                 />
                 <Route path="/ambassadors" element={<AmbassadorsPage />} />
+                <Route path="/collaborators" element={<CollaboratorsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/pricing" element={<PricingPage />} />
                 <Route path="/help" element={<SupportPage />} />

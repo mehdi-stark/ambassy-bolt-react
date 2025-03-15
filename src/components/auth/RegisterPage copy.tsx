@@ -3,12 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, Building, Globe } from "lucide-react";
 import { AuthLayout } from "./AuthLayout";
 import { useSignUp } from "@clerk/clerk-react";
+import { Card } from "../ui/card";
+import { useSearchParams } from "react-router-dom";
 
 export function RegisterPageV2() {
+  const [searchParams] = useSearchParams();
+  const role = searchParams.get("role");
   const { isLoaded, signUp, setActive } = useSignUp();
   const navigate = useNavigate();
 
-  const [role, setRole] = useState<"pro" | "ambassador">("pro");
+  const [setRole] = useState<"pro" | "ambassador">("pro");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [url, setUrl] = useState(""); // URL du store ou du compte social

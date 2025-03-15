@@ -63,6 +63,34 @@ export const useBusinessStores = create<BusinessState>(
     }
   )
 );
+
+interface SocialState {
+  socials: any[];
+  setSocials: (socials: any[]) => void;
+  addSocial: (social: any) => void;
+  removeSocial: (id: string) => void;
+}
+
+export const useSocialStore = create<SocialState>(
+  persist(
+    (set) => ({
+      socials: [],
+      setSocials: (socials) => set({ socials }),
+      addSocial: (social) =>
+        set((state) => ({
+          socials: [...state.socials, social],
+        })),
+      removeSocial: (id) =>
+        set((state) => ({
+          socials: state.socials.filter((social) => social.id !== id),
+        })),
+    }),
+    {
+      name: "social-store", // unique name for the storage key
+    }
+  )
+);
+
 interface CampaignState {
   campaigns: any[];
   setCampaigns: (campaigns: any[]) => void;

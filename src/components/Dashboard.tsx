@@ -8,37 +8,6 @@ import {
 import { Campaign } from "../types";
 import { useNavigate } from "react-router-dom";
 
-const mockCampaigns: Campaign[] = [
-  {
-    id: "1",
-    clientId: "1",
-    influencerId: "2",
-    status: "active",
-    amount: 1500,
-    startDate: new Date(),
-    description: "Campagne Mode Été 2024",
-  },
-];
-
-// const mockStores = [
-//   {
-//     id: "1",
-//     name: "Ma Boutique Mode",
-//     domain: "ma-boutique-mode.myshopify.com",
-//     status: "active",
-//     products: 156,
-//     monthlyOrders: 234,
-//   },
-//   {
-//     id: "2",
-//     name: "Accessoires Luxe",
-//     domain: "accessoires-luxe.myshopify.com",
-//     status: "active",
-//     products: 89,
-//     monthlyOrders: 167,
-//   },
-// ];
-
 export function Dashboard() {
   // const [userData, setUserData] = useState<any>(null);
   // const [businessStores, setBusinessStores] = useState<any[]>([]);
@@ -47,20 +16,6 @@ export function Dashboard() {
   const { campaigns } = useCampaignStore();
   const [activeCampaigns, setActiveCampaigns] = useState<number>(0);
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   console.log("Dashboard");
-  //   const user = sessionStorage.getItem("userComplete");
-  //   if (user) {
-  //     const parsedUser = JSON.parse(user);
-  //     setUserData(parsedUser);
-  //     setBusinessStores(parsedUser.businessStores || []);
-  //   }
-  // }, []);
-  // console.log(
-  //   "print sessionStorage :",
-  //   JSON.parse(sessionStorage.getItem("user") || "{}")
-  // );
 
   useEffect(() => {
     setActiveCampaigns(campaigns.filter((c) => c.status === "active").length);
@@ -220,43 +175,83 @@ export function Dashboard() {
         </div>
 
         {/* Boutiques */}
-        <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-            <h3 className="text-xl font-bold">Mes Boutiques</h3>
-            <button
-              className="text-indigo-600 hover:text-indigo-800 font-medium"
-              onClick={handleAddStoreClick}
-            >
-              Ajouter
-            </button>
-          </div>
-          <div className="p-6 space-y-4">
-            {businessStores.map((store) => (
-              <div
-                key={store.id}
-                className="flex items-center p-4 bg-gray-50 rounded-xl"
+        {user.role === "ambassador" ? (
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold">Mes Boutiques</h3>
+              <button
+                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                onClick={handleAddStoreClick}
               >
-                <div className="bg-white p-3 rounded-lg border border-gray-100">
-                  <Store className="w-6 h-6 text-indigo-600" />
-                </div>
-                <div className="ml-4 flex-1">
-                  <h5 className="font-medium text-gray-900 md:text-md">
-                    {store.storeName}
-                  </h5>
-                  <p className="text-sm text-gray-500">{store.storeUrl}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900">
-                    {store.stats.totalProducts} produits
+                Ajouter
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              {businessStores.map((store) => (
+                <div
+                  key={store.id}
+                  className="flex items-center p-4 bg-gray-50 rounded-xl"
+                >
+                  <div className="bg-white p-3 rounded-lg border border-gray-100">
+                    <Store className="w-6 h-6 text-indigo-600" />
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {store.stats.monthlyOrders} commandes/mois
+                  <div className="ml-4 flex-1">
+                    <h5 className="font-medium text-gray-900 md:text-md">
+                      {store.storeName}
+                    </h5>
+                    <p className="text-sm text-gray-500">{store.storeUrl}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-gray-900">
+                      {store.stats.totalProducts} produits
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {store.stats.monthlyOrders} commandes/mois
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 className="text-xl font-bold">Mes Reseaux</h3>
+              <button
+                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                onClick={handleAddStoreClick}
+              >
+                Ajouter
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              {businessStores.map((store) => (
+                <div
+                  key={store.id}
+                  className="flex items-center p-4 bg-gray-50 rounded-xl"
+                >
+                  <div className="bg-white p-3 rounded-lg border border-gray-100">
+                    <Store className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <h5 className="font-medium text-gray-900 md:text-md">
+                      {store.storeName}
+                    </h5>
+                    <p className="text-sm text-gray-500">{store.storeUrl}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-gray-900">
+                      {store.stats.totalProducts} produits
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {store.stats.monthlyOrders} commandes/mois
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
