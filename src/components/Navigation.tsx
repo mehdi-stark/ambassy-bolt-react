@@ -19,6 +19,7 @@ import {
   useUserStore,
   useBusinessStores,
   useCampaignStore,
+  logout,
 } from "../store/Store";
 
 export function Navigation() {
@@ -37,6 +38,11 @@ export function Navigation() {
 
   const isActive = (path: string) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    console.log("logout");
+    logout();
   };
 
   console.log("print role", role);

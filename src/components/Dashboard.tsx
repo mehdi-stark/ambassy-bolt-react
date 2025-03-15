@@ -198,7 +198,7 @@ export function Dashboard() {
         </div>
 
         {/* Boutiques */}
-        {user.role === "pro" ? (
+        {user?.role === "pro" ? (
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-xl font-bold">Mes Boutiques</h3>
@@ -210,7 +210,7 @@ export function Dashboard() {
               </button>
             </div>
             <div className="p-6 space-y-4">
-              {businessStores.map((store) => (
+              {businessStores?.map((store) => (
                 <div
                   key={store.id}
                   className="flex items-center p-4 bg-gray-50 rounded-xl"

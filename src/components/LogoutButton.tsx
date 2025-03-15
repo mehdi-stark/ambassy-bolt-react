@@ -1,6 +1,7 @@
 import { useClerk } from "@clerk/clerk-react";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../store/Store";
 
 const LogoutButton = () => {
   const { signOut } = useClerk();
@@ -8,6 +9,7 @@ const LogoutButton = () => {
 
   const handleLogout = async () => {
     await signOut();
+    logout();
     navigate("/login");
   };
 

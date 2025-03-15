@@ -69,6 +69,7 @@ interface SocialState {
   setSocials: (socials: any[]) => void;
   addSocial: (social: any) => void;
   removeSocial: (id: string) => void;
+  clearSocials: () => void;
 }
 
 export const useSocialStore = create<SocialState>(
@@ -84,6 +85,7 @@ export const useSocialStore = create<SocialState>(
         set((state) => ({
           socials: state.socials.filter((social) => social.id !== id),
         })),
+      clearSocials: () => set({ socials: [] }),
     }),
     {
       name: "social-store", // unique name for the storage key
@@ -96,6 +98,7 @@ interface CampaignState {
   setCampaigns: (campaigns: any[]) => void;
   addCampaign: (campaign: any) => void;
   removeCampaign: (id: string) => void;
+  clearCampaigns: () => void;
 }
 
 export const useCampaignStore = create<CampaignState>(
@@ -111,6 +114,7 @@ export const useCampaignStore = create<CampaignState>(
         set((state) => ({
           campaigns: state.campaigns.filter((campaign) => campaign.id !== id),
         })),
+      clearCampaigns: () => set({ campaigns: [] }),
     }),
     {
       name: "campaign-store", // unique name for the storage key
@@ -127,20 +131,12 @@ interface StoreState {
   updateStore: (id: string, updatedStore: any) => void;
 }
 
-export const Store = {
-  persist(
-    (set) => ({
-    logout: () =>
-      set({
-        user: null,
-        campaigns: [],
-        socials: [],
-        stores: [],
-        lastUpdated: {},
-      }),
-})
-  )
-}
+export const logout = () => {
+  useUserStore.getState().clearUser();
+  useBusinessStores.getState().clearBusinessStores();
+  useSocialStore.getState().clearSocials();
+  useCampaignStore.getState().clearCampaigns();
+};
 
 // export const CampaignStore = create<CampaignState>(
 //   persist(
