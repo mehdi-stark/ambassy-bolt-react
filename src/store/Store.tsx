@@ -118,6 +118,30 @@ export const useCampaignStore = create<CampaignState>(
   )
 );
 
+interface StoreState {
+  stores: any[];
+  setStores: (stores: any[]) => void;
+  addStore: (store: any) => void;
+  removeStore: (id: string) => void;
+  clearStores: () => void;
+  updateStore: (id: string, updatedStore: any) => void;
+}
+
+export const Store = {
+  persist(
+    (set) => ({
+    logout: () =>
+      set({
+        user: null,
+        campaigns: [],
+        socials: [],
+        stores: [],
+        lastUpdated: {},
+      }),
+})
+  )
+}
+
 // export const CampaignStore = create<CampaignState>(
 //   persist(
 //     (set, get) => ({

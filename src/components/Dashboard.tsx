@@ -6,12 +6,12 @@ import {
   useCampaignStore,
 } from "../store/Store";
 import { Campaign } from "../types";
-import { useNavigate } from "react-router-dom";
+import { resolvePath, useNavigate } from "react-router-dom";
 
 export function Dashboard() {
   // const [userData, setUserData] = useState<any>(null);
   // const [businessStores, setBusinessStores] = useState<any[]>([]);
-  const { user } = useUserStore();
+  const { user, role } = useUserStore();
   const { businessStores } = useBusinessStores();
   const { campaigns } = useCampaignStore();
   const [activeCampaigns, setActiveCampaigns] = useState<number>(0);
@@ -48,14 +48,17 @@ export function Dashboard() {
         <h2 className="text-3xl font-bold">
           <span className="text-gradient">Tableau de Bord</span>
         </h2>
-        <button
-          onClick={() => {
-            navigate("/global-campaign");
-          }}
-          className="px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
-        >
-          Nouvelle Campagne
-        </button>
+
+        {role === "pro" && (
+          <button
+            onClick={() => {
+              navigate("/global-campaign");
+            }}
+            className="px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+          >
+            Nouvelle Campagne
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -126,56 +129,76 @@ export function Dashboard() {
           <div className="p-6 border-b border-gray-100">
             <h3 className="text-xl font-bold">Campagnes en cours</h3>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
-                    Campagne
-                  </th>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
-                    Status
-                  </th>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
-                    Montant
-                  </th>
-                  <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {campaigns?.slice(0, 5).map((campaign) => (
-                  <tr key={campaign.id} className="border-t border-gray-100">
-                    <td className="py-4 px-6">{campaign.description}</td>
-                    <td className="py-4 px-6">
-                      <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-sm font-medium rounded-full">
-                        {campaign.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6 font-medium">
-                      {campaign.amount}€
-                    </td>
-                    <td className="py-4 px-6">
-                      <button className="text-indigo-600 hover:text-indigo-800 font-medium">
-                        Voir détails
-                      </button>
-                    </td>
+          {campaigns.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-96 space-y-4">
+              <Users className="w-10 h-10 text-gray-400" />
+              <p className="text-gray-600 text-center text-lg">
+                Aucune campagne ...
+              </p>{" "}
+              <br />
+              <p className="text-gray-600 text-center text-sm">
+                Commencez à développer votre réseau en invitant des créateurs de
+                contenu <br /> à rejoindre votre programme.
+              </p>
+              <button
+                className="px-4 py-1.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+                onClick={() => navigate("/search")}
+              >
+                Trouver des ambassadeurs
+              </button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
+                      Campagne
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
+                      Status
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
+                      Montant
+                    </th>
+                    <th className="text-left py-4 px-6 text-sm font-medium text-gray-600">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <button
-              className="p-2 text-indigo-600 hover:text-indigo-800 font-medium justify-center items-center"
-              onClick={() => navigate("/campaigns")}
-            >
-              Voir plus ...
-            </button>
-          </div>
+                </thead>
+                <tbody>
+                  {campaigns?.slice(0, 5).map((campaign) => (
+                    <tr key={campaign.id} className="border-t border-gray-100">
+                      <td className="py-4 px-6">{campaign.description}</td>
+                      <td className="py-4 px-6">
+                        <span className="px-3 py-1 bg-emerald-50 text-emerald-600 text-sm font-medium rounded-full">
+                          {campaign.status}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 font-medium">
+                        {campaign.amount}€
+                      </td>
+                      <td className="py-4 px-6">
+                        <button className="text-indigo-600 hover:text-indigo-800 font-medium">
+                          Voir détails
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button
+                className="p-2 text-indigo-600 hover:text-indigo-800 font-medium justify-center items-center"
+                onClick={() => navigate("/campaigns")}
+              >
+                Voir plus ...
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Boutiques */}
-        {user.role === "ambassador" ? (
+        {user.role === "pro" ? (
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-xl font-bold">Mes Boutiques</h3>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useUserStore } from "../store/Store";
 import { sub } from "date-fns";
 const PricingPage = () => {
-  const { user, subscription, setUser } = useUserStore();
+  const { user, role, subscription, setUser } = useUserStore();
   const [billingCycle, setBillingCycle] = useState("monthly");
 
   console.log("print user", user);
@@ -115,14 +115,17 @@ const PricingPage = () => {
         {/* Pricing cards */}
         <div
           className={`grid grid-cols-1 ${
-            subscription.plan === "ambassador"
-              ? "md:grid-cols-2"
-              : "md:grid-cols-3"
+            role === "ambassador" ? "md:grid-cols-2" : "md:grid-cols-3"
           } gap-8 flex justify-center items-center`}
         >
           {/* Ambassador Plan */}
-          {subscription.plan === "ambassador" && (
+          {role === "ambassador" && (
             <div className="border-2 border-purple-300 rounded-xl p-8 flex flex-col h-full">
+              {subscription.plan === "ambassador" && (
+                <h3 className="text-lg text-amber-500 font-semibold mb-2">
+                  Plan actuel
+                </h3>
+              )}
               <h2 className="text-2xl font-semibold mb-2">
                 {pricingData.ambassador.title}
               </h2>
@@ -179,10 +182,9 @@ const PricingPage = () => {
                   </div>
                 ))}
               </div>
-
-              <button className="w-full bg-black text-white py-3 rounded-md font-medium mt-auto">
+              {/* <button className="w-full bg-black text-white py-3 rounded-md font-medium mt-auto">
                 {pricingData.ambassador.buttonText}
-              </button>
+              </button> */}
             </div>
           )}
 

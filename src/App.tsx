@@ -6,7 +6,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Navigation } from "./components/Navigation";
-import { SearchPage } from "./components/SearchPage";
 import { Dashboard } from "./components/Dashboard";
 import { LoginPage } from "./components/auth/LoginPage";
 import { RegisterPage } from "./components/auth/RegisterPage";
@@ -29,6 +28,9 @@ import GlobalCampaign from "./components/global_campaigns/GobalCampaignForm";
 import AmbassadorCampaign from "./components/ambassador_campaign/AmbassadorCampaign";
 import { RegisterPageRole } from "./components/auth/RegisterPageRole";
 import { CollaboratorsPage } from "./components/CollaboratorsPage";
+import Search from "./components/SearchPage";
+import BentoGridDemo from "./components/ui/bento-grid-demo";
+import SearchPage from "./components/SearchPage";
 
 function App() {
   return (
@@ -129,6 +131,8 @@ function AppContent() {
                   path="/ambassador-campaign"
                   element={<AmbassadorCampaign />}
                 /> */}
+
+                {/* Formulaire de nouvelle campagne globale */}
                 <Route path="/global-campaign" element={<GlobalCampaign />} />
 
                 {/* Subscription */}

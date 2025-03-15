@@ -187,53 +187,55 @@ export const ProfilePage = () => {
         </section>
 
         {/* Section Pro */}
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
-          <h2 className="text-xl font-bold mb-4">Mes Shops</h2>
-          <div className="p-6 space-y-4 flex flex-col">
-            {businessStores.map((store) => (
-              <div
-                key={store.id}
-                className="flex items-center p-4 bg-gray-50 rounded-xl"
+        {user.role === "pro" && (
+          <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
+            <h2 className="text-xl font-bold mb-4">Mes Shops</h2>
+            <div className="p-6 space-y-4 flex flex-col">
+              {businessStores.map((store) => (
+                <div
+                  key={store.id}
+                  className="flex items-center p-4 bg-gray-50 rounded-xl"
+                >
+                  <div className="bg-white p-3 rounded-lg border border-gray-100">
+                    <Store className="w-6 h-6 text-indigo-600" />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <h5 className="font-medium text-gray-900">
+                      {store.storeName}
+                    </h5>
+                    <p className="text-sm text-gray-500">{store.storeUrl}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-medium text-gray-900">
+                      {store.stats.totalProducts} produits
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {store.stats.monthlyOrders} commandes/mois
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <button
+                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                onClick={handleAddStoreClick}
               >
-                <div className="bg-white p-3 rounded-lg border border-gray-100">
-                  <Store className="w-6 h-6 text-indigo-600" />
-                </div>
-                <div className="ml-4 flex-1">
-                  <h5 className="font-medium text-gray-900">
-                    {store.storeName}
-                  </h5>
-                  <p className="text-sm text-gray-500">{store.storeUrl}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900">
-                    {store.stats.totalProducts} produits
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {store.stats.monthlyOrders} commandes/mois
-                  </div>
-                </div>
-              </div>
-            ))}
-            <button
-              className="text-indigo-600 hover:text-indigo-800 font-medium"
-              onClick={handleAddStoreClick}
-            >
-              Ajouter
-            </button>
-          </div>
-          {/* <ul className="text-gray-600">
+                Ajouter
+              </button>
+            </div>
+            {/* <ul className="text-gray-600">
             <li>Shop 1</li>
             <li>Shop 2</li>
           </ul> */}
-        </section>
+          </section>
+        )}
 
-        <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+        {/* <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <h2 className="text-xl font-bold mb-4">Invitations Envoyées</h2>
           <ul className="text-gray-600">
             <li>Invitation 1</li>
             <li>Invitation 2</li>
           </ul>
-        </section>
+        </section> */}
 
         {/* Section Ambassador */}
         {user.role === "ambassador" && (
