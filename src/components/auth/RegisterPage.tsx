@@ -3,9 +3,10 @@ import { set } from "date-fns";
 import { Building, User } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useUserStore } from "../../store/Store";
 
 export function RegisterPage() {
-  const [role, setRole] = useState("");
+  const { role, setRole } = useUserStore();
   const [tmpRole, setTmpRole] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +19,7 @@ export function RegisterPage() {
       setRole(tmpRole);
       setError(null);
     } catch (err) {
-      setError(err.message);
+      setError(err?.message);
     } finally {
       setIsLoading(false);
     }
@@ -131,8 +132,8 @@ export function RegisterPage() {
           }}
           afterSignUpUrl={
             role === "pro"
-              ? "/registration-form-social"
-              : "/registration-form-store"
+              ? "/registration-form-store"
+              : "/registration-form-social"
           } // Redirection après inscription
         />
       )}

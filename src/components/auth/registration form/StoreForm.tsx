@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
+import UsersApi from "../../../api/user";
+import BusinessApi from "../../../api/businessStore";
+import { useUser } from "@clerk/clerk-react";
 
 const StoreForm = () => {
+  const { user } = useUser();
   const [text, setText] = useState("");
+  const [url, setUrl] = useState("");
+  const [userDb, setUserDb] = useState<any>(null);
   const [index, setIndex] = useState(0);
   const [showTitle, setShowTitle] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -21,13 +27,30 @@ const StoreForm = () => {
         setIndex(index + 1);
       }, 100);
     }
+
+    if (user?.id) {
+      UsersApi.getUserByClerkId(user.id).then((res) => {
+        console.log("RES DATA:", res.data);
+        setUserDb(res.data);
+      });
+    }
   }, [index, text, message, showTitle]);
 
-  function handlePassStep() {
+  async function handlePassStep() {
     setLoading(true);
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 2000); // Simulate a delay for loading
+    console.log("userDb", userDb);
+    const store = {
+      userId: userDb?._id, // Sophie Martin
+      businessType: "ecommerce",
+      platform: "shopify",
+      storeUlr: url,
+    };
+    await BusinessApi.createBusinessStore(store).then((res) => {
+      console.log(res);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000); // Simulate a delay for loading
+    });
   }
 
   return (
@@ -43,6 +66,9 @@ const StoreForm = () => {
           </h2>
           <input
             type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
             placeholder="Par exemple: ma-boutique.shopify.com"
             className="md:w-[680px] w-full p-3 border-b-2 border-gray-300 bg-transparent focus:outline-none focus:ring-0 focus:border-gradient-primary mb-4"
           />

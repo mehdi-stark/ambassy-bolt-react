@@ -2,7 +2,7 @@ import axios from "axios";
 
 // API calls for user
 
-export function getUser(userId) {
+export function getUser(userId: string) {
     const response = axios.get(import.meta.env.VITE_API_SERVER + `/users?id=${userId}`)
     .then((response) => {
         return response.data;
@@ -14,7 +14,7 @@ export function getUser(userId) {
     return response;
 }
 
-export function getUserByClerkId(clerkId) {
+export function getUserByClerkId(clerkId: string) {
     return axios.get(import.meta.env.VITE_API_SERVER + `/users?clerkId=${clerkId}`);
 }
 
@@ -41,7 +41,7 @@ export async function updateUserSubscription(userId, clerkId, subscription) {
     if (!user) {
         return Promise.reject(new Error('User not found'));
     }
-    let subscriptionFromUser = user.data.subscription;
+    const subscriptionFromUser = user.data?.subscription;
     console.log('subscriptionFromUser', subscriptionFromUser);
     if (!subscriptionFromUser) {
         subscription = [];
@@ -49,3 +49,15 @@ export async function updateUserSubscription(userId, clerkId, subscription) {
 
     return axios.put(import.meta.env.VITE_API_SERVER + `/users/${userId}`, { subscription });
 }
+
+const UsersApi = {
+    getUser,
+    getUserByClerkId,
+    createUser,
+    updateUser,
+    deleteUser,
+    getUsers,
+    updateUserSubscription
+}
+
+export default UsersApi;

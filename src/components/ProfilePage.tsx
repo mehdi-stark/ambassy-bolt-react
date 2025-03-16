@@ -10,7 +10,7 @@ import {
 } from "../store/Store";
 
 export const ProfilePage = () => {
-  const { user, subscription } = useUserStore();
+  const { user, role, subscription } = useUserStore();
   const { businessStores } = useBusinessStores();
   const { campaigns } = useCampaignStore();
   const userClerk = useUser();
@@ -187,7 +187,7 @@ export const ProfilePage = () => {
         </section>
 
         {/* Section Pro */}
-        {user.role === "pro" && (
+        {role === "pro" && (
           <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-md">
             <h2 className="text-xl font-bold mb-4">Mes Shops</h2>
             <div className="p-6 space-y-4 flex flex-col">
@@ -238,7 +238,7 @@ export const ProfilePage = () => {
         </section> */}
 
         {/* Section Ambassador */}
-        {user.role === "ambassador" && (
+        {role === "ambassador" && (
           <section className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <div className="relative h-48 sm:h-56">
               <h3 className="flex items-center justify-center text-center text-gradient text-2xl font-bold">
