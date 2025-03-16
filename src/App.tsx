@@ -31,6 +31,7 @@ import { CollaboratorsPage } from "./components/CollaboratorsPage";
 import Search from "./components/SearchPage";
 import BentoGridDemo from "./components/ui/bento-grid-demo";
 import SearchPage from "./components/SearchPage";
+import SocialForm from "./components/auth/registration form/SocialForm";
 
 function App() {
   return (
@@ -82,7 +83,7 @@ function AppContent() {
             element={<MerchantRegistrationPage />}
           />
           <Route path="/registration-form-store" element={<StoreForm />} />
-          <Route path="/registration-form-social" element={<StoreForm />} />
+          <Route path="/registration-form-social" element={<SocialForm />} />
           <Route
             path="*"
             element={

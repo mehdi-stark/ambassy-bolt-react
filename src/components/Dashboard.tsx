@@ -72,9 +72,10 @@ export function Dashboard() {
             </span>
           </div>
           <div className="text-2xl font-bold mb-1">15,000€</div>
-          <div className="text-sm text-emerald-500 font-medium">
+          {/* A REMETTRE QUAND IL Y AURA  LES CHIFFRES, IL FAUDRAS ENREGISTRER LA VALEUR CHAQUE MOIS POUR CALCULER LA DIFF */}
+          {/* <div className="text-sm text-emerald-500 font-medium">
             +12% ce mois
-          </div>
+          </div> */}
         </div>
 
         <div className="bg-white p-6 rounded-2xl border border-gray-100">
@@ -87,9 +88,9 @@ export function Dashboard() {
             </span>
           </div>
           <div className="text-2xl font-bold mb-1">{activeCampaigns}</div>
-          <div className="text-sm text-emerald-500 font-medium">
+          {/* <div className="text-sm text-emerald-500 font-medium">
             +3 nouvelles
-          </div>
+          </div> */}
         </div>
 
         {/* <div className="bg-white p-6 rounded-2xl border border-gray-100">
@@ -133,18 +134,18 @@ export function Dashboard() {
             <div className="flex flex-col items-center justify-center h-96 space-y-4">
               <Users className="w-10 h-10 text-gray-400" />
               <p className="text-gray-600 text-center text-lg">
-                Aucune campagne ...
+                Aucune campagne en cours ...
               </p>{" "}
-              <br />
-              <p className="text-gray-600 text-center text-sm">
+              {/* <br /> */}
+              {/* <p className="text-gray-600 text-center text-sm">
                 Commencez à développer votre réseau en invitant des créateurs de
                 contenu <br /> à rejoindre votre programme.
-              </p>
+              </p> */}
               <button
                 className="px-4 py-1.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
                 onClick={() => navigate("/search")}
               >
-                Trouver des ambassadeurs
+                Trouver des campagnes
               </button>
             </div>
           ) : (

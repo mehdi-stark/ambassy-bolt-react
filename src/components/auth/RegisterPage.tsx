@@ -129,7 +129,11 @@ export function RegisterPage() {
           unsafeMetadata={{
             role: role, // La valeur sera mise à jour lors du signup
           }}
-          afterSignUpUrl="/dashboard" // Redirection après inscription
+          afterSignUpUrl={
+            role === "pro"
+              ? "/registration-form-social"
+              : "/registration-form-store"
+          } // Redirection après inscription
         />
       )}
 
