@@ -10,8 +10,12 @@ import type { Ambassador } from "../types";
 import axios from "axios";
 import AmbassadorCampaign from "./ambassador_campaign/AmbassadorCampaign";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../store/Store";
 
 export function AmbassadorsPage() {
+  const { user, role, collaborationRequests, setCollaborationRequests } =
+    useUserStore();
+  console.log("user", user);
   const [activeTab, setActiveTab] = useState<string | "all">("all");
   const [selectedAmbassador, setSelectedAmbassador] =
     useState<Ambassador | null>(null);
@@ -113,10 +117,12 @@ export function AmbassadorsPage() {
   };
 
   async function fetchUserData() {
-    const userId = sessionStorage.getItem("userId");
     return axios
       .get(
-        import.meta.env.VITE_API_SERVER + "/collaboration-requests/" + userId,
+        import.meta.env.VITE_API_SERVER +
+          "/collaboration-requests/" +
+          user.userId +
+          "?type=ambassador",
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -127,6 +133,7 @@ export function AmbassadorsPage() {
           "collaborationRequests",
           JSON.stringify(data?.data)
         );
+        setCollaborationRequests(data?.data);
         return data;
       })
       .catch((err) => {

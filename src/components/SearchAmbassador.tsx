@@ -15,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { Card, Modal, Spinner } from "react-bootstrap";
 
 export function SearchAmbassador() {
-  const { user } = useUserStore();
+  const { user, collaborationRequests, setCollaborationRequests } =
+    useUserStore();
   const { businessStores } = useBusinessStores();
   const navigate = useNavigate();
 
@@ -45,11 +46,12 @@ export function SearchAmbassador() {
         const response = await axios.get(
           import.meta.env.VITE_API_SERVER + "/users?role=ambassador"
         );
-        const filteredAmbassadors = response.data.filter(
-          (user: Ambassador) =>
-            user.socialMediaLinks && user.socialMediaLinks.length > 0
-        );
-        setAmbassadors(filteredAmbassadors);
+        setAmbassadors(response.data);
+        // const filteredAmbassadors = response.data.filter(
+        //   (user: Ambassador) =>
+        //     user.socialMediaLinks && user.socialMediaLinks.length > 0
+        // );
+        // setAmbassadors(filteredAmbassadors);
       } catch (error) {
         console.error("Failed to fetch influencers:", error);
       }
@@ -151,6 +153,7 @@ export function SearchAmbassador() {
     }
   };
 
+  console.log("Ambassadors:", ambassadors);
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
       <div className="text-center mb-8 sm:mb-12">
@@ -312,31 +315,31 @@ Cordialement,
           >
             <div className="relative h-48 sm:h-56">
               <img
-                src={influencer.avatar}
-                alt={influencer.name}
+                src={influencer?.avatar}
+                alt={influencer?.name}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
               <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                 <h3 className="text-white text-lg sm:text-xl font-bold mb-1">
-                  {influencer.name}
+                  {influencer?.name}
                 </h3>
                 <div className="flex flex-wrap items-center gap-3 text-white/90">
-                  {influencer.socialMediaLinks.map((platform) => (
+                  {influencer?.socialMediaLinks.map((platform) => (
                     <div
                       key={platform._id}
                       className="flex items-center text-sm"
                     >
-                      {platform.platform.valueOf() === "instagram" && (
+                      {platform?.platform.valueOf() === "instagram" && (
                         <Instagram className="w-4 h-4 mr-1" />
                       )}
-                      {platform.platform.valueOf() === "youtube" && (
+                      {platform?.platform.valueOf() === "youtube" && (
                         <Youtube className="w-4 h-4 mr-1" />
                       )}
-                      {platform.platform.valueOf() === "tiktok" && (
+                      {platform?.platform.valueOf() === "tiktok" && (
                         <Twitter className="w-4 h-4 mr-1" />
                       )}
-                      {platform.metrics.followers.toLocaleString()}
+                      {platform?.metrics?.followers.toLocaleString()}
                     </div>
                   ))}
                 </div>
@@ -346,7 +349,7 @@ Cordialement,
             <div className="p-4 sm:p-6">
               <div className="flex justify-between items-center mb-4">
                 <div className="flex flex-wrap gap-2">
-                  {influencer.categories.map((category) => (
+                  {influencer?.categories.map((category) => (
                     <span
                       key={category}
                       className="px-3 py-1 bg-indigo-50 text-indigo-600 text-sm font-medium rounded-full"
@@ -358,7 +361,7 @@ Cordialement,
                 <div className="flex items-center text-sm whitespace-nowrap">
                   <TrendingUp className="w-4 h-4 mr-1 text-emerald-500" />
                   <span className="text-emerald-500 font-medium">
-                    {influencer.socialMediaLinks[0].metrics.engagement.toFixed(
+                    {influencer?.socialMediaLinks[0]?.metrics.engagement.toFixed(
                       2
                     )}
                     %

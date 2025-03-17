@@ -7,7 +7,7 @@ import { useSignUp } from "@clerk/clerk-react";
 export function RegisterPageRole() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const navigate = useNavigate();
-  const [role, setRole] = useState<"pro" | "ambassador">("pro");
+  const [role, setRole] = useState<"pro" | "ambassador">();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false); // Loader state
 

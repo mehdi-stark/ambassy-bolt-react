@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useUserStore, useBusinessStores } from "../../store/Store";
+import { useUserStore, useBusinessStores, logout } from "../../store/Store";
 import { set } from "date-fns";
 export function AuthLoadingPage() {
   const { user, isSignedIn } = useUser();
@@ -33,7 +33,7 @@ export function AuthLoadingPage() {
           })
           .then(async (data) => {
             // Stocker userId + clerkId en sessionStorage
-            const userResponse = data.data[0];
+            const userResponse = data.data;
             console.log("data user", userResponse);
             console.log("subscription :", userResponse?.subscription);
 
@@ -48,29 +48,8 @@ export function AuthLoadingPage() {
               role: userResponse.roles[0],
               completeUser: userResponse,
             });
-
             setSubscription(userResponse?.subscription || {});
-
             setBusinessStores(userResponse.businessStores || []);
-
-            sessionStorage.setItem(
-              "user",
-              JSON.stringify({
-                userId: userResponse.id || userResponse._id,
-                avatar: userResponse.avatar,
-                clerkId: user.id,
-                email: user.primaryEmailAddress?.emailAddress,
-                name: user.fullName,
-              })
-            );
-            sessionStorage.setItem(
-              "userComplete",
-              JSON.stringify(userResponse)
-            );
-            sessionStorage.setItem(
-              "userId",
-              userResponse.id || userResponse._id
-            );
 
             // stocker les invitations en attente dans le sessionStorage depuis l'API /collaboration-requests
             await axios
@@ -84,11 +63,6 @@ export function AuthLoadingPage() {
               )
               .then((data) => {
                 console.log("data collaborationRequests", data);
-
-                sessionStorage.setItem(
-                  "collaborationRequests",
-                  JSON.stringify(data?.data)
-                );
 
                 // Stocker les invitations dans Zustand
                 setCollaborationRequests(data?.data);
@@ -111,7 +85,7 @@ export function AuthLoadingPage() {
         console.error("Erreur :", error);
         signOut(); // Déconnecte l'utilisateur en cas d'erreur
         localStorage.clear(); // Supprime les données du localStorage
-        clearUser(); // Déconnecte l'utilisateur et supprime les données du store Zustand
+        logout(); // Supprime les données de Zustand
         navigate("/login"); // Retour à la connexion en cas de problème
       }
     };
