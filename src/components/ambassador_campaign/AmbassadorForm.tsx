@@ -409,7 +409,7 @@ const AmbassadorForm = ({ onReturn, ambassador }) => {
 
             <section>
               <h2 className="text-xl font-semibold mb-2">
-                Ce qui doit être fait par l'influenceur{" "}
+                Ce qui doit être fait par l'ambassadeur{" "}
                 <span className="text-red-500">*</span>
               </h2>
               <textarea

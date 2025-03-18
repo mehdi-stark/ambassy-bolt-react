@@ -59,6 +59,9 @@ export const BentoGridItem = ({
         <div className="font-sans font-normal text-neutral-600 text-xs dark:text-neutral-300">
           {description}
         </div>
+        <button className="mt-2 px-2.5 py-1 bg-gray-200 rounded-xl">
+          Read More
+        </button>
       </div>
     </div>
   );

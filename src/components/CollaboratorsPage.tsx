@@ -286,31 +286,34 @@ export function CollaboratorsPage() {
                     </p>
                   )}
 
-                  <div className="flex flex-col items-center justify-between text-md text-gray-500">
+                  <div className="flex flex-col items-start justify-start text-md text-gray-500">
                     <span>
-                      {ambassador.proId.platforms?.length} plateformes
+                      Url boutique :{" "}
+                      <a href={ambassador.storeId?.storeUrl} target="_blank">
+                        {" "}
+                        {ambassador.storeId?.storeUrl}
+                      </a>
                     </span>
                     <span>
                       Date invitation:{" "}
                       {new Date(
-                        ambassador.proId?.createdAt || ""
+                        ambassador?.createdAt || ""
                       ).toLocaleDateString()}
+                    </span>
+
+                    <span className="font-bold" id="commission">
+                      Comission: {ambassador.commission}%
                     </span>
                   </div>
 
-                  <div className="flex justify-center mt-1">
-                    <p className="text-gray-600">
-                      Comission:{" "}
-                      <span className="font-bold" id="commission">
-                        {ambassador.commission}%
-                      </span>
-                    </p>
-                  </div>
+                  {/* <div className="flex justify-center mt-1">
+                    <p className="text-gray-600"></p>
+                  </div> */}
 
                   {ambassador.status === "pending" && (
-                    <div className="flex justify-center space-x-4 mt-2">
+                    <div className="flex md:flex-row flex-col justify-end items-end md:space-x-4 space-y-3 md:space-y-0 mt-2">
                       <button
-                        className="w-1/2 px-6 py-2.5 bg-gradient-primary hover-gradient-primary text-white rounded-full font-medium transition-colors"
+                        className="md:w-1/2 w-full px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white rounded-full font-medium transition-colors"
                         onClick={() => {
                           handleAcceptInvitationClick(ambassador);
                         }}
@@ -319,7 +322,7 @@ export function CollaboratorsPage() {
                       </button>
 
                       <button
-                        className="w-1/3 px-6 py-2.5 bg-red-800 hover-gradient-primary text-white rounded-full font-medium transition-colors"
+                        className="md:w-1/3 w-full px-6 py-2.5 bg-red-800 hover:bg-red-500 text-primary text-white rounded-full font-medium transition-colors"
                         onClick={() => handleRejectInvitationClick(influencer)}
                       >
                         Refuser

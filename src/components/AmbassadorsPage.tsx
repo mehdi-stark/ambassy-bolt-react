@@ -122,7 +122,7 @@ export function AmbassadorsPage() {
         import.meta.env.VITE_API_SERVER +
           "/collaboration-requests/" +
           user.userId +
-          "?type=ambassador",
+          "?type=pro",
         {
           headers: { "Content-Type": "application/json" },
         }
@@ -227,7 +227,7 @@ export function AmbassadorsPage() {
               >
                 <div className="relative h-40">
                   <img
-                    src={ambassador.ambassadorId.avatar || ""}
+                    src={ambassador.ambassadorId?.avatar}
                     alt={ambassador.ambassadorId.name}
                     className="w-full h-full object-cover"
                   />
@@ -273,15 +273,19 @@ export function AmbassadorsPage() {
                     </p>
                   )}
 
-                  <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex flex-col items-start justify-start text-sm text-gray-500">
                     <span>
-                      {ambassador.ambassadorId.platforms?.length} plateformes
+                      {ambassador.socialMediaLinks?.length} plateformes
                     </span>
-                    <span>
+                    {/* <span>
                       Dernier contact:{" "}
                       {new Date(
                         ambassador.ambassadorId?.lastContact || ""
                       ).toLocaleDateString()}
+                    </span> */}
+                    <span>
+                      Date envoie:{" "}
+                      {new Date(ambassador.createdAt)?.toLocaleDateString()}
                     </span>
                   </div>
 

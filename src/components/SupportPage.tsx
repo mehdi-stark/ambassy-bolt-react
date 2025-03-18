@@ -132,14 +132,14 @@ export const SupportPage = () => {
             <div className="flex md:flex-row flex-col items-center md:space-x-4 space-y-4 md:space-y-0">
               <button
                 onClick={handleWhatsAppClick}
-                className="flex items-center bg-green-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-green-600"
+                className="flex items-center bg-green-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-green-500"
               >
                 <MessageCircle className="mr-2" />
                 WhatsApp
               </button>
               <a
                 href="mailto:support@example.com"
-                className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-red-600"
+                className="flex items-center bg-red-600 text-white px-4 py-2 rounded-md shadow-sm hover:bg-red-500"
               >
                 <Mail className="mr-2" />
                 Email

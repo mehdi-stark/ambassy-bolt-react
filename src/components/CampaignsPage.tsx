@@ -20,7 +20,7 @@ const CampaignsPage = () => {
   // const user = sessionStorage.getItem("user")
   //   ? JSON.parse(sessionStorage.getItem("user") as string)
   //   : null;
-  const { user } = useUserStore();
+  const { user, role } = useUserStore();
   const { campaigns, setCampaigns, addCampaign } = useCampaignStore();
 
   const fetchCampaigns = async () => {
@@ -178,12 +178,14 @@ const CampaignsPage = () => {
                   Refusées
                 </button>
               </div>
-              <button
-                onClick={() => setShowPopup(true)}
-                className="px-4 py-2 rounded-lg font-medium whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-700"
-              >
-                Créer campagne
-              </button>
+              {role === "pro" && (
+                <button
+                  onClick={() => setShowPopup(true)}
+                  className="px-4 py-2 rounded-lg font-medium whitespace-nowrap bg-indigo-600 text-white hover:bg-indigo-700"
+                >
+                  Créer campagne
+                </button>
+              )}
             </div>
           </div>
         </section>
@@ -232,14 +234,12 @@ const CampaignsPage = () => {
           <div className="fixed inset-0 flex items-center justify-center bg-white">
             <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/3">
               <h2 className="text-xl font-bold mb-4">Détails de la Campagne</h2>
-              <p>
+              {/* <p>
                 <strong>ID:</strong> {selectedCampaign.id}
-              </p>
+              </p> */}
               <p>
-                <strong>Date:</strong> {selectedCampaign.createdAt}
-              </p>
-              <p>
-                <strong>Catégorie:</strong> {selectedCampaign.category}
+                <strong>Date:</strong>{" "}
+                {new Date(selectedCampaign.createdAt).toLocaleDateString()}
               </p>
               <p>
                 <strong>Nom Boutique:</strong>{" "}
@@ -247,15 +247,34 @@ const CampaignsPage = () => {
                   selectedCampaign?.storeName}
               </p>
               <p>
+                <strong>Url de la boutique:</strong>{" "}
+                <a
+                  href={selectedCampaign.storeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {selectedCampaign.storeUrl}
+                </a>
+              </p>
+              <p>
                 <strong>Commission:</strong>{" "}
                 {selectedCampaign.commissionPercentage.toFixed(2)}%
               </p>
               <p>
-                <strong>Store Url:</strong> {selectedCampaign.storeUrl}
+                <strong>Resume de la campagne :</strong>{" "}
+                {selectedCampaign.campaignSummary}
               </p>
               <p>
-                <strong>Montant:</strong> ${selectedCampaign.amount}
+                <strong>Ce qui est attendu par le client :</strong>{" "}
+                {selectedCampaign.campaignScript}
               </p>
+
+              <p>
+                <strong>Catégorie:</strong> {selectedCampaign.category}
+              </p>
+              {/* <p>
+                <strong>Montant:</strong> ${selectedCampaign.amount}
+              </p> */}
               <p>
                 <strong>Statut:</strong>{" "}
                 {statusMap[selectedCampaign.status].label}

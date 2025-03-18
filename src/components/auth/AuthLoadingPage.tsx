@@ -56,7 +56,9 @@ export function AuthLoadingPage() {
               .get(
                 import.meta.env.VITE_API_SERVER +
                   "/collaboration-requests/" +
-                  userResponse._id,
+                  userResponse._id +
+                  "?type=" +
+                  userResponse.roles[0],
                 {
                   headers: { "Content-Type": "application/json" },
                 }

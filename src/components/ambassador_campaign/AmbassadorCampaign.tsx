@@ -11,7 +11,7 @@ const AmbassadorCampaign = ({ ambassador, onReturn }) => {
       <div className="w-full md:w-1/2 relative bg-white overflow-hidden rounded-t-xl md:rounded-r-xl p-2 mb-4 md:mb-0">
         <div className="relative h-64 md:h-full">
           <img
-            src={ambassador.avatar || ambassador.ambassador.avatar || ""}
+            src={ambassador?.avatar || ambassador.ambassador?.avatar}
             alt="Testimonial"
             className="w-full h-full object-cover"
           />
