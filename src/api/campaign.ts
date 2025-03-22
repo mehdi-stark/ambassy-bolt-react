@@ -1,4 +1,6 @@
 import exp from "constants";
+import axios from "axios";
+
 
 export function getCampaign(campaignId) {
     return axios.get(import.meta.env.VITE_API_SERVER + `/campaigns/${campaignId}`);

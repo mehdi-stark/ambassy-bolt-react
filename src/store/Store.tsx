@@ -122,6 +122,37 @@ export const useCampaignStore = create<CampaignState>(
   )
 );
 
+interface AffiliateLinksState {
+  affiliateLinks: any[];
+  setAffiliateLinks: (affiliateLinks: any[]) => void;
+  addAffiliateLink: (affiliateLink: any) => void;
+  removeAffiliateLink: (id: string) => void;
+  clearAffiliateLinks: () => void;
+}
+
+export const useAffiliateLinksStore = create<AffiliateLinksState>(
+  persist(
+    (set) => ({
+      affiliateLinks: [],
+      setAffiliateLinks: (affiliateLinks) => set({ affiliateLinks }),
+      addAffiliateLink: (affiliateLink) =>
+        set((state) => ({
+          affiliateLinks: [...state.affiliateLinks, affiliateLink],
+        })),
+      removeAffiliateLink: (id: string) =>
+        set((state) => ({
+          affiliateLinks: state.affiliateLinks.filter(
+            (affiliateLink) => affiliateLink.id !== id
+          ),
+        })),
+      clearAffiliateLinks: () => set({ affiliateLinks: [] }),
+    }),
+    {
+      name: "affiliate-links-store", // unique name for the storage key
+    }
+  )
+);
+
 interface StoreState {
   stores: any[];
   setStores: (stores: any[]) => void;

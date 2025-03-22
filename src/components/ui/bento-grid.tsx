@@ -11,7 +11,7 @@ export const BentoGrid = ({
   return (
     <div
       className={cn(
-        "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto ",
+        "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto ",
         className
       )}
     >
@@ -33,12 +33,17 @@ export const BentoGridItem = ({
   header?: React.ReactNode;
   icon?: React.ReactNode;
 }) => {
-  function handleOnClick() {
-    console.log("clicked");
+  function handleOnClickMoreDetail() {
+    console.log("clicked handleOnClickMoreDetail");
   }
+
+  function handleOnClickInterested() {
+    console.log("clicked handleOnClickInterested");
+  }
+
   return (
     <div
-      onClick={handleOnClick}
+      // onClick={handleOnClickMoreDetail}
       className={cn(
         "row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-black dark:border-white/[0.2] bg-white border border-transparent justify-between flex flex-col space-y-4 w-full",
         className
@@ -59,9 +64,20 @@ export const BentoGridItem = ({
         <div className="font-sans font-normal text-neutral-600 text-xs dark:text-neutral-300">
           {description}
         </div>
-        <button className="mt-2 px-2.5 py-1 bg-gray-200 rounded-xl">
-          Read More
-        </button>
+        <div className="font-sans font-normal text-neutral-600 text-xs dark:text-neutral-300 space-x-3">
+          <button
+            className="mt-2 px-2.5 py-1 bg-gray-200 rounded-xl text-gray-600"
+            onClick={handleOnClickMoreDetail}
+          >
+            Voir plus
+          </button>
+          <button
+            className="mt-2 px-2.5 py-1 bg-green-200 rounded-xl text-green-600"
+            onClick={handleOnClickInterested}
+          >
+            Je suis intéressé
+          </button>
+        </div>
       </div>
     </div>
   );

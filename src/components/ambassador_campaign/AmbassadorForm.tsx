@@ -35,7 +35,8 @@ const AmbassadorForm = ({ onReturn, ambassador }) => {
   const [formDetails, setFormDetails] = useState<{
     ambassadorId: string;
     proId: string;
-    affiliateLink: string;
+    // affiliateLink: string;
+    affiliateLink: any;
     todoByInfluencer: string;
     offerSummary: string;
     storeId: string;
@@ -216,7 +217,7 @@ const AmbassadorForm = ({ onReturn, ambassador }) => {
     generateAffiliateLink(newLink)
       .then((response) => {
         console.log("data", response.data);
-        setFormDetails({ ...formDetails, affiliateLink: response.data?.link });
+        // setFormDetails({ ...formDetails, affiliateLink: response.data?.link });
       })
       .catch((error) => {
         console.log("error", error);

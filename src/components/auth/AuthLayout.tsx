@@ -13,7 +13,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img src={logo} className="mx-auto h-20 w-auto" />
         <Link to="/" className="flex justify-center">
-          <h1 className="text-3xl font-bold text-gradient">Ambassy</h1>
+          <h1 className="md:text-xl font-bold text-gradient">Ambassy</h1>
         </Link>
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
           {title}

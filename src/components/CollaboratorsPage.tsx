@@ -287,6 +287,7 @@ export function CollaboratorsPage() {
                   )}
 
                   <div className="flex flex-col items-start justify-start text-md text-gray-500">
+                    <span>Nom boutique : {ambassador.storeId?.storeName}</span>{" "}
                     <span>
                       Url boutique :{" "}
                       <a href={ambassador.storeId?.storeUrl} target="_blank">
@@ -300,7 +301,6 @@ export function CollaboratorsPage() {
                         ambassador?.createdAt || ""
                       ).toLocaleDateString()}
                     </span>
-
                     <span className="font-bold" id="commission">
                       Comission: {ambassador.commission}%
                     </span>

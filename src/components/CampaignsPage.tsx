@@ -232,59 +232,78 @@ const CampaignsPage = () => {
 
         {showingDetails && selectedCampaign && (
           <div className="fixed inset-0 flex items-center justify-center bg-white">
-            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/3">
-              <h2 className="text-xl font-bold mb-4">Détails de la Campagne</h2>
-              {/* <p>
+            <div className="bg-white p-6 rounded-lg shadow-lg md:w-1/2">
+              <div>
+                <h2 className="text-xl font-bold mb-4 text-gradient ">
+                  Détails de la Campagne
+                </h2>
+                {/* <p>
                 <strong>ID:</strong> {selectedCampaign.id}
               </p> */}
-              <p>
-                <strong>Date:</strong>{" "}
-                {new Date(selectedCampaign.createdAt).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Nom Boutique:</strong>{" "}
-                {selectedCampaign.businessId?.storeName ||
-                  selectedCampaign?.storeName}
-              </p>
-              <p>
-                <strong>Url de la boutique:</strong>{" "}
-                <a
-                  href={selectedCampaign.storeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {selectedCampaign.storeUrl}
-                </a>
-              </p>
-              <p>
-                <strong>Commission:</strong>{" "}
-                {selectedCampaign.commissionPercentage.toFixed(2)}%
-              </p>
-              <p>
-                <strong>Resume de la campagne :</strong>{" "}
-                {selectedCampaign.campaignSummary}
-              </p>
-              <p>
-                <strong>Ce qui est attendu par le client :</strong>{" "}
-                {selectedCampaign.campaignScript}
-              </p>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(selectedCampaign.createdAt).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Nom Boutique:</strong>{" "}
+                  {selectedCampaign.businessId?.storeName ||
+                    selectedCampaign?.storeName}
+                </p>
+                <p>
+                  <strong>Url de la boutique:</strong>{" "}
+                  <a
+                    href={selectedCampaign.storeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {selectedCampaign.storeUrl}
+                  </a>
+                </p>
+                <p>
+                  <strong>Commission:</strong>{" "}
+                  {selectedCampaign.commissionPercentage.toFixed(2)}%
+                </p>
+                <p>
+                  <strong>Resume de la campagne :</strong>{" "}
+                  {selectedCampaign.campaignSummary}
+                </p>
+                <p>
+                  <strong>Ce qui est attendu par le client :</strong>{" "}
+                  {selectedCampaign.campaignScript}
+                </p>
 
-              <p>
-                <strong>Catégorie:</strong> {selectedCampaign.category}
-              </p>
-              {/* <p>
+                <p>
+                  <strong>Catégorie:</strong> {selectedCampaign.category}
+                </p>
+                {/* <p>
                 <strong>Montant:</strong> ${selectedCampaign.amount}
               </p> */}
-              <p>
-                <strong>Statut:</strong>{" "}
-                {statusMap[selectedCampaign.status].label}
-              </p>
-              <button
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded justify-center items-center"
-                onClick={() => setShowingDetails(false)}
-              >
-                Fermer
-              </button>
+                <p>
+                  <strong>Statut:</strong>{" "}
+                  {statusMap[selectedCampaign.status].label}
+                </p>
+              </div>
+
+              <div className="mt-4">
+                <h2 className="text-xl font-bold mb-4 text-gradient ">
+                  Statistiques
+                </h2>
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(selectedCampaign.createdAt).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Nom Boutique:</strong>{" "}
+                  {selectedCampaign.businessId?.storeName ||
+                    selectedCampaign?.storeName}
+                </p>
+                <button
+                  className="mt-4 bg-red-500 text-white px-4 py-2 rounded justify-center items-center"
+                  onClick={() => setShowingDetails(false)}
+                >
+                  Fermer
+                </button>
+              </div>
             </div>
           </div>
         )}

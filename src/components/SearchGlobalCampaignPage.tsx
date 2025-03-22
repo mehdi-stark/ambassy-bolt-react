@@ -137,7 +137,7 @@ export function SearchGlobalCampaign() {
           <p className="text-gray-600 text-xl">Aucune campagne disponible</p>
         </div>
       ) : (
-        <BentoGrid className="max-w-4xl mx-auto">
+        <BentoGrid className="max-w-6xl mx-auto">
           {globalCampaigns.map((item, i) => (
             <BentoGridItem
               key={i}
